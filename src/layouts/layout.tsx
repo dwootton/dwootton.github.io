@@ -17,10 +17,15 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { title, author } = useSiteMetadata()
   const [splashMounted, setSplashMounted] = React.useState(false)
   const [splashVisible, setSplashVisible] = React.useState(false)
+  const [appVisible, setAppVisible] = React.useState(false)
   const lottieContainerRef = React.useRef<HTMLDivElement | null>(null)
+  const lottieModuleRef = React.useRef<any | null>(null)
+  const lottieAnimRef = React.useRef<any | null>(null)
+  const [darkFilterFallback, setDarkFilterFallback] = React.useState(false)
 
   React.useEffect(() => {
     let timeoutId: number | undefined
+    let unmountTimeoutId: number | undefined
     let animation: any
 
     // Only run on client
@@ -60,26 +65,51 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
       if (!shouldShow) {
         setSplashMounted(false)
         setSplashVisible(false)
+        setAppVisible(true)
         return
       }
 
       // Mount and fade-in
       setSplashMounted(true)
       requestAnimationFrame(() => setSplashVisible(true))
+      setAppVisible(false)
 
       try {
         const lottie = await import("lottie-web")
+        lottieModuleRef.current = lottie.default || lottie
+
+        // choose animation by theme
+        const getAnimationData = async (t: string | null) => {
+          if (t === "dark") {
+            try {
+              const res = await fetch("/logo-dark.json", { credentials: "same-origin" })
+              if (res.ok) {
+                const data = await res.json()
+                setDarkFilterFallback(false)
+                return data
+              }
+            } catch (_) {
+              // ignore
+            }
+            // fallback to light asset with filter
+            setDarkFilterFallback(true)
+          }
+          return logoAnimation as any
+        }
+
         if (lottieContainerRef.current) {
-          animation = lottie.default.loadAnimation({
+          const data = await getAnimationData(theme)
+          animation = lottieModuleRef.current.loadAnimation({
             container: lottieContainerRef.current,
             renderer: "svg",
             loop: false,
             autoplay: true,
-            animationData: logoAnimation as any,
+            animationData: data,
             rendererSettings: {
               preserveAspectRatio: "xMidYMid meet",
             },
           })
+          lottieAnimRef.current = animation
         }
       } catch (e) {
         // If lottie fails to load, just skip the splash quickly
@@ -87,8 +117,13 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
         console.warn("Lottie failed to load:", e)
       } finally {
         timeoutId = window.setTimeout(() => {
+          // Start app fade-in as splash ends
+          setAppVisible(true)
           setSplashVisible(false)
-          setSplashMounted(false)
+          // Unmount splash after fade-out window
+          unmountTimeoutId = window.setTimeout(() => {
+            setSplashMounted(false)
+          }, 500)
           try {
             window.localStorage.setItem("splashLastShownAt", String(Date.now()))
           } catch (_) {
@@ -102,6 +137,7 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
 
     return () => {
       if (timeoutId) window.clearTimeout(timeoutId)
+      if (unmountTimeoutId) window.clearTimeout(unmountTimeoutId)
       try {
         if (animation && typeof animation.destroy === "function") {
           animation.destroy()
@@ -112,6 +148,51 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
     }
   }, [])
 
+  // If theme changes while splash is visible, reload animation with matching asset
+  React.useEffect(() => {
+    const reloadForTheme = async () => {
+      if (!splashMounted) return
+      if (!lottieModuleRef.current || !lottieContainerRef.current) return
+
+      try {
+        // destroy existing
+        if (lottieAnimRef.current && typeof lottieAnimRef.current.destroy === "function") {
+          lottieAnimRef.current.destroy()
+        }
+
+        // load appropriate data
+        let data: any = logoAnimation
+        if (theme === "dark") {
+          try {
+            const res = await fetch("/logo-dark.json", { credentials: "same-origin" })
+            if (res.ok) {
+              data = await res.json()
+              setDarkFilterFallback(false)
+            } else {
+              setDarkFilterFallback(true)
+            }
+          } catch (_) {
+            data = logoAnimation as any
+            setDarkFilterFallback(true)
+          }
+        }
+
+        lottieAnimRef.current = lottieModuleRef.current.loadAnimation({
+          container: lottieContainerRef.current,
+          renderer: "svg",
+          loop: false,
+          autoplay: true,
+          animationData: data,
+          rendererSettings: { preserveAspectRatio: "xMidYMid meet" },
+        })
+      } catch (_) {
+        // ignore reload errors
+      }
+    }
+
+    reloadForTheme()
+  }, [theme, splashMounted])
+
   return (
     <ThemeProvider theme={styledTheme}>
       <ThemeContext.Provider value={theme}>
@@ -119,11 +200,11 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
         {splashMounted && (
           <SplashOverlay role="status" aria-live="polite" aria-label="Loading" data-visible={splashVisible}>
             <SplashInner>
-              <LottieBox ref={lottieContainerRef} />
+              <LottieBox ref={lottieContainerRef} data-dark-fallback={darkFilterFallback && theme === "dark" ? "true" : "false"} />
             </SplashInner>
           </SplashOverlay>
         )}
-        <Container>
+        <Container data-visible={appVisible ? "true" : "false"}>
           <NavBar title={title} themeToggler={themeToggler} />
           {children}
         </Container>
@@ -138,6 +219,11 @@ const Container = styled.div`
   height: 100%;
   min-height: calc(100vh - var(--footer-height));
   background-color: var(--color-post-background);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  &[data-visible='true'] {
+    opacity: 1;
+  }
 `
 
 const Footer = styled.footer`
@@ -190,4 +276,7 @@ const SplashInner = styled.div`
 const LottieBox = styled.div`
   width: 100%;
   height: 100%;
+  &[data-dark-fallback='true'] {
+    filter: invert(1);
+  }
 `

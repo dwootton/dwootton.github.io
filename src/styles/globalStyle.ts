@@ -92,8 +92,8 @@ const GlobalStyle = createGlobalStyle`
       --color-gray-4: #868686;
       --color-gray-5: #6e6e6e;
       --color-gray-6: #696969;
-      --color-divider: rgba(0, 0, 0, 0.15);
-      --color-dimmed: rgba(0, 0, 0, 0.15);
+      --color-divider: rgba(0, 0, 0, 0.10);
+      --color-dimmed: rgba(0, 0, 0, 0.10);
       --color-floating-button: rgba(255, 255, 255, 0.7);
       --color-floating-button-hover: rgba(50, 50, 50, 0.7);
       --color-floating-button-border: rgba(230, 230, 230, 0.7);
@@ -105,7 +105,8 @@ const GlobalStyle = createGlobalStyle`
       --color-blue: #0066cc;
       --color-icon: #2c2c2c;
       /* Atlas tokens */
-      --atlas-dot: #cfcfcf; /* light gray points */
+      --atlas-dot: #111111; /* much darker points */
+      --atlas-grid: #E6E6E6; /* much lighter gridlines */
     }
 
     body.dark {
@@ -143,6 +144,7 @@ const GlobalStyle = createGlobalStyle`
       --color-icon: #d1d1d1;
       /* Atlas tokens */
       --atlas-dot: #dadada; /* light gray points against dark */
+      --atlas-grid: rgba(255,255,255,0.22); /* brighter gridlines on dark */
     }
   }
 

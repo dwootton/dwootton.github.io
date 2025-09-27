@@ -207,7 +207,8 @@ const pwaPlugins = [
       },
     },
   },
-  "gatsby-plugin-offline",
+  // Only enable offline in production to avoid SW caching issues during develop
+  ... (process.env.NODE_ENV === 'production' ? ["gatsby-plugin-offline"] : []),
 ]
 
 const isDev = process.env.NODE_ENV === 'development'

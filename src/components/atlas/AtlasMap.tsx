@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import type { AtlasItem } from "./types"
+import useTheme from "Hooks/useTheme"
 
 interface Props {
   data: AtlasItem[]
@@ -24,6 +25,24 @@ const AtlasMap: React.FC<Props> = ({ data, width = 800, height = 450, onSelect, 
   const [hover, setHover] = React.useState<string | null>(null)
   const [selected, setSelected] = React.useState<string | null>(null)
   // No pan/zoom per requirements
+  const { theme } = useTheme()
+  const [themeTick, setThemeTick] = React.useState(0)
+
+  // Fallback: observe body.class changes to ensure redraw on theme flips
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return
+    const target = document.body
+    const obs = new MutationObserver((muts) => {
+      for (const m of muts) {
+        if (m.type === 'attributes' && m.attributeName === 'class') {
+          setThemeTick(t => t + 1)
+          break
+        }
+      }
+    })
+    obs.observe(target, { attributes: true, attributeFilter: ['class'] })
+    return () => obs.disconnect()
+  }, [])
 
   const filtered = data
 
@@ -51,17 +70,17 @@ const AtlasMap: React.FC<Props> = ({ data, width = 800, height = 450, onSelect, 
     ctx.clearRect(0, 0, width, height)
     ctx.save()
 
-    // Mesh background and highlight color from CSS vars
-    let divider = "rgba(0,0,0,0.08)"
-    let highlight = "#FFCC00"
+    // Resolve atlas colors from CSS variables once per draw
+    let grid = '#666'
+    let dot = '#2A2A2A'
+    let highlight = '#FFCC00'
     if (typeof window !== 'undefined') {
       const styles = getComputedStyle(document.body)
-      const v = styles.getPropertyValue('--color-divider').trim()
-      if (v) divider = v
-      const a = styles.getPropertyValue('--accent').trim()
-      if (a) highlight = a
+      grid = (styles.getPropertyValue('--atlas-grid') || styles.getPropertyValue('--color-divider')).trim() || grid
+      dot = (styles.getPropertyValue('--atlas-dot')).trim() || dot
+      highlight = (styles.getPropertyValue('--accent')).trim() || highlight
     }
-    ctx.strokeStyle = divider
+    ctx.strokeStyle = grid
     ctx.lineWidth = 1
     for (let gx = 0; gx < width; gx += 40) {
       ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, height); ctx.stroke()
@@ -76,7 +95,7 @@ const AtlasMap: React.FC<Props> = ({ data, width = 800, height = 450, onSelect, 
       const y = scale.ny(d.y)
       const r = typeSize[d.type] ?? 4
       ctx.beginPath()
-      ctx.fillStyle = pointColor(d)
+      ctx.fillStyle = dot
       ctx.arc(x, y, r, 0, Math.PI * 2)
       ctx.fill()
       // Hover/selected halo
@@ -88,7 +107,7 @@ const AtlasMap: React.FC<Props> = ({ data, width = 800, height = 450, onSelect, 
     })
 
     ctx.restore()
-  }, [filtered, scale, width, height, hover, hoverSlug, selected])
+  }, [filtered, scale, width, height, hover, hoverSlug, selected, theme, themeTick])
 
   // Hit test
   const pick = (pxCSS: number, pyCSS: number) => {
@@ -172,22 +191,11 @@ const AtlasMap: React.FC<Props> = ({ data, width = 800, height = 450, onSelect, 
         role="img"
         aria-label="Atlas Map scatterplot"
       />
-      {hover && (
-        <Live aria-live="polite">{data.find(d => d.slug === hover)?.title}</Live>
-      )}
     </Wrap>
   )
 }
 
-const pointColor = (_d: AtlasItem) => {
-  // All dots use a light gray that respects theme
-  if (typeof window !== 'undefined') {
-    const styles = getComputedStyle(document.body)
-    const v = styles.getPropertyValue('--atlas-dot').trim()
-    if (v) return v
-  }
-  return '#cfcfcf'
-}
+// Point color resolved via CSS variables inside draw effect
 
 const Wrap = styled.div`
   position: relative;
@@ -204,12 +212,6 @@ const Canvas = styled.canvas`
   touch-action: auto;
 `
 
-const Live = styled.div`
-  position: absolute; left: 8px; bottom: 8px;
-  background: var(--color-card);
-  border: 1px solid var(--color-divider);
-  padding: 4px 8px; border-radius: 4px;
-  font-size: 12px; font-family: var(--font-mono);
-`
+// bottom-left live tooltip removed per design
 
 export default AtlasMap
