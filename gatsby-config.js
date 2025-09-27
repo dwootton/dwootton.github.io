@@ -210,8 +210,17 @@ const pwaPlugins = [
   "gatsby-plugin-offline",
 ]
 
+const isDev = process.env.NODE_ENV === 'development'
+
 module.exports = {
-  graphqlTypegen: true,
+  // Disable typegen during develop to avoid watch loops; generate on build
+  graphqlTypegen: isDev
+    ? false
+    : {
+        generateOnBuild: true,
+        // Emit outside `src` to avoid watchers even in future upgrades
+        typesOutputPath: 'types/gatsby-types.d.ts',
+      },
   siteMetadata,
   plugins: [
     ...corePlugins,
