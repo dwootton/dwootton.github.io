@@ -57,6 +57,20 @@ const GlobalStyle = createGlobalStyle`
 
     --color-outline: rgba(0,125,250,0.6);
 
+    /* Atlas design tokens */
+    --ink: #111;
+    --charcoal: #2A2A2A;
+    --paper: #FFF;
+    --mist: #F7F7F7;
+    --contour: #E6E6E6;
+    --accent: #FFCC00; /* Nat Geo-like gold */
+    --forest: #0E5E3B;
+    --navy: #0D2747;
+
+    --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    --font-serif: "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  
     body.light {
       --color-text: #1d1d1d;
       --color-text-2: #1d1d1d;
@@ -90,6 +104,8 @@ const GlobalStyle = createGlobalStyle`
       --color-floating-button-shadow-hover: rgba(0, 0, 0, 0.4);
       --color-blue: #0066cc;
       --color-icon: #2c2c2c;
+      /* Atlas tokens */
+      --atlas-dot: #cfcfcf; /* light gray points */
     }
 
     body.dark {
@@ -125,6 +141,8 @@ const GlobalStyle = createGlobalStyle`
       --color-floating-button-shadow-hover: rgba(0, 0, 0, 0.4);
       --color-blue: #0a84ff;
       --color-icon: #d1d1d1;
+      /* Atlas tokens */
+      --atlas-dot: #dadada; /* light gray points against dark */
     }
   }
 
@@ -183,3 +201,4 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export default GlobalStyle
+ 

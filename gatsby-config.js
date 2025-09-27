@@ -16,8 +16,8 @@ const siteMetadata = {
       name: "Home",
     },
     {
-      link: "/projects/",
-      name: "Projects",
+      link: "/atlas/",
+      name: "Atlas",
     },
 
     {

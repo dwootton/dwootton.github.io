@@ -24,6 +24,7 @@ const Projects = ({
   data,
   location,
 }: PageProps<Queries.Query, Queries.MarkdownRemarkFrontmatter>) => {
+  // Projects page remains as-is; Atlas is available at /atlas
   const [posts, setPosts] = useState<Post[]>([])
   // make currentCategory only a string
   const [currentCategory] = useQueryParamString("category", "")
