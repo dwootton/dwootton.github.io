@@ -10,6 +10,7 @@ interface Props {
   onSelect: (slug: string | null) => void
   onHover?: (info: { slug: string | null; cx: number; cy: number }) => void
   hoverSlug?: string | null
+  visitedSlugs?: Set<string>
 }
 
 const typeSize: Record<string, number> = {
@@ -20,7 +21,7 @@ const typeSize: Record<string, number> = {
   map: 5,
 }
 
-const AtlasMap: React.FC<Props> = ({ data, width = 800, height = 450, onSelect, onHover, hoverSlug }) => {
+const AtlasMap: React.FC<Props> = ({ data, width = 800, height = 450, onSelect, onHover, hoverSlug, visitedSlugs }) => {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
   const [hover, setHover] = React.useState<string | null>(null)
   const [selected, setSelected] = React.useState<string | null>(null)
@@ -74,11 +75,13 @@ const AtlasMap: React.FC<Props> = ({ data, width = 800, height = 450, onSelect, 
     let grid = '#666'
     let dot = '#2A2A2A'
     let highlight = '#FFCC00'
+    let visited = '#6B4EFF'
     if (typeof window !== 'undefined') {
       const styles = getComputedStyle(document.body)
       grid = (styles.getPropertyValue('--atlas-grid') || styles.getPropertyValue('--color-divider')).trim() || grid
       dot = (styles.getPropertyValue('--atlas-dot')).trim() || dot
       highlight = (styles.getPropertyValue('--accent')).trim() || highlight
+      visited = (styles.getPropertyValue('--atlas-visited')).trim() || visited
     }
     ctx.strokeStyle = grid
     ctx.lineWidth = 1
@@ -95,7 +98,7 @@ const AtlasMap: React.FC<Props> = ({ data, width = 800, height = 450, onSelect, 
       const y = scale.ny(d.y)
       const r = typeSize[d.type] ?? 4
       ctx.beginPath()
-      ctx.fillStyle = dot
+      ctx.fillStyle = (visitedSlugs && visitedSlugs.has(d.slug)) ? visited : dot
       ctx.arc(x, y, r, 0, Math.PI * 2)
       ctx.fill()
       // Hover/selected halo
@@ -107,7 +110,7 @@ const AtlasMap: React.FC<Props> = ({ data, width = 800, height = 450, onSelect, 
     })
 
     ctx.restore()
-  }, [filtered, scale, width, height, hover, hoverSlug, selected, theme, themeTick])
+  }, [filtered, scale, width, height, hover, hoverSlug, selected, theme, themeTick, visitedSlugs])
 
   // Hit test
   const pick = (pxCSS: number, pyCSS: number) => {

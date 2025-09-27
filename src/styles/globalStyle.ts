@@ -107,6 +107,10 @@ const GlobalStyle = createGlobalStyle`
       /* Atlas tokens */
       --atlas-dot: #111111; /* much darker points */
       --atlas-grid: #E6E6E6; /* much lighter gridlines */
+      --atlas-visited:rgb(34, 24, 74,0.7); /* dark purple for visited */
+      /* Card hover */
+      --card-hover-bg: #F4F1FF; /* soft lavender */
+      --card-hover-shadow: 0 10px 24px rgba(0,0,0,.18);
     }
 
     body.dark {
@@ -145,6 +149,10 @@ const GlobalStyle = createGlobalStyle`
       /* Atlas tokens */
       --atlas-dot: #dadada; /* light gray points against dark */
       --atlas-grid: rgba(255,255,255,0.22); /* brighter gridlines on dark */
+      --atlas-visited:rgb(214, 203, 241,0.7); /* light purple for visited */
+      /* Card hover */
+      --card-hover-bg: rgba(255,255,255,0.06); /* subtle tint on dark */
+      --card-hover-shadow: 0 12px 28px rgba(0,0,0,.4);
     }
   }
 

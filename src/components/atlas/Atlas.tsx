@@ -15,6 +15,24 @@ const Atlas: React.FC<Props> = ({ items = sampleItems }) => {
   const [hoverTip, setHoverTip] = React.useState<{ slug: string | null; cx: number; cy: number } | null>(null)
   const [overlay, setOverlay] = React.useState({ opacity: 1, scale: 1 })
   const [cardHover, setCardHover] = React.useState<string | null>(null)
+  const [visited, setVisited] = React.useState<Set<string>>(() => {
+    if (typeof window === 'undefined') return new Set()
+    try {
+      const raw = localStorage.getItem('atlasVisited')
+      if (!raw) return new Set()
+      return new Set(JSON.parse(raw))
+    } catch { return new Set() }
+  })
+
+  const recordVisit = React.useCallback((slug: string | null) => {
+    if (!slug) return
+    setVisited(prev => {
+      const next = new Set(prev)
+      next.add(slug)
+      try { localStorage.setItem('atlasVisited', JSON.stringify(Array.from(next))) } catch {}
+      return next
+    })
+  }, [])
 
   return (
     <Main>
@@ -22,13 +40,14 @@ const Atlas: React.FC<Props> = ({ items = sampleItems }) => {
         <MapCell onMouseEnter={() => setOverlay({ opacity: 0.15, scale: 0.98 })} onMouseLeave={() => setOverlay({ opacity: 1, scale: 1 })}>
           <AtlasMap
             data={items}
-            onSelect={setSelected}
+            onSelect={(slug) => { if (slug) { recordVisit(slug); navigate(buildItemUrl(slug)) } }}
             onHover={(info) => {
               setHoverTip(info)
               // Hover only dims overlay while hovering
               setOverlay(o => (info.slug ? { opacity: 0.15, scale: 0.98 } : o))
             }}
             hoverSlug={cardHover}
+            visitedSlugs={visited}
           />
           <HeroOverlay style={{ opacity: overlay.opacity, transform: `scale(${overlay.scale})` }}>
             <h1>The Atlas</h1>
@@ -42,7 +61,8 @@ const Atlas: React.FC<Props> = ({ items = sampleItems }) => {
               }}
               onClick={() => {
                 if (!hoverTip?.slug) return
-                setSelected(hoverTip.slug)
+                recordVisit(hoverTip.slug)
+                navigate(buildItemUrl(hoverTip.slug))
               }}
             >
               <strong>{items.find(i => i.slug === hoverTip.slug)?.title}</strong>
@@ -52,12 +72,13 @@ const Atlas: React.FC<Props> = ({ items = sampleItems }) => {
       </MapWrap>
 
       <List>
-        {orderItems(items, selected).map(item => (
+        {items.map(item => (
           <ItemCard
             key={item.slug}
             item={item}
             onHover={(slug) => setCardHover(slug)}
-            onClick={() => navigate(buildItemUrl(item.slug))}
+            onClick={(slug) => { recordVisit(slug); navigate(buildItemUrl(item.slug)) }}
+            visited={visited.has(item.slug)}
           />
         ))}
       </List>
