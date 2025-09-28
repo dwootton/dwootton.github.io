@@ -1,7 +1,6 @@
-import React from "react"
-import styled from "styled-components"
-import type { AtlasItem } from "./types"
-import useTheme from "Hooks/useTheme"
+import React from 'react'
+import styled from 'styled-components'
+import type { AtlasItem } from './types'
 
 interface Props {
   data: AtlasItem[]
@@ -13,7 +12,7 @@ interface Props {
   visitedSlugs?: Set<string>
 }
 
-const typeSize: Record<string, number> = {
+const typeRadius: Record<string, number> = {
   project: 6,
   route: 6,
   waypoint: 4,
@@ -21,184 +20,87 @@ const typeSize: Record<string, number> = {
   map: 5,
 }
 
-const AtlasMap: React.FC<Props> = ({ data, width = 800, height = 450, onSelect, onHover, hoverSlug, visitedSlugs }) => {
-  const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
+export default function AtlasMap({ data, onSelect, onHover, hoverSlug, visitedSlugs }: Props) {
+  const wrapRef = React.useRef<HTMLDivElement | null>(null)
+  const [size, setSize] = React.useState<{ w: number; h: number }>({ w: 640, h: 360 })
   const [hover, setHover] = React.useState<string | null>(null)
-  const [selected, setSelected] = React.useState<string | null>(null)
-  // No pan/zoom per requirements
-  const { theme } = useTheme()
-  const [themeTick, setThemeTick] = React.useState(0)
 
-  // Fallback: observe body.class changes to ensure redraw on theme flips
   React.useEffect(() => {
-    if (typeof window === 'undefined') return
-    const target = document.body
-    const obs = new MutationObserver((muts) => {
-      for (const m of muts) {
-        if (m.type === 'attributes' && m.attributeName === 'class') {
-          setThemeTick(t => t + 1)
-          break
-        }
-      }
-    })
-    obs.observe(target, { attributes: true, attributeFilter: ['class'] })
-    return () => obs.disconnect()
+    const el = wrapRef.current
+    if (!el) return
+    const update = () => {
+      const w = el.clientWidth
+      const h = Math.max(180, Math.round((w * 9) / 16))
+      setSize({ w, h })
+    }
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => ro.disconnect()
   }, [])
 
-  const filtered = data
+  // Normalize coordinates to viewBox with padding
+  const pad = 20
+  const mins = React.useMemo(() => {
+    const xs = data.map(d => d.x)
+    const ys = data.map(d => d.y)
+    return { minX: Math.min(...xs, -1), maxX: Math.max(...xs, 1), minY: Math.min(...ys, -1), maxY: Math.max(...ys, 1) }
+  }, [data])
+  const nx = React.useCallback((x: number) => ((x - mins.minX) / (mins.maxX - mins.minX || 1)) * (size.w - pad * 2) + pad, [size.w, mins])
+  const ny = React.useCallback((y: number) => ((y - mins.minY) / (mins.maxY - mins.minY || 1)) * (size.h - pad * 2) + pad, [size.h, mins])
 
-  const scale = React.useMemo(() => {
-    const xs = filtered.map(d => d.x)
-    const ys = filtered.map(d => d.y)
-    const minX = Math.min(...xs, -1), maxX = Math.max(...xs, 1)
-    const minY = Math.min(...ys, -1), maxY = Math.max(...ys, 1)
-    const pad = 20
-    const nx = (x: number) => ((x - minX) / (maxX - minX || 1)) * (width - pad * 2) + pad
-    const ny = (y: number) => ((y - minY) / (maxY - minY || 1)) * (height - pad * 2) + pad
-    return { nx, ny }
-  }, [filtered, width, height])
-
-  React.useEffect(() => {
-    const ctx = canvasRef.current?.getContext("2d")
-    if (!ctx) return
-    const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
-    const w = width * dpr
-    const h = height * dpr
-    ctx.canvas.width = w
-    ctx.canvas.height = h
-    ctx.scale(dpr, dpr)
-
-    ctx.clearRect(0, 0, width, height)
-    ctx.save()
-
-    // Resolve atlas colors from CSS variables once per draw
-    let grid = '#666'
-    let dot = '#2A2A2A'
-    let highlight = '#FFCC00'
-    let visited = '#6B4EFF'
-    if (typeof window !== 'undefined') {
-      const styles = getComputedStyle(document.body)
-      grid = (styles.getPropertyValue('--atlas-grid') || styles.getPropertyValue('--color-divider')).trim() || grid
-      dot = (styles.getPropertyValue('--atlas-dot')).trim() || dot
-      highlight = (styles.getPropertyValue('--accent')).trim() || highlight
-      visited = (styles.getPropertyValue('--atlas-visited')).trim() || visited
-    }
-    ctx.strokeStyle = grid
-    ctx.lineWidth = 1
-    for (let gx = 0; gx < width; gx += 40) {
-      ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, height); ctx.stroke()
-    }
-    for (let gy = 0; gy < height; gy += 40) {
-      ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(width, gy); ctx.stroke()
-    }
-
-    // Points
-    filtered.forEach(d => {
-      const x = scale.nx(d.x)
-      const y = scale.ny(d.y)
-      const r = typeSize[d.type] ?? 4
-      ctx.beginPath()
-      ctx.fillStyle = (visitedSlugs && visitedSlugs.has(d.slug)) ? visited : dot
-      ctx.arc(x, y, r, 0, Math.PI * 2)
-      ctx.fill()
-      // Hover/selected halo
-      if (d.slug === hover || d.slug === selected || d.slug === hoverSlug) {
-        ctx.lineWidth = 2
-        ctx.strokeStyle = highlight
-        ctx.beginPath(); ctx.arc(x, y, r + 3, 0, Math.PI * 2); ctx.stroke()
-      }
-    })
-
-    ctx.restore()
-  }, [filtered, scale, width, height, hover, hoverSlug, selected, theme, themeTick, visitedSlugs])
-
-  // Hit test
-  const pick = (pxCSS: number, pyCSS: number) => {
-    const rect = canvasRef.current?.getBoundingClientRect()
-    const sx = rect ? rect.width / width : 1
-    const sy = rect ? rect.height / height : 1
-    const x0 = pxCSS / sx
-    const y0 = pyCSS / sy
-    for (let i = filtered.length - 1; i >= 0; i--) {
-      const d = filtered[i]
-      const x = scale.nx(d.x)
-      const y = scale.ny(d.y)
-      const r = (typeSize[d.type] ?? 4) + 4
-      const dx = x - x0
-      const dy = y - y0
-      if (dx * dx + dy * dy <= r * r) return d.slug
-    }
-    return null
+  const handleEnter = (d: AtlasItem) => {
+    setHover(d.slug)
+    onHover?.({ slug: d.slug, cx: nx(d.x), cy: ny(d.y) })
   }
-
-  const onMouseMove: React.MouseEventHandler<HTMLCanvasElement> = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const localX = e.clientX - rect.left
-    const localY = e.clientY - rect.top
-    const slug = pick(localX, localY)
-    setHover(slug)
-    if (onHover) {
-      if (slug) {
-        const d = filtered.find(d => d.slug === slug)
-        if (d) {
-          const sx = rect.width / width
-          const sy = rect.height / height
-          const x = scale.nx(d.x) * sx
-          const y = scale.ny(d.y) * sy
-          onHover({ slug, cx: x, cy: y })
-        } else {
-          onHover({ slug: null, cx: localX, cy: localY })
-        }
-      } else {
-        onHover({ slug: null, cx: localX, cy: localY })
-      }
-    }
+  const handleLeave = () => {
+    setHover(null)
+    onHover?.({ slug: null, cx: 0, cy: 0 })
   }
-
-  const onClick: React.MouseEventHandler<HTMLCanvasElement> = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const slug = pick(e.clientX - rect.left, e.clientY - rect.top)
-    setSelected(slug)
-    onSelect(slug)
-  }
-
-  // Wheel zoom
-  // No wheel zoom or drag pan
-
-  // Keyboard navigation (← → within same cluster)
-  React.useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (!selected) return
-      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return
-      const cur = data.find(d => d.slug === selected)
-      if (!cur) return
-      const inCluster = data.filter(d => d.cluster === cur.cluster)
-      const idx = inCluster.findIndex(d => d.slug === selected)
-      const nextIdx = (idx + (e.key === "ArrowRight" ? 1 : -1) + inCluster.length) % inCluster.length
-      const next = inCluster[nextIdx]
-      setSelected(next.slug)
-      onSelect(next.slug)
-    }
-    window.addEventListener("keydown", handler)
-    return () => window.removeEventListener("keydown", handler)
-  }, [selected, data, onSelect])
 
   return (
-    <Wrap>
-      <Canvas
-        ref={canvasRef}
-        width={width}
-        height={height}
-        onMouseMove={onMouseMove}
-        onClick={onClick}
-        role="img"
-        aria-label="Atlas Map scatterplot"
-      />
+    <Wrap ref={wrapRef}>
+      <svg width="100%" height="auto" viewBox={`0 0 ${size.w} ${size.h}`} preserveAspectRatio="xMidYMid meet" role="img" aria-label="Atlas Map scatterplot">
+        {/* Grid */}
+        <g stroke="var(--atlas-grid)" strokeWidth={1} shapeRendering="crispEdges">
+          {Array.from({ length: Math.ceil(size.w / 40) + 1 }).map((_, i) => {
+            const x = i * 40
+            return <line key={`vx-${i}`} x1={x} y1={0} x2={x} y2={size.h} />
+          })}
+          {Array.from({ length: Math.ceil(size.h / 40) + 1 }).map((_, i) => {
+            const y = i * 40
+            return <line key={`hy-${i}`} x1={0} y1={y} x2={size.w} y2={y} />
+          })}
+        </g>
+        {/* Points */}
+        <g>
+          {data.map(d => {
+            const cx = nx(d.x)
+            const cy = ny(d.y)
+            const r = typeRadius[d.type] ?? 4
+            const isHover = d.slug === hover || d.slug === hoverSlug
+            const isVisited = visitedSlugs?.has(d.slug)
+            return (
+              <g key={d.slug}>
+                {isHover && <circle cx={cx} cy={cy} r={r + 3} fill="none" stroke="var(--accent)" strokeWidth={2} />}
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={r}
+                  fill={isVisited ? 'var(--atlas-visited)' : 'var(--atlas-dot)'}
+                  onMouseEnter={() => handleEnter(d)}
+                  onMouseLeave={handleLeave}
+                  onClick={() => onSelect(d.slug)}
+                  style={{ cursor: 'pointer' }}
+                />
+              </g>
+            )
+          })}
+        </g>
+      </svg>
     </Wrap>
   )
 }
-
-// Point color resolved via CSS variables inside draw effect
 
 const Wrap = styled.div`
   position: relative;
@@ -206,15 +108,6 @@ const Wrap = styled.div`
   background: var(--color-post-background);
   border-radius: 8px;
   overflow: hidden;
-`
-
-const Canvas = styled.canvas`
-  width: 100%;
-  height: auto;
   aspect-ratio: 16 / 9;
-  touch-action: auto;
 `
 
-// bottom-left live tooltip removed per design
-
-export default AtlasMap

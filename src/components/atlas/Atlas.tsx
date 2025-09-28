@@ -51,7 +51,7 @@ const Atlas: React.FC<Props> = ({ items = sampleItems }) => {
           />
           <HeroOverlay style={{ opacity: overlay.opacity, transform: `scale(${overlay.scale})` }}>
             <h1>The Atlas</h1>
-            <p>Writings, prototypes, and code projects mapped as a landscape.</p>
+            <p>Writings, prototypes, and code projects mapped.</p>
           </HeroOverlay>
           {hoverTip?.slug && (
             <NameTooltip
