@@ -71,7 +71,10 @@ const Home = () => {
           { id: 'guides', title: 'Guideposts', explainer: 'Reusable techniques and patterns.' },
           { id: 'prototypes', title: 'Prototypes', explainer: 'Code and prototypes with write-ups.' },
           { id: 'field', title: 'Field Notes', explainer: 'Shorter thoughts and provisional ideas.' },
-        ].map((sec, idx) => (
+        ].map((sec, idx) => {
+          const items = posts.slice(idx*3, idx*3 + 3)
+          if (items.length === 0) return null
+          return (
           <Section key={sec.id}>
             <SectionHead>
               <Link to="/atlas/"><h3>{sec.title} →</h3></Link>
@@ -79,7 +82,7 @@ const Home = () => {
             </SectionHead>
             {sec.id === 'essays' ? (
               <Cards>
-                {(posts.slice(idx*3, idx*3 + 3)).map((p) => (
+                {items.map((p) => (
                   <HomeCard
                     key={p.id}
                     title={p.title}
@@ -93,7 +96,7 @@ const Home = () => {
               </Cards>
             ) : (
               <SimpleList>
-                {(posts.slice(idx*3, idx*3 + 3)).map((p) => (
+                {items.map((p) => (
                   <li key={p.id}>
                     <Link to={p.slug || '#'}>{p.title}</Link>
                     {p.desc && <span className="muted"> — {p.desc}</span>}
@@ -102,7 +105,7 @@ const Home = () => {
               </SimpleList>
             )}
           </Section>
-        ))}
+        )})}
       </Sections>
     </Layout>
   )
