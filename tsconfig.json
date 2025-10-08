@@ -7,6 +7,10 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
+    "rootDir": "src",
+    "outDir": ".cache/tsc",
+    "noEmitOnError": true,
+    "sourceMap": true,
     "baseUrl": ".",
     "paths": {
       "Src/*": ["src"],
@@ -27,5 +31,13 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    ".cache",
+    "public"
+  ]
 }

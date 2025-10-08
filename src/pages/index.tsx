@@ -54,17 +54,20 @@ const Home = () => {
       <SEO title="Home" />
       <HeroWrap>
         <HeroGrid>
-          <H1>Dylan builds interactive systems that help people make sense of data.</H1>
-          <Subline>HCI researcher and Interaction designer</Subline>
-          <BodyCopy>
+          <H1>Dylan builds interactive systems that make information explorable.</H1>
+          <Subline>HCI and VIS researcher. PhD'ing at MIT.</Subline>
+          {/* <BodyCopy>
             My work explores the boundary between rigid computational formalisms and the softer, exploratory reasoning of analysts. I’m currently PhD’ing at
             {' '}<a href="https://vis.csail.mit.edu/" target="_blank" rel="noreferrer">MIT</a> working with {' '}
             <a href="https://arvindsatya.com/" target="_blank" rel="noreferrer">Arvind Satyanarayan</a>.
-          </BodyCopy>
+          </BodyCopy> */}
         </HeroGrid>
       </HeroWrap>
 
       <AtlasHeaderLink to="/atlas/">The Atlas</AtlasHeaderLink>
+      <AtlasSubline style={{ display: "block", marginBottom: "1.5rem", color: "var(--color-text-2)", fontSize: "1.08rem" }}>
+        A <span style={{ color: "var(--color-text-3)" }}>(WIP)</span>  compendium of interactive essays, prototypes, and field notes.
+      </AtlasSubline>
       <Sections>
         {[
           { id: 'essays', title: 'Essays', explainer: 'Papers, essays, and long-form arguments on interaction.' },
@@ -215,6 +218,13 @@ const AtlasHeaderLink = styled(Link)`
   @media (min-width: 1024px) { font-size: 2rem; }
   text-decoration: none;
   &:hover { text-decoration: underline; }
+`
+
+const AtlasSubline = styled.p`
+  width: 87.5%; max-width: var(--width); margin: 24px auto 8px; display: block;
+  font-weight: 300; font-size: 1.08rem; color: var(--color-text-2);
+  @media (min-width: 1024px) { font-size: 2rem; }
+  text-decoration: none;
 `
 
 // Section wrapper for home categories

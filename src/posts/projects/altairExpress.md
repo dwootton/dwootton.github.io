@@ -1,7 +1,13 @@
 ---
 title: "Altair Express"
-category: "Interaction"
-date: "2023"
+subtitle: "Instrumental Interaction Operators for Data Analysis"
+category: "Projects"
+subcategory: "Mature"
+planted_at: "2023-01-01"
+tags:
+  - Interaction
+  - Altair
+  - Prototyping
 desc: "Instrumental Interaction Operators for Data Analysis"
 thumbnail: "./images/alx/thumbnail.png"
 alt: "apple and shaking hands"

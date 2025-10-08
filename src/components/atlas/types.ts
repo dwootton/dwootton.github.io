@@ -10,7 +10,6 @@ export interface AtlasItem {
   tags: string[];
   topics: string[];
   status: "uncharted" | "in_progress" | "charted";
-  elevation: number;
   thumbnail?: string;
   alt?: string;
   repo_url?: string;
@@ -28,4 +27,3 @@ export interface AtlasData {
     version: number;
   };
 }
-

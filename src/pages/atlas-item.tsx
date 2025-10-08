@@ -1,70 +1,85 @@
 import React from "react"
 import styled from "styled-components"
+import { graphql, useStaticQuery } from "gatsby"
 import Layout from "Layouts/layout"
 import SEO from "Components/seo"
-import { sampleItems } from "Components/atlas/sampleData"
+import PageType from "Components/atlas/post/PageType"
 import type { AtlasItem } from "Components/atlas/types"
 
 const useSlug = (): string | null => {
   if (typeof window === 'undefined') return null
-  const p = new URLSearchParams(window.location.search)
-  return p.get('slug')
+  // Expect pathname like /atlas/<slug>
+  const parts = window.location.pathname.split('/').filter(Boolean)
+  const idx = parts.indexOf('atlas')
+  if (idx >= 0 && parts[idx + 1]) return decodeURIComponent(parts[idx + 1])
+  return null
 }
 
 const AtlasItemPage: React.FC = () => {
   const slug = useSlug()
-  const item: AtlasItem | undefined = slug ? sampleItems.find(i => i.slug === slug) : undefined
-  const title = item ? `${item.title} · ${labelForType(item.type)}` : 'Atlas Item'
+  const data = useStaticQuery<any>(graphql`
+    query AtlasItemsQuery {
+      allMarkdownRemark(
+        filter: { fileAbsolutePath: { regex: "/(posts)/" } }
+        sort: { frontmatter: { date: DESC } }
+      ) {
+        edges { node { id html frontmatter { title desc date category demoLink githubLink paperLink liveLink } fields { slug } } }
+      }
+    }
+  `)
+
+  const nodes = data.allMarkdownRemark.edges.map((e: any) => e.node)
+  const match = React.useMemo(() => {
+    if (!slug) return null
+    const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
+    const decamel = (s: string) => s.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+    // 1) match by title normalized
+    let n = nodes.find((n: any) => n.frontmatter?.title && norm(n.frontmatter.title) === slug)
+    if (n) return n
+    // 2) match by fields.slug includes slug (tolerate camelCase vs kebab-case)
+    n = nodes.find((n: any) => {
+      const f = (n.fields?.slug || '').toLowerCase()
+      return f.includes(slug) || f.includes(decamel(slug))
+    })
+    return n || null
+  }, [nodes, slug])
+
+  if (!match) {
+    return (
+      <Layout>
+        <SEO title="Atlas Item" />
+        <Main><Empty>Item not found.</Empty></Main>
+      </Layout>
+    )
+  }
+
+  const fm = match.frontmatter || {}
+  const title = fm.title || 'Atlas Item'
+  const pageFm = {
+    type: mapCategoryToType(fm.category),
+    title: fm.title || '',
+    deck: fm.desc || '',
+    topics: [],
+    date: fm.date || undefined,
+    status: 'charted',
+    tags: [],
+    repo_url: fm.githubLink || undefined,
+    live_url: (fm as any).liveLink || undefined,
+  } as any
 
   return (
     <Layout>
       <SEO title={title} />
       <Main>
-        {item ? (
-          <Article>
-            <Header>
-              <Badge>{iconFor(item.type)} {labelForType(item.type)}</Badge>
-              <h1>{item.title}</h1>
-              <p className="desc">{item.desc}</p>
-            </Header>
-            <MetaRow>
-              <span className="status">• {statusLabel(item.status)}</span>
-              <span className="elev">↑ {item.elevation}</span>
-              <span className="date">{item.date}</span>
-            </MetaRow>
-            <Content>
-              <p>This is a placeholder page for “{item.title}”. Layout and content blocks vary by type.</p>
-              {renderTypeSpecific(item)}
-            </Content>
-          </Article>
-        ) : (
-          <Empty>Item not found.</Empty>
-        )}
+        <PageType frontmatter={pageFm}>
+          <div dangerouslySetInnerHTML={{ __html: match.html || '' }} />
+        </PageType>
       </Main>
     </Layout>
   )
 }
 
-const renderTypeSpecific = (item: AtlasItem) => {
-  switch (item.type) {
-    case 'project':
-      return <Section>Links: {item.repo_url && (<a href={item.repo_url} target="_blank" rel="noreferrer">Repo</a>)} {item.live_url && (<a href={item.live_url} target="_blank" rel="noreferrer">Live</a>)}</Section>
-    case 'route':
-      return <Section>Route overview and linear navigation would appear here.</Section>
-    case 'waypoint':
-      return <Section>Waypoint details with elevation ticks.</Section>
-    case 'field_note':
-      return <Section>Field note with softer background and status.</Section>
-    case 'map':
-      return <Section>Map meta and related layers.</Section>
-    default:
-      return null
-  }
-}
-
-const labelForType = (t: string) => ({ project: 'Project', route: 'Route', waypoint: 'Waypoint', field_note: 'Field Note', map: 'Map' } as Record<string,string>)[t] || t
-const iconFor = (t: string) => t === 'project' ? '▣' : t === 'route' ? '╱╲' : t === 'waypoint' ? '⬤' : t === 'field_note' ? '✎' : t === 'map' ? '🗺' as unknown as string : '•'
-const statusLabel = (s: AtlasItem['status']) => ({ uncharted: 'Uncharted', in_progress: 'In progress', charted: 'Charted' } as const)[s]
+// Note: previously had per-type rendering helpers; consolidate into PageType usage
 
 const Main = styled.main`
   min-width: var(--min-width);
@@ -78,30 +93,16 @@ const Article = styled.article`
   background: var(--color-post-background);
 `
 
-const Header = styled.header`
-  display: grid; gap: 8px;
-  h1 { font-size: 28px; font-weight: 800; }
-  .desc { color: var(--charcoal); }
-`
-
-const Badge = styled.span`
-  font-size: 12px; font-family: var(--font-mono); color: var(--charcoal);
-`
-
-const MetaRow = styled.div`
-  display: flex; gap: 12px; font-size: 12px; color: var(--charcoal);
-  .elev { font-family: var(--font-mono); }
-`
-
-const Content = styled.section`
-  display: grid; gap: 16px; line-height: 1.6;
-`
-
-const Section = styled.section``
-
 const Empty = styled.div`
   width: 87.5%; max-width: var(--post-width); margin: 0 auto; color: var(--charcoal);
 `
 
-export default AtlasItemPage
+function mapCategoryToType(cat?: string | null): any {
+  const c = (cat || '').toLowerCase()
+  if (c.includes('guide')) return 'guidepost'
+  if (c.includes('note')) return 'field_note'
+  if (c.includes('essay') || c.includes('paper')) return 'essay'
+  return 'project'
+}
 
+export default AtlasItemPage

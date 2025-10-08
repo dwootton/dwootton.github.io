@@ -20,16 +20,6 @@ const MapKeyCard: React.FC<Props> = ({ fm, fields }) => {
           <Val>{fm.status}</Val>
         </Section>
       )}
-      {typeof fm.elevation === 'number' && (
-        <Section>
-          <Label>Elevation</Label>
-          <Ticks aria-label={`Elevation ${fm.elevation} of 5`}>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <span key={i} className={i < (fm.elevation || 0) ? 'on' : ''} />
-            ))}
-          </Ticks>
-        </Section>
-      )}
       {fields?.audience && (
         <Section>
           <Label>Audience</Label>
@@ -98,11 +88,5 @@ const Links = styled.div`
   display: flex; flex-wrap: wrap; gap: 8px;
   a { color: var(--accent); text-decoration: underline; font-size: 13px }
 `
-const Ticks = styled.div`
-  display: inline-flex; gap: 4px;
-  span { width: 8px; height: 8px; border-radius: 2px; background: var(--color-divider); }
-  span.on { background: var(--accent); }
-`
 
 export default MapKeyCard
-

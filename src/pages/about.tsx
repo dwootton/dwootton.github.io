@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import Layout from 'Layouts/layout'
 import SEO from 'Components/seo'
 import Markdown from 'Styles/markdown'
+import { rhythm } from 'Styles/typography'
 
 const AboutPage: React.FC = () => {
   const data = useStaticQuery<Queries.Query>(graphql`
@@ -20,7 +21,7 @@ const AboutPage: React.FC = () => {
   return (
     <Layout>
       <SEO title="About" />
-      <Main as="main">
+      <Main as="main" rhythm={rhythm}>
         <h1>About</h1>
         <div dangerouslySetInnerHTML={{ __html: html }} />
       </Main>
@@ -39,4 +40,3 @@ const Main = styled(Markdown)`
 `
 
 export default AboutPage
-

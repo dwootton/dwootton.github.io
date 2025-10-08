@@ -15,7 +15,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
 }
 
 exports.createPages = async ({ graphql, actions }) => {
-  const { createPage } = actions
+  const { createPage, createRedirect } = actions
 
   const mainTemplate = path.resolve(`./src/pages/index.tsx`)
   const blogPostTemplate = path.resolve(`./src/templates/blogPost.tsx`)
@@ -54,6 +54,20 @@ exports.createPages = async ({ graphql, actions }) => {
         slug: node.fields.slug,
       },
     })
+
+    // Deprecate legacy project paths under /project/ and /projects/ to /atlas/<slug>
+    // The new atlas path will try to match by normalized title or slug part
+    const slug = String(node.fields.slug || '')
+    // Expect format like /posts/projects/<name>/ -> derive last segment
+    const lastSeg = slug.split('/').filter(Boolean).pop() || ''
+    const atlasTarget = `/atlas/${encodeURIComponent(lastSeg)}`
+    const legacyPaths = [
+      `/project/${lastSeg}/`,
+      `/projects/${lastSeg}/`,
+    ]
+    legacyPaths.forEach(fromPath => {
+      createRedirect({ fromPath, toPath: atlasTarget, isPermanent: true, redirectInBrowser: true })
+    })
   })
 
   const categories = result.data.categoriesGroup.group
@@ -67,4 +81,17 @@ exports.createPages = async ({ graphql, actions }) => {
       },
     })
   })
+
+  // Nothing else here; /atlas client-only subroutes handled in onCreatePage
+}
+
+// Add client-only matches for /atlas/* pages so client routes render
+exports.onCreatePage = async ({ page, actions }) => {
+  const { createPage, deletePage } = actions
+  if (page.path === '/atlas-item/') {
+    const oldPage = { ...page }
+    page.matchPath = '/atlas/*'
+    deletePage(oldPage)
+    createPage(page)
+  }
 }

@@ -1,7 +1,13 @@
 ---
 title: "Arctic Explorer"
-category: "Interaction"
-date: "2019"
+subtitle: "Google Maps for the Arctic"
+category: "Projects"
+subcategory: "Budding"
+planted_at: "2019-01-01"
+tags:
+  - Mapping
+  - Data Visualization
+  - Arctic
 desc: "Google Maps for the Arctic"
 thumbnail: "./images/arcticExplorer/thumbnail.png"
 alt: "apple and shaking hands"

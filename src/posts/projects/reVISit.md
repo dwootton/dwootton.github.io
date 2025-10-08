@@ -1,7 +1,13 @@
 ---
 title: "ReVISit"
-category: "Design Methods"
-date: "2020"
+subtitle: "Tools to analyze user interactions in detail"
+category: "Projects"
+subcategory: "Seedling"
+planted_at: "2020-01-01"
+tags:
+  - UX Research
+  - Session Replay
+  - Visualization
 desc: "Tools to analyze user interactions in detail"
 thumbnail: "./images/reVISit/thumbnail.png"
 alt: "apple and shaking hands"

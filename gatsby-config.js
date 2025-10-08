@@ -206,6 +206,10 @@ const pwaPlugins = [
       theme_color: "#ffffff",
       display: "standalone",
       icon: meta.favicon,
+      // Ensure our custom <link rel="icon" ...> remains authoritative
+      include_favicon: false,
+      legacy: false,
+      theme_color_in_head: false,
       icon_options: {
         purpose: "any maskable",
       },

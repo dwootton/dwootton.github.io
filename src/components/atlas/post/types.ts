@@ -15,13 +15,16 @@ export interface Frontmatter {
   type: AtlasPostType
   title: string
   deck?: string
+  subtitle?: string
+  category?: string
+  subcategory?: string
   topics?: string[]
   date?: string // planted
+  planted_at?: string
   updated?: string // last tended
   status?: StatusStage
-  elevation?: number // 1..5
   tags?: string[]
-  audience?: string
+  audience?: string | { label?: string; description?: string }
   readTime?: string
   effort?: string
   repo_url?: string
@@ -47,4 +50,3 @@ export interface PageTypeProps {
   next?: { title: string; slug: string } | null
   mapKey?: MapKeyFields
 }
-

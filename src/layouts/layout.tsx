@@ -14,7 +14,7 @@ const { name, homepage } = packageJSON
 
 const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { theme, themeToggler } = useTheme()
-  const { title, author } = useSiteMetadata()
+  const { title, author, menuLinks } = useSiteMetadata()
   const [splashMounted, setSplashMounted] = React.useState(false)
   const [splashVisible, setSplashVisible] = React.useState(false)
   const [appVisible, setAppVisible] = React.useState(false)
@@ -208,7 +208,22 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
           <NavBar title={title} themeToggler={themeToggler} />
           {children}
         </Container>
-        <Footer role="contentinfo"></Footer>
+        <Footer role="contentinfo">
+          <FooterInner>
+            <FooterLeft>
+              <FooterTitle>Want to stay up to date?</FooterTitle>
+              <RssButton href="/rss.xml" aria-label="Subscribe via RSS Feed">Subscribe via RSS Feed</RssButton>
+              <SmallPrint>© {new Date().getFullYear()} {author}</SmallPrint>
+            </FooterLeft>
+            <FooterRight>
+              <FooterNavList aria-label="Footer navigation">
+                {menuLinks?.map(link => (
+                  <li key={link.name}><a href={link.link}>{link.name}</a></li>
+                ))}
+              </FooterNavList>
+            </FooterRight>
+          </FooterInner>
+        </Footer>
       </ThemeContext.Provider>
     </ThemeProvider>
   )
@@ -227,12 +242,48 @@ const Container = styled.div`
 `
 
 const Footer = styled.footer`
-  display: flex;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  height: var(--footer-height);
-  background-color: var(--color-gray-1);
+  width: 100%;
+  background: var(--color-post-background);
+  border-top: 1px solid var(--color-divider);
+`
+
+const FooterInner = styled.div`
+  width: 87.5%; max-width: var(--width); margin: 0 auto; padding: 28px 0 36px;
+  display: grid; grid-template-columns: 1fr auto; gap: 24px;
+  /* Slightly lighter in light mode, slightly darker in dark mode */
+  color: var(--color-text-3);
+`
+
+const FooterLeft = styled.div`
+  display: grid; gap: 12px; align-content: start;
+`
+
+const FooterRight = styled.nav`
+  display: grid; align-content: start;
+`
+
+const FooterTitle = styled.h2`
+  margin: 0; font-size: 18px; color: inherit;
+`
+
+const RssButton = styled.a`
+  /* Make the RSS button a small, intrinsic-width button */
+  justify-self: start;
+  display: inline-block; font-size: 14px; color: inherit;
+  border: 1px solid var(--color-divider); border-radius: 999px; padding: 6px 12px;
+  background: var(--color-card);
+  text-decoration: none;
+  &:hover { border-color: var(--accent); color: var(--accent); }
+`
+
+const SmallPrint = styled.div`
+  font-size: 12px; color: var(--color-text-3);
+`
+
+const FooterNavList = styled.ul`
+  margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; grid-auto-rows: min-content;
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--accent); }
 `
 
 const Copyright = styled.span`

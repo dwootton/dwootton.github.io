@@ -6,7 +6,6 @@ export interface Filters {
   types: Set<string>
   statuses: Set<string>
   topics: Set<string>
-  elevation: [number, number]
 }
 
 interface Props {
@@ -47,10 +46,6 @@ const LegendFilters: React.FC<Props> = ({ data, filters, onChange }) => {
     if (next.has(value)) next.delete(value)
     else next.add(value)
     onChange({ ...filters, [group]: next } as Filters)
-  }
-
-  const setElevation = (min: number, max: number) => {
-    onChange({ ...filters, elevation: [min, max] })
   }
 
   return (
@@ -103,30 +98,7 @@ const LegendFilters: React.FC<Props> = ({ data, filters, onChange }) => {
           ))}
         </TopicsList>
       </Section>
-      <Section>
-        <Label>Elevation</Label>
-        <Elevation>
-          <input
-            type="range"
-            min={1}
-            max={5}
-            value={filters.elevation[0]}
-            onChange={e => setElevation(Number(e.target.value), filters.elevation[1])}
-            aria-label="Min elevation"
-          />
-          <input
-            type="range"
-            min={1}
-            max={5}
-            value={filters.elevation[1]}
-            onChange={e => setElevation(filters.elevation[0], Number(e.target.value))}
-            aria-label="Max elevation"
-          />
-          <span>
-            {filters.elevation[0]}–{filters.elevation[1]}
-          </span>
-        </Elevation>
-      </Section>
+      {/* Elevation filter removed */}
     </Wrap>
   )
 }
@@ -213,13 +185,4 @@ const TopicChip = styled.button<{ $active?: boolean }>`
   &:focus { outline-color: var(--accent); }
 `
 
-const Elevation = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  input { flex: 1; }
-  span { font-size: 12px; font-family: var(--font-mono); color: var(--charcoal) }
-`
-
 export default LegendFilters
-

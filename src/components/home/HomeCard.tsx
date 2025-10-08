@@ -10,11 +10,10 @@ export interface HomeCardProps {
   date?: string
   type: 'Essay' | 'Field Note' | 'Project' | 'Guidepost' | 'Prototype'
   status?: 'uncharted' | 'in_progress' | 'charted'
-  elevation?: number
   image?: IGatsbyImageData | null
 }
 
-export default function HomeCard({ title, desc, slug, date, type, status, elevation, image }: HomeCardProps) {
+export default function HomeCard({ title, desc, slug, date, type, status, image }: HomeCardProps) {
   return (
     <CardLink to={slug} aria-label={`Open ${title} (${type})`}>
       <Card>
@@ -27,13 +26,6 @@ export default function HomeCard({ title, desc, slug, date, type, status, elevat
           <TypeChip>{type}</TypeChip>
           {date && <span>· {timeSince(date)}</span>}
           {status && <StatusChip data-status={status}>{statusLabel(status)}</StatusChip>}
-          {typeof elevation === 'number' && (
-            <Elev aria-label={`Elevation ${elevation} of 5`}>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <span key={i} className={i < (elevation || 0) ? 'on' : ''} />
-              ))}
-            </Elev>
-          )}
         </Meta>
       </Card>
     </CardLink>
@@ -82,12 +74,6 @@ const TypeChip = styled.span`
 
 const StatusChip = styled.span`
   border: 1px solid var(--color-divider); border-radius: 999px; padding: 2px 8px; text-transform: capitalize;
-`
-
-const Elev = styled.span`
-  display: inline-flex; gap: 3px; margin-left: auto;
-  span{ width: 8px; height: 8px; border-radius: 2px; background: var(--color-divider) }
-  span.on{ background: var(--accent) }
 `
 
 function timeSince(iso?: string) {

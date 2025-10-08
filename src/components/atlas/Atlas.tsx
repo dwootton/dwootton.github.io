@@ -151,7 +151,17 @@ const NameTooltip = styled.button`
 
 export default Atlas
 
-export const buildItemUrl = (slug: string) => `/atlas-item?slug=${encodeURIComponent(slug)}`
+export const buildItemUrl = (slug: string) => {
+  const toKebab = (s: string) =>
+    encodeURIComponent(
+      s
+        .replace(/([a-z])([A-Z])/g, '$1-$2') // camelCase -> kebab
+        .replace(/[^a-zA-Z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .toLowerCase()
+    )
+  return `/atlas/${toKebab(slug)}`
+}
 
 const orderItems = (items: AtlasItem[], selected: string | null) => {
   if (!selected) return items
