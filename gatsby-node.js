@@ -12,6 +12,16 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       value: slug,
     })
   }
+  if (node.internal.type === `Mdx`) {
+    // For atlas-posts/<slug>/post.mdx → slug: /atlas/<slug>
+    const fileNode = getNode(node.parent)
+    const absolutePath = (fileNode && fileNode.absolutePath) || ''
+    const m = absolutePath.match(/atlas-posts\/(.+?)\/(post|index)\.(md|mdx)$/)
+    if (m && m[1]) {
+      const atlasSlug = `/atlas/${m[1].toLowerCase().replace(/[^a-z0-9]+/g, '-')}/`
+      createNodeField({ node, name: 'slug', value: atlasSlug })
+    }
+  }
 }
 
 exports.createPages = async ({ graphql, actions }) => {

@@ -7,6 +7,7 @@ import useSiteMetadata from "Hooks/useSiteMetadata"
 import NavBar from "Components/navBar/navBar"
 import styledTheme from "Styles/styledTheme"
 import GlobalStyle from "Styles/globalStyle"
+import TopoBackground from "Components/TopoBackground"
 import packageJSON from "../../package.json"
 import logoAnimation from "../../logo.json"
 
@@ -204,10 +205,13 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
             </SplashInner>
           </SplashOverlay>
         )}
-        <Container data-visible={appVisible ? "true" : "false"}>
-          <NavBar title={title} themeToggler={themeToggler} />
-          {children}
-        </Container>
+        <PageWrap>
+          <TopoBackground />
+          <Container data-visible={appVisible ? "true" : "false"}>
+            <NavBar title={title} themeToggler={themeToggler} />
+            {children}
+          </Container>
+        </PageWrap>
         <Footer role="contentinfo">
           <FooterInner>
             <FooterLeft>
@@ -230,15 +234,21 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
 }
 
 const Container = styled.div`
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   min-height: calc(100vh - var(--footer-height));
-  background-color: var(--color-post-background);
   opacity: 0;
   transition: opacity 0.5s ease;
   &[data-visible='true'] {
     opacity: 1;
   }
+`
+
+const PageWrap = styled.div`
+  position: relative;
+  min-height: calc(100vh - var(--footer-height));
 `
 
 const Footer = styled.footer`

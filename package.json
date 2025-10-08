@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "gatsby build",
-    "develop": "gatsby develop",
+    "dev": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "gatsby develop",
     "serve": "gatsby serve",
@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@mdx-js/react": "^2.3.0",
+    "d3-contour": "^4.0.2",
+    "d3-geo": "^3.1.1",
     "dark-theme-github": "github:remorses/dark-github-theme",
     "gatsby": "^5.0.0-next.16",
     "gatsby-plugin-feed": "^5.0.0-next.4",
@@ -56,6 +58,8 @@
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/github": "^8.0.2",
     "@semantic-release/release-notes-generator": "^10.0.3",
+    "@types/d3-contour": "^3.0.6",
+    "@types/d3-geo": "^3.1.0",
     "@types/react-helmet": "^6.1.5",
     "@types/styled-components": "^5.1.19",
     "@types/typography": "^0.16.4",

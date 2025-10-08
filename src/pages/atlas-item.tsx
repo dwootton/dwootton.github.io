@@ -1,6 +1,10 @@
 import React from "react"
 import styled from "styled-components"
-import { graphql, useStaticQuery } from "gatsby"
+import { graphql, type PageProps } from "gatsby"
+// MDX types may not export Renderer typings; cast to any to satisfy TS
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { MDXRenderer: GatsbyMDXRenderer } = require("gatsby-plugin-mdx")
+const MDXRendererAny: React.FC<{ children: string }> = (GatsbyMDXRenderer as any)
 import Layout from "Layouts/layout"
 import SEO from "Components/seo"
 import PageType from "Components/atlas/post/PageType"
@@ -15,20 +19,25 @@ const useSlug = (): string | null => {
   return null
 }
 
-const AtlasItemPage: React.FC = () => {
+const AtlasItemPage: React.FC<PageProps<any>> = ({ data }) => {
   const slug = useSlug()
-  const data = useStaticQuery<any>(graphql`
-    query AtlasItemsQuery {
-      allMarkdownRemark(
-        filter: { fileAbsolutePath: { regex: "/(posts)/" } }
-        sort: { frontmatter: { date: DESC } }
-      ) {
-        edges { node { id html frontmatter { title desc date category demoLink githubLink paperLink liveLink } fields { slug } } }
-      }
-    }
-  `)
+  
 
-  const nodes = data.allMarkdownRemark.edges.map((e: any) => e.node)
+  const mdNodes = data.allMarkdownRemark.edges.map((e: any) => ({
+    kind: 'md',
+    id: e.node.id,
+    html: e.node.html,
+    frontmatter: e.node.frontmatter,
+    slug: e.node.fields.slug,
+  }))
+  const mdxNodes = data.allMdx.edges.map((e: any) => ({
+    kind: 'mdx',
+    id: e.node.id,
+    body: e.node.body,
+    frontmatter: e.node.frontmatter,
+    slug: e.node.fields.slug,
+  }))
+  const nodes = [...mdNodes, ...mdxNodes]
   const match = React.useMemo(() => {
     if (!slug) return null
     const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
@@ -72,7 +81,11 @@ const AtlasItemPage: React.FC = () => {
       <SEO title={title} />
       <Main>
         <PageType frontmatter={pageFm}>
-          <div dangerouslySetInnerHTML={{ __html: match.html || '' }} />
+          {match.kind === 'mdx' ? (
+            <MDXRendererAny>{match.body}</MDXRendererAny>
+          ) : (
+            <div dangerouslySetInnerHTML={{ __html: match.html || '' }} />
+          )}
         </PageType>
       </Main>
     </Layout>
@@ -106,3 +119,16 @@ function mapCategoryToType(cat?: string | null): any {
 }
 
 export default AtlasItemPage
+export const pageQuery = graphql`
+  query AtlasItemsQueryPage {
+    allMarkdownRemark(
+      filter: { fileAbsolutePath: { regex: "/(posts)/" } }
+      sort: { frontmatter: { date: DESC } }
+    ) {
+      edges { node { id html frontmatter { title desc date category demoLink githubLink paperLink liveLink } fields { slug } } }
+    }
+    allMdx(filter: { fields: { slug: { regex: "/^\\/atlas\\//" } } }) {
+      edges { node { id body fields { slug } frontmatter { title subtitle category subcategory tags planted_at } } }
+    }
+  }
+`

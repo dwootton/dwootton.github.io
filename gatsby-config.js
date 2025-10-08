@@ -53,6 +53,13 @@ const corePlugins = [
       path: `${__dirname}/src`,
     },
   },
+  {
+    resolve: "gatsby-source-filesystem",
+    options: {
+      name: "atlas-posts",
+      path: `${__dirname}/atlas-posts`,
+    },
+  },
 ]
 
 const devPlugins = [

@@ -1,6 +1,6 @@
 ---
 title: "Arctic Explorer"
-subtitle: "Google Maps for the Arctic"
+subtitle: "Google Maps for the Arcticsddf"
 category: "Projects"
 subcategory: "Budding"
 planted_at: "2019-01-01"
@@ -8,7 +8,7 @@ tags:
   - Mapping
   - Data Visualization
   - Arctic
-desc: "Google Maps for the Arctic"
+desc: "Google Maps for the Arcticasddsa"
 thumbnail: "./images/arcticExplorer/thumbnail.png"
 alt: "apple and shaking hands"
 githubLink: "https://github.com/dwootton/Arctic-Explorer"
