@@ -57,6 +57,8 @@ const TopoBackground: React.FC = () => {
     const gridCols = 220
     const gridRows = Math.max(120, Math.round(gridCols * (safeHeight / safeWidth)))
     const values = new Array(gridCols * gridRows)
+    let minVal = Number.POSITIVE_INFINITY
+    let maxVal = Number.NEGATIVE_INFINITY
 
     for (let y = 0; y < gridRows; y++) {
       for (let x = 0; x < gridCols; x++) {
@@ -75,13 +77,18 @@ const TopoBackground: React.FC = () => {
         elevation += Math.exp(-dist1 * 20) * 40
         elevation += Math.exp(-dist2 * 15) * 35
 
-        values[y * gridCols + x] = elevation + 50
+        const val = elevation + 50
+        const idx = y * gridCols + x
+        values[idx] = val
+        if (val < minVal) minVal = val
+        if (val > maxVal) maxVal = val
       }
     }
 
-    // Find min and max for color scale
-    const minVal = Math.min(...values)
-    const maxVal = Math.max(...values)
+    if (!Number.isFinite(minVal) || !Number.isFinite(maxVal) || minVal === maxVal) {
+      minVal = 0
+      maxVal = 1
+    }
 
     // Create contours
     const contourGen = d3contours()
