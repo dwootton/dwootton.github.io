@@ -60,11 +60,15 @@ const AtlasPage: React.FC<AtlasPageProps> = ({ data }) => {
   const items: AtlasItem[] = data.allMarkdownRemark.edges.map(({ node }) => ({
     slug: node.fields.slug,
     title: node.frontmatter.title || "Untitled",
-    subtitle: node.frontmatter.subtitle || node.frontmatter.desc || node.excerpt,
+    desc: node.frontmatter.subtitle || node.frontmatter.desc || node.excerpt,
     category: node.frontmatter.category || "Uncategorized",
-    subcategory: "General",
+    subcategory: node.frontmatter.subcategory || "General",
     tags: node.frontmatter.tags || [],
+    date: node.frontmatter.date || new Date().toISOString(),
     planted_at: node.frontmatter.date || new Date().toISOString(),
+    type: 'project' as const, // Default to project type
+    status: 'charted' as const, // Default status
+    thumbnail: node.frontmatter.thumbnail?.childImageSharp?.gatsbyImageData?.images?.fallback?.src,
   }))
 
   return (
