@@ -373,7 +373,12 @@ const PostGrid = styled.div`
 const DesktopRail = styled.div`
   display: none;
   @media (min-width: 1025px) {
-    display: block; grid-column: 1; justify-self: start; align-self: stretch; /* ensure parent taller than sticky child */
+    display: block; 
+    grid-column: 1; 
+    justify-self: start; 
+    align-self: start; /* Align to start so sticky works properly */
+    position: relative;
+    height: 100%;
   }
 `
 

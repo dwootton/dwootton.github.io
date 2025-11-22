@@ -40,8 +40,25 @@ const StickyRail: React.FC<StickyRailProps> = ({ children, topOffsetPx = 24 }) =
 const Wrap = styled.div<{ $topOffsetPx: number }>`
   position: sticky;
   top: calc(var(--nav-height, 80px) + ${({ $topOffsetPx }) => $topOffsetPx}px);
-  align-self: start; z-index: 10;
+  align-self: start; 
+  z-index: 10;
   transition: transform 180ms ease-out;
+  max-height: calc(100vh - var(--nav-height, 80px) - ${({ $topOffsetPx }) => $topOffsetPx + 40}px);
+  overflow-y: auto;
+  
+  /* Hide scrollbar but keep content scrollable if needed */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-divider);
+    border-radius: 4px;
+  }
 `
 
 export default StickyRail
