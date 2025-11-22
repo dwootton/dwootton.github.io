@@ -4,6 +4,38 @@ import reset from "styled-reset"
 const GlobalStyle = createGlobalStyle`
   ${reset}
 
+  @font-face {
+    font-family: "Cabin";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("/fonts/cabin/Cabin-VariableFont_wdth,wght.ttf") format("truetype-variations");
+  }
+
+  @font-face {
+    font-family: "Cabin";
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("/fonts/cabin/Cabin-Italic-VariableFont_wdth,wght.ttf") format("truetype-variations");
+  }
+
+  @font-face {
+    font-family: "Cabin";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/fonts/cabin/Cabin-Regular.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "Cabin";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("/fonts/cabin/Cabin-Bold.ttf") format("truetype");
+  }
+
   :root {
     font-size: 100%;
 
@@ -67,7 +99,7 @@ const GlobalStyle = createGlobalStyle`
     --forest: #0E5E3B;
     --navy: #0D2747;
 
-    --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    --font-sans:  "Cabin", Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
     --font-serif: "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
     --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   
@@ -161,7 +193,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    font-family: var(--font-sans);
     background-color: var(--color-post-background);
     -webkit-font-smoothing: antialiased;
 

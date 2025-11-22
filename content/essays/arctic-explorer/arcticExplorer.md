@@ -1,20 +1,20 @@
 ---
 title: "Arctic Explorer"
-subtitle: "Google Maps for the Arcticsddf"
-category: "Projects"
-subcategory: "Budding"
-planted_at: "2019-01-01"
+subtitle: "Google Maps for the Arctics"
+category: "gadgets"
+logged: "2019-01-01"
 tags:
   - Mapping
-  - Data Visualization
+  - Representations
   - Arctic
-desc: "Google Maps for the Arcticasddsa"
-thumbnail: "./images/arcticExplorer/thumbnail.png"
+desc: "Google Maps for the Arctic"
+thumbnail: "thumbnail.png"
 alt: "apple and shaking hands"
 githubLink: "https://github.com/dwootton/Arctic-Explorer"
 liveLink: "https://www.dylanwootton.com/Arctic-Explorer/"
 demoLink: "https://www.youtube.com/watch?v=EbsGiAUuHX0"
 paperLink: "https://www.dylanwootton.com/papers/2019_infovis_arctic_explorer.pdf"
+assumed_audience: "Researchers who work in data visualization"
 ---
 
 ![A Mockup of the interface](https://i.imgur.com/BXEx4bd.png)

@@ -59,6 +59,7 @@ export default function PageType({ frontmatter: fm, children, related, prev, nex
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
   return (
       <Article className="post prose-wrapper">
       <Header className="post-header">
@@ -148,7 +149,6 @@ const SubcategoryChip = styled.span`
 `
 
 const Title = styled.h1<{ $essay?: boolean }>`
-  font-family: var(--font-serif);
   font-size: ${p => (p.$essay ? '2.3rem' : '2.0rem')};
   line-height: 1.2;
   font-weight: 800;
@@ -163,7 +163,7 @@ const Deck = styled.p`
 
 const MetaRow = styled.div`
   display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px;
-  padding: 10px 0; border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider);
+  padding: 10px 0; 
   .topics { font-size: 14px; color: var(--color-text-2); }
   .dates { font-size: 12px; color: var(--color-text-3); white-space: nowrap; }
   @media (max-width: 640px) {
@@ -220,7 +220,6 @@ const PostBody = styled.div`
   padding-left: 20px; /* left gutter for heading indicator */
 
   /* Rule above the body entry */
-  border-top: 1px solid var(--color-divider);
   padding-top: 16px;
 
   /* Drop cap: apply only to explicit intro paragraph */

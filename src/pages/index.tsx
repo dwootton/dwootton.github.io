@@ -54,7 +54,9 @@ const Home = () => {
       <SEO title="Home" />
       <HeroWrap>
         <HeroGrid>
-          <H1>Dylan builds interactive systems that make information explorable.</H1>
+          <H1>
+            <NameEmphasis>Dylan</NameEmphasis> builds interactive systems that make information explorable.
+          </H1>
           <Subline>HCI and VIS researcher. PhD'ing at MIT.</Subline>
           {/* <BodyCopy>
             My work explores the boundary between rigid computational formalisms and the softer, exploratory reasoning of analysts. I’m currently PhD’ing at
@@ -198,8 +200,12 @@ const Name = styled.h5`
 `
 
 const H1 = styled.h1`
-  font-size: 2.4rem; font-weight: 800; line-height: 1.15; margin-bottom: 4px;
+  font-size: 2.4rem; font-weight: 600; line-height: 1.15; margin-bottom: 4px;
   @media (min-width: 1024px) { font-size: 3rem; }
+`
+
+const NameEmphasis = styled.span`
+  font-weight: 800;
 `
 
 const BodyCopy = styled.p`
