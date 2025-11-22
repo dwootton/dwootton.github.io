@@ -1,13 +1,13 @@
 ---
 title: "Arctic Explorer"
-subtitle: "Google Maps for the Arctics"
-category: "gadgets"
-logged: "2019-01-01"
+subtitle: "Google Maps for the Arctic"
+category: "Essays"
+date: "2019-01-01"
 tags:
   - Mapping
   - Representations
   - Arctic
-desc: "Google Maps for the Arctic"
+desc: "Interactive mapping tools for Arctic exploration and navigation"
 thumbnail: "thumbnail.png"
 alt: "apple and shaking hands"
 githubLink: "https://github.com/dwootton/Arctic-Explorer"

@@ -62,35 +62,6 @@ export default function PageType({ frontmatter: fm, children, related, prev, nex
 
   return (
       <Article className="post prose-wrapper">
-      <Header className="post-header">
-        <TopChips>
-          {fm.category && <CategoryLabel className="category">{fm.category}</CategoryLabel>}
-          {fm.subcategory && <SubcategoryChip aria-label={`Subcategory: ${fm.subcategory}`}>{fm.subcategory}</SubcategoryChip>}
-        </TopChips>
-        <Title as={fm.type === 'essay' ? 'h1' : 'h1'} $essay={fm.type === 'essay'}>{fm.title}</Title>
-        {(fm.deck || (fm as any).subtitle) && <Deck>{fm.deck || (fm as any).subtitle}</Deck>}
-        <MetaRow>
-          <div className="left">
-            {(fm.tags || fm.topics) && (
-              <Tags className="tags">
-                {(fm.tags || fm.topics || []).map((t: string) => (
-                  <span key={t} className="tag">#{t}</span>
-                ))}
-              </Tags>
-            )}
-          </div>
-          <div className="right">
-            {(fm.date || fm.updated) && (
-              <div className="dates">
-                {(fm as any).planted_at && <span>Planted {(fm as any).planted_at}</span>}
-                {!((fm as any).planted_at) && fm.date && <span>Planted {fm.date}</span>}
-                {fm.updated && <span> · Revisited {fm.updated}</span>}
-              </div>
-            )}
-          </div>
-        </MetaRow>
-      </Header>
-
       <PostGrid className="post-grid">
         <DesktopRail>
           <StickyRail topOffsetPx={24}>
@@ -98,19 +69,50 @@ export default function PageType({ frontmatter: fm, children, related, prev, nex
           </StickyRail>
         </DesktopRail>
         
-        <PostBody className="post-body article-body" ref={contentRef as any}>
+        <ContentColumn>
+          <Header className="post-header">
+            <TopChips>
+              {fm.category && <CategoryLabel className="category">{fm.category}</CategoryLabel>}
+              {fm.subcategory && <SubcategoryChip aria-label={`Subcategory: ${fm.subcategory}`}>{fm.subcategory}</SubcategoryChip>}
+            </TopChips>
+            <Title as={fm.type === 'essay' ? 'h1' : 'h1'} $essay={fm.type === 'essay'}>{fm.title}</Title>
+            {(fm.deck || (fm as any).subtitle) && <Deck>{fm.deck || (fm as any).subtitle}</Deck>}
+            <MetaRow>
+              <div className="left">
+                {(fm.tags || fm.topics) && (
+                  <Tags className="tags">
+                    {(fm.tags || fm.topics || []).map((t: string) => (
+                      <span key={t} className="tag">#{t}</span>
+                    ))}
+                  </Tags>
+                )}
+              </div>
+              <div className="right">
+                {(fm.date || fm.updated) && (
+                  <div className="dates">
+                    {(fm as any).planted_at && <span>Planted {(fm as any).planted_at}</span>}
+                    {!((fm as any).planted_at) && fm.date && <span>Planted {fm.date}</span>}
+                    {fm.updated && <span> · Revisited {fm.updated}</span>}
+                  </div>
+                )}
+              </div>
+            </MetaRow>
+          </Header>
+          
+          <PostBody className="post-body article-body" ref={contentRef as any}>
           {(mapKey?.audience || (fm as any).audience) && (
             <AudienceCard as="section" className="audience" aria-labelledby="audience-label">
               <span id="audience-label" className="label">Assumed audience</span>
               <p className="text">{mapKey?.audience || (fm as any).audience?.description || (fm as any).audience}</p>
             </AudienceCard>
           )}
-          <HeadingIndicator forRef={contentRef} />
-          {children}
-          <PostFooter className="post-footer">
-            <FooterNav tags={fm.tags} related={related} prev={prev || undefined} next={next || undefined} />
-          </PostFooter>
-        </PostBody>
+            <HeadingIndicator forRef={contentRef} />
+            {children}
+            <PostFooter className="post-footer">
+              <FooterNav tags={fm.tags} related={related} prev={prev || undefined} next={next || undefined} />
+            </PostFooter>
+          </PostBody>
+        </ContentColumn>
       </PostGrid>
       </Article>
   )
@@ -122,14 +124,34 @@ const OuterMain = styled.main`
 
 const Article = styled.article``
 
+const ContentColumn = styled.div`
+  grid-column: 1;
+  
+  @media (min-width: 1025px) {
+    grid-column: 2;
+  }
+`
+
 const Header = styled.header`
   /* Align header axis and width to the body column */
   width: 100%;
-  max-width: 760px;
+  max-width: 700px;
   margin: 0 auto 16px;
   display: grid; gap: 12px;
-  @media (min-width: 641px) { gap: 14px; }
-  @media (min-width: 1025px) { gap: 16px; margin: 0 auto 20px; }
+  
+  @media (min-width: 641px) { 
+    gap: 14px; 
+  }
+  
+  @media (min-width: 1025px) { 
+    gap: 16px; 
+    margin: 0 0 20px 0; /* Remove auto margins on desktop to align with grid */
+    max-width: 100%; /* Use full column width */
+  }
+  
+  @media (min-width: 1280px) {
+    max-width: 700px; /* Limit width on larger screens for readability */
+  }
 `
 
 const TopChips = styled.div`
@@ -188,9 +210,17 @@ const AudienceCard = styled.div`
 const PostGrid = styled.div`
   display: grid; gap: 24px; grid-template-columns: 1fr; align-items: start;
   @media (min-width: 1025px) {
-    grid-template-columns: 280px minmax(auto, 700px) 1fr; /* fixed rail to ensure sticky within viewport */
-    column-gap: 32px;
-    max-width: 1400px; margin: 0 auto; padding: 0 16px;
+    grid-template-columns: 200px 1fr; /* rail + content */
+    column-gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+  }
+  @media (min-width: 1280px) {
+    grid-template-columns: 240px 1fr;
+    column-gap: 60px;
+    max-width: 1280px;
   }
 `
 const DesktopRail = styled.div`
@@ -215,12 +245,16 @@ const PostBody = styled.div`
   position: relative;
   display: grid; gap: 16px; line-height: 1.7; font-size: 1.06rem;
   width: 100%;
-  max-width: 700px; /* centered body measure */
-  margin-left: auto; margin-right: auto; /* center on single-column layout */
+  max-width: 700px; /* limit text width for readability */
   padding-left: 20px; /* left gutter for heading indicator */
+  margin: 0 auto; /* center on mobile */
 
   /* Rule above the body entry */
   padding-top: 16px;
+  
+  @media (min-width: 1025px) {
+    margin: 0; /* align to start of column on desktop */
+  }
 
   /* Drop cap: apply only to explicit intro paragraph */
   p.intro:first-letter {

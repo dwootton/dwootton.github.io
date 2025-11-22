@@ -30,13 +30,19 @@ const siteMetadata = {
     },
   ],
 }
-// NOTE: these must be in order from more specific to least specific!
 const corePlugins = [
   {
     resolve: "gatsby-source-filesystem",
     options: {
-      name: "gallery",
-      path: `${__dirname}/src/images/gallery`,
+      name: "content",
+      path: `${__dirname}/content`,
+    },
+  },
+  {
+    resolve: "gatsby-source-filesystem",
+    options: {
+      name: "pages",
+      path: `${__dirname}/src/pages`,
     },
   },
   {
@@ -44,20 +50,6 @@ const corePlugins = [
     options: {
       name: "images",
       path: `${__dirname}/src/images`,
-    },
-  },
-  {
-    resolve: "gatsby-source-filesystem",
-    options: {
-      name: "src",
-      path: `${__dirname}/src`,
-    },
-  },
-  {
-    resolve: "gatsby-source-filesystem",
-    options: {
-      name: "content",
-      path: `${__dirname}/content`,
     },
   },
 ]
@@ -74,7 +66,6 @@ const devPlugins = [
         Images: "src/images",
         Layouts: "src/layouts",
         Pages: "src/pages",
-        Posts: "src/posts",
         Stores: "src/stores",
         Styles: "src/styles",
         Templates: "src/templates",
@@ -132,13 +123,6 @@ const markdownPlugins = [
 
 const mdxPlugins = [
   `gatsby-plugin-mdx`,
-  {
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      name: `pages`,
-      path: `${__dirname}/src/pages`,
-    },
-  },
 ]
 
 const searchPlugins = [

@@ -1,4 +1,14 @@
 const React = require("react")
+const { MDXProvider } = require("@mdx-js/react")
+const mdxComponents = require("./src/components/mdx").default
+
+exports.wrapRootElement = ({ element }) => {
+  return React.createElement(
+    MDXProvider,
+    { components: mdxComponents },
+    element
+  )
+}
 
 exports.onRenderBody = ({ setPreBodyComponents, setHeadComponents }) => {
   // Authoritative SVG favicon; script below swaps light/dark after hydration

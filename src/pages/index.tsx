@@ -15,8 +15,8 @@ const Home = () => {
       home: allMarkdownRemark(filter: { fileAbsolutePath: { regex: "/home/" } }) {
         edges { node { html } }
       }
-      projects: allMarkdownRemark(
-        filter: { fileAbsolutePath: { regex: "/(posts/projects)/" } }
+      essays: allMarkdownRemark(
+        filter: { fileAbsolutePath: { regex: "/content/essays/" } }
         sort: { frontmatter: { date: DESC } }
       ) {
         edges {
@@ -26,6 +26,8 @@ const Home = () => {
               title
               date
               desc
+              category
+              tags
               thumbnail { childImageSharp { gatsbyImageData(width: 640, placeholder: BLURRED, aspectRatio: 1.5) } }
             }
             fields { slug }
@@ -38,16 +40,21 @@ const Home = () => {
   const markdown = data.home.edges[0]?.node.html
   // Compact hero: auto height so content flows quickly
 
-  const posts = React.useMemo(() => (data.projects?.edges || []).map(({ node }: any) => ({
+  // Process essays from markdown files
+  const essays = React.useMemo(() => (data.essays?.edges || []).map(({ node }: any) => ({
     id: node.id,
     title: node.frontmatter?.title,
     date: node.frontmatter?.date,
     desc: node.frontmatter?.desc,
+    category: node.frontmatter?.category,
     slug: node.fields?.slug,
     img: getImage(node.frontmatter?.thumbnail?.childImageSharp),
-  })), [data.projects])
-  const essays = posts.slice(0, 4)
-  const notes = posts.slice(4, 10)
+  })), [data.essays])
+
+  // For now, we'll use empty arrays for other content types until we have proper MDX content
+  const guides: any[] = []
+  const prototypes: any[] = []
+  const fieldNotes: any[] = []
 
   return (
     <Layout>
@@ -72,13 +79,12 @@ const Home = () => {
       </AtlasSubline>
       <Sections>
         {[
-          { id: 'essays', title: 'Essays', explainer: 'Papers, essays, and long-form arguments on interaction.' },
-          { id: 'guides', title: 'Guideposts', explainer: 'Reusable techniques and patterns.' },
-          { id: 'prototypes', title: 'Prototypes', explainer: 'Code and prototypes with write-ups.' },
-          { id: 'field', title: 'Field Notes', explainer: 'Shorter thoughts and provisional ideas.' },
-        ].map((sec, idx) => {
-          const items = posts.slice(idx*3, idx*3 + 3)
-          if (items.length === 0) return null
+          { id: 'essays', title: 'Essays', explainer: 'Papers, essays, and long-form arguments on interaction.', items: essays },
+          { id: 'guides', title: 'Guideposts', explainer: 'Reusable techniques and patterns.', items: guides },
+          { id: 'prototypes', title: 'Prototypes', explainer: 'Code and prototypes with write-ups.', items: prototypes },
+          { id: 'field', title: 'Field Notes', explainer: 'Shorter thoughts and provisional ideas.', items: fieldNotes },
+        ].map((sec) => {
+          if (sec.items.length === 0) return null
           return (
           <Section key={sec.id}>
             <SectionHead>
@@ -87,7 +93,7 @@ const Home = () => {
             </SectionHead>
             {sec.id === 'essays' ? (
               <Cards>
-                {items.map((p) => (
+                {sec.items.map((p) => (
                   <HomeCard
                     key={p.id}
                     title={p.title}
@@ -101,7 +107,7 @@ const Home = () => {
               </Cards>
             ) : (
               <SimpleList>
-                {items.map((p) => (
+                {sec.items.map((p) => (
                   <li key={p.id}>
                     <Link to={p.slug || '#'}>{p.title}</Link>
                     {p.desc && <span className="muted"> — {p.desc}</span>}

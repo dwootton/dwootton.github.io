@@ -47,28 +47,37 @@ const BlogPost: React.FC<PageProps<Queries.Query>> = ({ data }) => {
       <SEO title={title} desc={desc} image={ogImagePath} />
       <main>
         <article>
-          <OuterWrapper>
-            <InnerWrapper>
-              <PageType frontmatter={fm as any}>
-                {(demoLink || paperLink) && (
-                  <Materials>
-                    {demoLink && <MaterialLink href={demoLink}>Demo</MaterialLink>}
-                    {paperLink && <MaterialLink href={paperLink}>Paper</MaterialLink>}
-                  </Materials>
-                )}
-                <Divider />
-                <Markdown
-                  dangerouslySetInnerHTML={{ __html: html ?? "" }}
-                  rhythm={rhythm}
-                />
-              </PageType>
-            </InnerWrapper>
-          </OuterWrapper>
+          <PageTypeWrapper>
+            <PageType frontmatter={fm as any}>
+              {(demoLink || paperLink) && (
+                <Materials>
+                  {demoLink && <MaterialLink href={demoLink}>Demo</MaterialLink>}
+                  {paperLink && <MaterialLink href={paperLink}>Paper</MaterialLink>}
+                </Materials>
+              )}
+              <Divider />
+              <Markdown
+                dangerouslySetInnerHTML={{ __html: html ?? "" }}
+                rhythm={rhythm}
+              />
+            </PageType>
+          </PageTypeWrapper>
         </article>
       </main>
     </Layout>
   )
 }
+
+const PageTypeWrapper = styled.div`
+  margin-top: var(--sizing-xl);
+  /* Allow full width for the grid layout */
+  width: 100%;
+  padding-bottom: var(--sizing-lg);
+
+  @media (max-width: ${({ theme }) => theme.device.sm}) {
+    margin-top: var(--sizing-lg);
+  }
+`
 
 const OuterWrapper = styled.div`
   margin-top: var(--sizing-xl);
@@ -160,7 +169,6 @@ export const query = graphql`
           }
         }
         date(formatString: "YYYY")
-        audience
         category
         demoLink
         paperLink

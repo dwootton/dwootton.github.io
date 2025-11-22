@@ -30,13 +30,15 @@ const AtlasItemPage: React.FC<PageProps<any>> = ({ data }) => {
     frontmatter: e.node.frontmatter,
     slug: e.node.fields.slug,
   }))
-  const mdxNodes = data.allMdx.edges.map((e: any) => ({
-    kind: 'mdx',
-    id: e.node.id,
-    body: e.node.body,
-    frontmatter: e.node.frontmatter,
-    slug: e.node.fields.slug,
-  }))
+  const mdxNodes = data.allMdx.edges
+    .filter((e: any) => e.node.fields?.slug?.startsWith('/atlas/'))
+    .map((e: any) => ({
+      kind: 'mdx',
+      id: e.node.id,
+      body: e.node.internal?.content,
+      frontmatter: e.node.frontmatter,
+      slug: e.node.fields.slug,
+    }))
   const nodes = [...mdNodes, ...mdxNodes]
   const match = React.useMemo(() => {
     if (!slug) return null
@@ -127,8 +129,8 @@ export const pageQuery = graphql`
     ) {
       edges { node { id html frontmatter { title desc date category demoLink githubLink paperLink liveLink } fields { slug } } }
     }
-    allMdx(filter: { fields: { slug: { regex: "/^\\/atlas\\//" } } }) {
-      edges { node { id body fields { slug } frontmatter { title subtitle category subcategory tags planted_at } } }
+    allMdx {
+      edges { node { id internal { content } } }
     }
   }
 `

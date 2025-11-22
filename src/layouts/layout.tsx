@@ -7,7 +7,6 @@ import useSiteMetadata from "Hooks/useSiteMetadata"
 import NavBar from "Components/navBar/navBar"
 import styledTheme from "Styles/styledTheme"
 import GlobalStyle from "Styles/globalStyle"
-import TopoBackground from "Components/TopoBackground"
 import packageJSON from "../../package.json"
 import logoAnimation from "../../logo.json"
 
@@ -206,7 +205,6 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
           </SplashOverlay>
         )}
         <PageWrap>
-          <TopoBackground />
           <Container data-visible={appVisible ? "true" : "false"}>
             <NavBar title={title} themeToggler={themeToggler} />
             {children}

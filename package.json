@@ -1,7 +1,7 @@
 {
-  "name": "gatsby-starter-apple",
-  "version": "3.0.0",
-  "description": "Gatsby blog starter kit with beautiful and responsive design",
+  "name": "dwootton-portfolio",
+  "version": "1.0.0",
+  "description": "Dylan Wootton's personal portfolio and blog",
   "main": "index.js",
   "private": true,
   "scripts": {
@@ -82,15 +82,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sungik-choi/gatsby-starter-apple.git"
+    "url": "https://github.com/dwootton/dwootton.github.io.git"
   },
   "keywords": [
-    "gatsby"
+    "gatsby",
+    "portfolio",
+    "blog"
   ],
   "author": "Dylan Wootton <wootton.dylan@gmail.com> (https://www.dylanwootton.com/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sungik-choi/gatsby-starter-apple/issues"
+    "url": "https://github.com/dwootton/dwootton.github.io/issues"
   },
-  "homepage": "https://github.com/sungik-choi/gatsby-starter-apple#readme"
+  "homepage": "https://www.dylanwootton.com"
 }

@@ -10,7 +10,7 @@ import { rhythm } from 'Styles/typography'
 const AboutPage: React.FC = () => {
   const data = useStaticQuery<Queries.Query>(graphql`
     query AboutPageQuery {
-      about: allMarkdownRemark(filter: { fileAbsolutePath: { regex: "/(posts/about)/" } }) {
+      about: allMarkdownRemark(filter: { fileAbsolutePath: { regex: "/content/pages/about/" } }) {
         edges { node { html } }
       }
     }

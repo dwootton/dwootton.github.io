@@ -8,7 +8,7 @@ import useSiteMetadata from "Hooks/useSiteMetadata"
 import Layout from "Layouts/layout"
 import SEO from "Components/seo"
 import PostGrid from "Components/postGrid"
-import CategoryFilter from "Components/catetgoryFilter"
+import CategoryFilter from "Components/categoryFilter"
 import { useQueryParamString } from "react-use-query-param-string"
 
 const DISPLAY_NAMES_FOR_CATEGORIES: Record<string, string> = {
