@@ -1,12 +1,12 @@
 {
-  "name": "gatsby-starter-apple",
-  "version": "3.0.0",
-  "description": "Gatsby blog starter kit with beautiful and responsive design",
+  "name": "dwootton-portfolio",
+  "version": "1.0.0",
+  "description": "Dylan Wootton's personal portfolio and blog",
   "main": "index.js",
   "private": true,
   "scripts": {
     "build": "gatsby build",
-    "develop": "gatsby develop",
+    "dev": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "gatsby develop",
     "serve": "gatsby serve",
@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@mdx-js/react": "^2.3.0",
+    "d3-contour": "^4.0.2",
+    "d3-geo": "^3.1.1",
     "dark-theme-github": "github:remorses/dark-github-theme",
     "gatsby": "^5.0.0-next.16",
     "gatsby-plugin-feed": "^5.0.0-next.4",
@@ -38,6 +40,7 @@
     "gatsby-transformer-remark": "^6.0.0-next.6",
     "gatsby-transformer-sharp": "^5.11.0",
     "gh-pages": "^4.0.0",
+    "lottie-web": "^5.13.0",
     "react-helmet": "^6.1.0",
     "react-tsparticles": "^2.7.1",
     "react-typography": "^0.16.20",
@@ -55,6 +58,8 @@
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/github": "^8.0.2",
     "@semantic-release/release-notes-generator": "^10.0.3",
+    "@types/d3-contour": "^3.0.6",
+    "@types/d3-geo": "^3.1.0",
     "@types/react-helmet": "^6.1.5",
     "@types/styled-components": "^5.1.19",
     "@types/typography": "^0.16.4",
@@ -77,15 +82,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sungik-choi/gatsby-starter-apple.git"
+    "url": "https://github.com/dwootton/dwootton.github.io.git"
   },
   "keywords": [
-    "gatsby"
+    "gatsby",
+    "portfolio",
+    "blog"
   ],
   "author": "Dylan Wootton <wootton.dylan@gmail.com> (https://www.dylanwootton.com/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sungik-choi/gatsby-starter-apple/issues"
+    "url": "https://github.com/dwootton/dwootton.github.io/issues"
   },
-  "homepage": "https://github.com/sungik-choi/gatsby-starter-apple#readme"
+  "homepage": "https://www.dylanwootton.com"
 }

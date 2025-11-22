@@ -5,9 +5,9 @@ import styled from "styled-components"
 import Layout from "Layouts/layout"
 import SEO from "Components/seo"
 import { rhythm } from "Styles/typography"
-import Category from "Styles/category"
 import DateTime from "Styles/dateTime"
 import Markdown from "Styles/markdown"
+import PageType from "Components/atlas/post/PageType"
 
 const BlogPost: React.FC<PageProps<Queries.Query>> = ({ data }) => {
   const { markdownRemark } = data
@@ -17,6 +17,7 @@ const BlogPost: React.FC<PageProps<Queries.Query>> = ({ data }) => {
     desc,
     thumbnail,
     date,
+    audience,
     category,
     demoLink,
     githubLink,
@@ -29,53 +30,57 @@ const BlogPost: React.FC<PageProps<Queries.Query>> = ({ data }) => {
     thumbnail &&
     thumbnail?.childImageSharp?.gatsbyImageData!.images!.fallback!.src
 
+  const fm = {
+    type: "project",
+    title,
+    deck: desc,
+    topics: [category].filter(Boolean) as string[],
+    date,
+    audience: audience || undefined,
+    status: "charted" as const,
+    repo_url: githubLink || undefined,
+    live_url: liveLink || undefined,
+  }
+
   return (
     <Layout>
       <SEO title={title} desc={desc} image={ogImagePath} />
       <main>
         <article>
-          <OuterWrapper>
-            <InnerWrapper>
-              <div>
-                <header>
-                  <Info>
-                    <InfoColumn>
-                      <ColumnHeader>{"Information"}</ColumnHeader>
-                      <PostCategory>{category}</PostCategory>
-                      <Time>{date}</Time>
-                    </InfoColumn>
-                    <MaterialsColumn>
-                      <ColumnHeader>{"Materials"}</ColumnHeader>
-                      {demoLink && (
-                        <MaterialLink href={demoLink}>Demo</MaterialLink>
-                      )}
-                      {paperLink && (
-                        <MaterialLink href={paperLink}>Paper</MaterialLink>
-                      )}
-                      {liveLink && (
-                        <MaterialLink href={liveLink}>Website</MaterialLink>
-                      )}
-                      {githubLink && (
-                        <MaterialLink href={githubLink}>Github</MaterialLink>
-                      )}
-                    </MaterialsColumn>
-                  </Info>
-                  <Title>{title}</Title>
-                  <Desc>{desc}</Desc>
-                </header>
-                <Divider />
-                <Markdown
-                  dangerouslySetInnerHTML={{ __html: html ?? "" }}
-                  rhythm={rhythm}
-                />
-              </div>
-            </InnerWrapper>
-          </OuterWrapper>
+          <PageTypeWrapper>
+            <PageType frontmatter={fm as any}>
+              {(demoLink || paperLink) && (
+                <Materials>
+                  {demoLink && <MaterialLink href={demoLink}>Demo</MaterialLink>}
+                  {paperLink && <MaterialLink href={paperLink}>Paper</MaterialLink>}
+                </Materials>
+              )}
+              <Divider />
+              <Markdown
+                dangerouslySetInnerHTML={{ __html: html ?? "" }}
+                rhythm={rhythm}
+              />
+            </PageType>
+          </PageTypeWrapper>
         </article>
       </main>
     </Layout>
   )
 }
+
+const PageTypeWrapper = styled.div`
+  margin-top: var(--sizing-xl);
+  /* Allow full width for the grid layout */
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  padding-bottom: var(--sizing-lg);
+
+  @media (max-width: ${({ theme }) => theme.device.sm}) {
+    margin-top: var(--sizing-lg);
+  }
+`
 
 const OuterWrapper = styled.div`
   margin-top: var(--sizing-xl);
@@ -106,21 +111,8 @@ const CommentWrap = styled.section`
   }
 `
 
-const PostCategory = styled(Category)`
-  font-size: 0.875rem;
-  font-weight: var(--font-weight-semi-bold);
-`
-const MaterialsColumn = styled.div`
-  display: grid;
-  justify-content: end;
-`
-const InfoColumn = styled.div`
-  display: block;
-`
-const ColumnHeader = styled.div`
-  font-size: 0.875rem;
-  font-weight: var(--font-weight-semi-bold);
-  justify-self: end;
+const Materials = styled.div`
+  display: flex; gap: 10px; flex-wrap: wrap; margin: 6px 0 0;
 `
 const MaterialLink = styled.a`
   justify-self: end;
@@ -128,11 +120,7 @@ const MaterialLink = styled.a`
   font-weight: var(--font-weight-regular);
   color: var(--color-text-3);
 `
-const Info = styled.div`
-  margin-bottom: var(--sizing-md);
-  display: grid;
-  grid-template-columns: 50% 50%;
-`
+const Info = styled.div``
 
 const Time = styled(DateTime)``
 

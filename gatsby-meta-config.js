@@ -17,7 +17,7 @@
 
 /** @type {MetaConfig} */
 const metaConfig = {
-  title: " ",
+  title: "Dylan Wootton",
   description: `Dylan Wootton's Website`,
   author: "Dylan Wootton",
   siteUrl: "https://www.dylanwootton.com",

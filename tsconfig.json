@@ -7,6 +7,10 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
+    "rootDir": "src",
+    "outDir": ".cache/tsc",
+    "noEmitOnError": true,
+    "sourceMap": true,
     "baseUrl": ".",
     "paths": {
       "Src/*": ["src"],
@@ -16,7 +20,6 @@
       "Images/*": ["src/images/*"],
       "Layouts/*": ["src/layouts/*"],
       "Pages/*": ["src/pages/*"],
-      "Posts/*": ["src/posts/*"],
       "Stores/*": ["src/stores/*"],
       "Styles/*": ["src/styles/*"],
       "Templates/*": ["src/templates/*"],
@@ -27,5 +30,13 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    ".cache",
+    "public"
+  ]
 }

@@ -16,8 +16,12 @@ const siteMetadata = {
       name: "Home",
     },
     {
-      link: "/projects/",
-      name: "Projects",
+      link: "/about/",
+      name: "About",
+    },
+    {
+      link: "/atlas/",
+      name: "Atlas",
     },
 
     {
@@ -26,13 +30,19 @@ const siteMetadata = {
     },
   ],
 }
-// NOTE: these must be in order from more specific to least specific!
 const corePlugins = [
   {
     resolve: "gatsby-source-filesystem",
     options: {
-      name: "gallery",
-      path: `${__dirname}/src/images/gallery`,
+      name: "content",
+      path: `${__dirname}/content`,
+    },
+  },
+  {
+    resolve: "gatsby-source-filesystem",
+    options: {
+      name: "pages",
+      path: `${__dirname}/src/pages`,
     },
   },
   {
@@ -40,13 +50,6 @@ const corePlugins = [
     options: {
       name: "images",
       path: `${__dirname}/src/images`,
-    },
-  },
-  {
-    resolve: "gatsby-source-filesystem",
-    options: {
-      name: "src",
-      path: `${__dirname}/src`,
     },
   },
 ]
@@ -63,7 +66,6 @@ const devPlugins = [
         Images: "src/images",
         Layouts: "src/layouts",
         Pages: "src/pages",
-        Posts: "src/posts",
         Stores: "src/stores",
         Styles: "src/styles",
         Templates: "src/templates",
@@ -121,13 +123,6 @@ const markdownPlugins = [
 
 const mdxPlugins = [
   `gatsby-plugin-mdx`,
-  {
-    resolve: `gatsby-source-filesystem`,
-    options: {
-      name: `pages`,
-      path: `${__dirname}/src/pages`,
-    },
-  },
 ]
 
 const searchPlugins = [
@@ -202,16 +197,30 @@ const pwaPlugins = [
       theme_color: "#ffffff",
       display: "standalone",
       icon: meta.favicon,
+      // Ensure our custom <link rel="icon" ...> remains authoritative
+      include_favicon: false,
+      legacy: false,
+      theme_color_in_head: false,
       icon_options: {
         purpose: "any maskable",
       },
     },
   },
-  "gatsby-plugin-offline",
+  // Only enable offline in production to avoid SW caching issues during develop
+  ... (process.env.NODE_ENV === 'production' ? ["gatsby-plugin-offline"] : []),
 ]
 
+const isDev = process.env.NODE_ENV === 'development'
+
 module.exports = {
-  graphqlTypegen: true,
+  // Disable typegen during develop to avoid watch loops; generate on build
+  graphqlTypegen: isDev
+    ? false
+    : {
+        generateOnBuild: true,
+        // Emit outside `src` to avoid watchers even in future upgrades
+        typesOutputPath: 'types/gatsby-types.d.ts',
+      },
   siteMetadata,
   plugins: [
     ...corePlugins,

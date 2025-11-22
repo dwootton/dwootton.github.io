@@ -4,6 +4,38 @@ import reset from "styled-reset"
 const GlobalStyle = createGlobalStyle`
   ${reset}
 
+  @font-face {
+    font-family: "Cabin";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("/fonts/cabin/Cabin-VariableFont_wdth,wght.ttf") format("truetype-variations");
+  }
+
+  @font-face {
+    font-family: "Cabin";
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("/fonts/cabin/Cabin-Italic-VariableFont_wdth,wght.ttf") format("truetype-variations");
+  }
+
+  @font-face {
+    font-family: "Cabin";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/fonts/cabin/Cabin-Regular.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "Cabin";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("/fonts/cabin/Cabin-Bold.ttf") format("truetype");
+  }
+
   :root {
     font-size: 100%;
 
@@ -57,6 +89,20 @@ const GlobalStyle = createGlobalStyle`
 
     --color-outline: rgba(0,125,250,0.6);
 
+    /* Atlas design tokens */
+    --ink: #111;
+    --charcoal: #2A2A2A;
+    --paper: #FFF;
+    --mist: #F7F7F7;
+    --contour: #E6E6E6;
+    --accent: #FFCC00; /* Nat Geo-like gold */
+    --forest: #0E5E3B;
+    --navy: #0D2747;
+
+    --font-sans:  "Cabin", Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    --font-serif: "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  
     body.light {
       --color-text: #1d1d1d;
       --color-text-2: #1d1d1d;
@@ -78,8 +124,8 @@ const GlobalStyle = createGlobalStyle`
       --color-gray-4: #868686;
       --color-gray-5: #6e6e6e;
       --color-gray-6: #696969;
-      --color-divider: rgba(0, 0, 0, 0.15);
-      --color-dimmed: rgba(0, 0, 0, 0.15);
+      --color-divider: rgba(0, 0, 0, 0.10);
+      --color-dimmed: rgba(0, 0, 0, 0.10);
       --color-floating-button: rgba(255, 255, 255, 0.7);
       --color-floating-button-hover: rgba(50, 50, 50, 0.7);
       --color-floating-button-border: rgba(230, 230, 230, 0.7);
@@ -90,6 +136,13 @@ const GlobalStyle = createGlobalStyle`
       --color-floating-button-shadow-hover: rgba(0, 0, 0, 0.4);
       --color-blue: #0066cc;
       --color-icon: #2c2c2c;
+      /* Atlas tokens */
+      --atlas-dot: #111111; /* much darker points */
+      --atlas-grid: #E6E6E6; /* much lighter gridlines */
+      --atlas-visited:rgb(34, 24, 74,0.7); /* dark purple for visited */
+      /* Card hover */
+      --card-hover-bg: #F4F1FF; /* soft lavender */
+      --card-hover-shadow: 0 10px 24px rgba(0,0,0,.18);
     }
 
     body.dark {
@@ -125,6 +178,13 @@ const GlobalStyle = createGlobalStyle`
       --color-floating-button-shadow-hover: rgba(0, 0, 0, 0.4);
       --color-blue: #0a84ff;
       --color-icon: #d1d1d1;
+      /* Atlas tokens */
+      --atlas-dot: #dadada; /* light gray points against dark */
+      --atlas-grid: rgba(255,255,255,0.22); /* brighter gridlines on dark */
+      --atlas-visited:rgb(214, 203, 241,0.7); /* light purple for visited */
+      /* Card hover */
+      --card-hover-bg: rgba(255,255,255,0.06); /* subtle tint on dark */
+      --card-hover-shadow: 0 12px 28px rgba(0,0,0,.4);
     }
   }
 
@@ -133,7 +193,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    font-family: var(--font-sans);
     background-color: var(--color-post-background);
     -webkit-font-smoothing: antialiased;
 
@@ -183,3 +243,4 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export default GlobalStyle
+ 
