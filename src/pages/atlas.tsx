@@ -96,44 +96,78 @@ const AtlasPage: React.FC<AtlasPageProps> = ({ data }) => {
 }
 
 const Main = styled.main`
-  min-width: var(--min-width);
+  min-width: 320px; /* Mobile min-width */
   min-height: calc(100vh - var(--nav-height) - var(--footer-height));
   background: var(--color-background);
-  padding: 40px 0 60px;
+  padding: 24px 0 40px;
+  
+  @media (min-width: 480px) {
+    padding: 32px 0 50px;
+  }
+  
+  @media (min-width: 641px) {
+    padding: 40px 0 60px;
+    min-width: var(--min-width);
+  }
 `
 
 const Header = styled.div`
-  width: 87.5%;
+  width: 90%;
   max-width: var(--width);
-  margin: 0 auto 40px;
+  margin: 0 auto 24px;
   
   h1 {
-    font-size: 48px;
+    font-size: 28px;
     font-weight: 800;
-    line-height: 1.05;
+    line-height: 1.1;
     color: var(--color-text);
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
   
   p {
-    font-size: 18px;
+    font-size: 14px;
     color: var(--color-text-3);
     max-width: 60ch;
+    line-height: 1.4;
   }
   
-  @media (max-width: 600px) {
-    h1 { font-size: 32px; }
+  @media (min-width: 480px) {
+    margin: 0 auto 32px;
+    h1 { 
+      font-size: 36px; 
+      margin-bottom: 10px;
+    }
     p { font-size: 16px; }
+  }
+  
+  @media (min-width: 641px) {
+    width: 87.5%;
+    margin: 0 auto 40px;
+    h1 { 
+      font-size: 48px;
+      line-height: 1.05;
+      margin-bottom: 12px;
+    }
+    p { font-size: 18px; }
   }
 `
 
 const List = styled.section`
-  width: 87.5%;
+  width: 90%;
   max-width: var(--width);
   margin: 0 auto;
   display: grid;
-  gap: 16px;
+  gap: 12px;
   grid-template-columns: 1fr;
+  
+  @media (min-width: 480px) {
+    gap: 14px;
+  }
+  
+  @media (min-width: 641px) {
+    width: 87.5%;
+    gap: 16px;
+  }
   
   @media (min-width: 720px) {
     grid-template-columns: repeat(2, 1fr);

@@ -50,15 +50,29 @@ const statusLabel = (s: AtlasItem["status"]) =>
 
 const Card = styled.article`
   display: grid;
-  gap: 8px;
-  padding: 16px;
-  border-radius: 12px;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 10px;
   background: var(--color-card);
   border: 1px solid var(--color-divider);
   box-shadow: 0 1px 2px rgba(0,0,0,.06);
   cursor: pointer;
   transition: box-shadow 160ms ease, border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
-  max-width: 360px;
+  max-width: 100%;
+  
+  @media (min-width: 480px) {
+    gap: 7px;
+    padding: 14px;
+    border-radius: 11px;
+  }
+  
+  @media (min-width: 641px) {
+    gap: 8px;
+    padding: 16px;
+    border-radius: 12px;
+    max-width: 360px;
+  }
+  
   &:hover, &:focus {
     border-color: transparent;
     background: var(--card-hover-bg);
@@ -75,24 +89,58 @@ const InlineIcon = styled.span`
 `
 
 const Title = styled.h3<{ $visited?: boolean }>`
-  font-size: 18px;
-  line-height: 1.35;
+  font-size: 15px;
+  line-height: 1.3;
   font-weight: 800;
   font-family: var(--font-sans);
   color: ${p => (p.$visited ? 'var(--atlas-visited)' : 'var(--color-text)')};
+  
+  @media (min-width: 480px) {
+    font-size: 16px;
+    line-height: 1.32;
+  }
+  
+  @media (min-width: 641px) {
+    font-size: 18px;
+    line-height: 1.35;
+  }
 `
 
 const Subtitle = styled.p`
-  font-size: 14px;
-  line-height: 1.15;
+  font-size: 12px;
+  line-height: 1.2;
   color: var(--color-text-3);
+  
+  @media (min-width: 480px) {
+    font-size: 13px;
+    line-height: 1.18;
+  }
+  
+  @media (min-width: 641px) {
+    font-size: 14px;
+    line-height: 1.15;
+  }
 `
 
 const MetaRow = styled.div`
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 12px; color: var(--color-text-3);
+  display: inline-flex; 
+  align-items: center; 
+  gap: 6px;
+  font-size: 10px; 
+  color: var(--color-text-3);
+  
   .dot { opacity: .6 }
   .visited { color: var(--atlas-visited); }
+  
+  @media (min-width: 480px) {
+    gap: 7px;
+    font-size: 11px;
+  }
+  
+  @media (min-width: 641px) {
+    gap: 8px;
+    font-size: 12px;
+  }
 `
 
 function timeSince(iso?: string) {
@@ -134,8 +182,37 @@ function resolveLogo(thumbnail?: string) {
 }
 
 const LogoRight = styled.div`
-  position: absolute; right: 12px; top: 12px;
-  img { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; border: 1px solid var(--color-divider); }
+  position: absolute; 
+  right: 10px; 
+  top: 10px;
+  
+  img { 
+    width: 24px; 
+    height: 24px; 
+    border-radius: 4px; 
+    object-fit: cover; 
+    border: 1px solid var(--color-divider); 
+  }
+  
+  @media (min-width: 480px) {
+    right: 11px;
+    top: 11px;
+    img { 
+      width: 28px; 
+      height: 28px; 
+      border-radius: 5px;
+    }
+  }
+  
+  @media (min-width: 641px) {
+    right: 12px;
+    top: 12px;
+    img { 
+      width: 32px; 
+      height: 32px; 
+      border-radius: 6px;
+    }
+  }
 `
 
 export default ItemCard

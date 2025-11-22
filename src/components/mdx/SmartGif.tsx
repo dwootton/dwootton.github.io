@@ -115,7 +115,9 @@ const Container = styled.div<{ $width: string | number; $height: string | number
   position: relative;
   width: ${props => typeof props.$width === 'number' ? `${props.$width}px` : props.$width};
   height: ${props => typeof props.$height === 'number' ? `${props.$height}px` : props.$height};
+  max-width: 100%; /* Ensure it doesn't overflow on mobile */
   min-height: 200px;
+  margin: 0 auto; /* Center the container */
   background: ${({ theme }) => theme.colors?.background || '#f5f5f5'};
   border-radius: 8px;
   overflow: hidden;

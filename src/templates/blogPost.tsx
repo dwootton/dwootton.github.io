@@ -72,6 +72,9 @@ const PageTypeWrapper = styled.div`
   margin-top: var(--sizing-xl);
   /* Allow full width for the grid layout */
   width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
   padding-bottom: var(--sizing-lg);
 
   @media (max-width: ${({ theme }) => theme.device.sm}) {

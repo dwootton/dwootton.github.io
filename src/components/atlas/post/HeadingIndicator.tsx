@@ -67,13 +67,22 @@ const HeadingIndicator: React.FC<Props> = ({ forRef }) => {
 }
 
 const Marker = styled.div`
-  position: absolute; top: 0; left: 0;
-  width: 10px; height: 10px; border-radius: 2px;
+  position: absolute; 
+  top: 0; 
+  left: -20px; /* Position to the left of the content */
+  width: 10px; 
+  height: 10px; 
+  border-radius: 2px;
   background: var(--accent);
   transform: translateY(0);
   transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
   /* Slight glow for visibility on images */
   box-shadow: 0 0 0 2px var(--color-post-background);
+  
+  /* Hide on mobile where there's no space */
+  @media (max-width: 640px) {
+    display: none;
+  }
 `
 
 export default HeadingIndicator

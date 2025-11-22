@@ -153,12 +153,25 @@ const HeroWrap = styled.section`
   position: relative;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: 12px;
   align-items: start;
-  padding: 32px 0;
-  width: 87.5%;
+  padding: 24px 0;
+  width: 90%;
   max-width: var(--width);
-  margin: 60px auto;
+  margin: 32px auto;
+  
+  @media (min-width: 480px) {
+    gap: 14px;
+    padding: 28px 0;
+    margin: 40px auto;
+  }
+  
+  @media (min-width: 641px) {
+    gap: 16px;
+    padding: 32px 0;
+    width: 87.5%;
+    margin: 60px auto;
+  }
 `
 
 const HeroGrid = styled.div`
@@ -169,23 +182,81 @@ const HeroGrid = styled.div`
 /* CTA row removed per request */
 
 const Sections = styled.section`
-  width: 87.5%; max-width: var(--width); margin: 32px auto 64px;
-  display: grid; gap: 24px; grid-template-columns: 1fr; align-items: start;
-  @media (min-width: 1024px) { grid-template-columns: 1fr 1fr; gap: 28px; }
+  width: 90%; 
+  max-width: var(--width); 
+  margin: 24px auto 48px;
+  display: grid; 
+  gap: 20px; 
+  grid-template-columns: 1fr; 
+  align-items: start;
+  
+  @media (min-width: 480px) {
+    gap: 22px;
+    margin: 28px auto 52px;
+  }
+  
+  @media (min-width: 641px) {
+    width: 87.5%;
+    gap: 24px;
+    margin: 32px auto 64px;
+  }
+  
+  @media (min-width: 1024px) { 
+    grid-template-columns: 1fr 1fr; 
+    gap: 28px; 
+  }
 `
 
 const Col = styled.div`display: grid; gap: 16px;`
 
 const SectionHead = styled.header`
-  display: grid; gap: 4px;
-  h3 { font-weight: 800; display: inline; }
-  p { color: var(--color-text-3); font-size: 13px; }
-  a { color: var(--color-text); text-decoration: underline; }
+  display: grid; 
+  gap: 4px;
+  
+  h3 { 
+    font-weight: 800; 
+    display: inline;
+    font-size: 1.1rem;
+  }
+  
+  p { 
+    color: var(--color-text-3); 
+    font-size: 12px;
+    line-height: 1.3;
+  }
+  
+  a { 
+    color: var(--color-text); 
+    text-decoration: underline; 
+  }
+  
+  @media (min-width: 480px) {
+    h3 { font-size: 1.2rem; }
+    p { font-size: 12px; }
+  }
+  
+  @media (min-width: 641px) {
+    h3 { font-size: 1.3rem; }
+    p { font-size: 13px; }
+  }
 `
 
 const Cards = styled.div`
-  display: grid; gap: 16px; grid-template-columns: 1fr;
-  @media (min-width: 720px) { grid-template-columns: 1fr 1fr; }
+  display: grid; 
+  gap: 12px; 
+  grid-template-columns: 1fr;
+  
+  @media (min-width: 480px) {
+    gap: 14px;
+  }
+  
+  @media (min-width: 641px) {
+    gap: 16px;
+  }
+  
+  @media (min-width: 720px) { 
+    grid-template-columns: 1fr 1fr; 
+  }
 `
 
 const SimpleList = styled.ul`
@@ -206,8 +277,24 @@ const Name = styled.h5`
 `
 
 const H1 = styled.h1`
-  font-size: 2.4rem; font-weight: 600; line-height: 1.15; margin-bottom: 4px;
-  @media (min-width: 1024px) { font-size: 3rem; }
+  font-size: 1.5rem; 
+  font-weight: 600; 
+  line-height: 1.2; 
+  margin-bottom: 4px;
+  
+  @media (min-width: 480px) {
+    font-size: 1.75rem;
+    line-height: 1.18;
+  }
+  
+  @media (min-width: 641px) {
+    font-size: 2.4rem;
+    line-height: 1.15;
+  }
+  
+  @media (min-width: 1024px) { 
+    font-size: 3rem; 
+  }
 `
 
 const NameEmphasis = styled.span`
@@ -222,27 +309,92 @@ const BodyCopy = styled.p`
 
 const Subline = styled.p`
   color: var(--color-text-3);
+  font-size: 0.875rem;
+  
+  @media (min-width: 480px) {
+    font-size: 0.95rem;
+  }
+  
+  @media (min-width: 641px) {
+    font-size: 1rem;
+  }
 `
 
 const AtlasHeaderLink = styled(Link)`
-  width: 87.5%; max-width: var(--width); margin: 24px auto 8px; display: block;
-  font-weight: 800; font-size: 1.75rem; color: var(--color-text);
-  @media (min-width: 1024px) { font-size: 2rem; }
+  width: 90%; 
+  max-width: var(--width); 
+  margin: 20px auto 8px; 
+  display: block;
+  font-weight: 800; 
+  font-size: 1.25rem; 
+  color: var(--color-text);
   text-decoration: none;
+  
   &:hover { text-decoration: underline; }
+  
+  @media (min-width: 480px) {
+    font-size: 1.5rem;
+  }
+  
+  @media (min-width: 641px) {
+    width: 87.5%;
+    margin: 24px auto 8px;
+    font-size: 1.75rem;
+  }
+  
+  @media (min-width: 1024px) { 
+    font-size: 2rem; 
+  }
 `
 
 const AtlasSubline = styled.p`
-  width: 87.5%; max-width: var(--width); margin: 24px auto 8px; display: block;
-  font-weight: 300; font-size: 1.08rem; color: var(--color-text-2);
-  @media (min-width: 1024px) { font-size: 2rem; }
+  width: 90%; 
+  max-width: var(--width); 
+  margin: 0 auto 16px; 
+  display: block;
+  font-weight: 300; 
+  font-size: 0.875rem; 
+  line-height: 1.4;
+  color: var(--color-text-2);
   text-decoration: none;
+  
+  @media (min-width: 480px) {
+    font-size: 0.95rem;
+  }
+  
+  @media (min-width: 641px) {
+    width: 87.5%;
+    margin: 0 auto 24px;
+    font-size: 1.08rem;
+  }
+  
+  @media (min-width: 1024px) { 
+    font-size: 1.2rem; 
+  }
 `
 
 // Section wrapper for home categories
 const Section = styled.section`
-  display: grid; gap: 12px; padding: 8px 0; margin-bottom: 48px;
-  @media (min-width: 1024px) { margin-bottom: 64px; }
+  display: grid; 
+  gap: 10px; 
+  padding: 6px 0; 
+  margin-bottom: 32px;
+  
+  @media (min-width: 480px) {
+    gap: 11px;
+    padding: 7px 0;
+    margin-bottom: 40px;
+  }
+  
+  @media (min-width: 641px) {
+    gap: 12px;
+    padding: 8px 0;
+    margin-bottom: 48px;
+  }
+  
+  @media (min-width: 1024px) { 
+    margin-bottom: 64px; 
+  }
 `
 
 function hashToXY(slug: string) {
