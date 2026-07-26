@@ -9,7 +9,7 @@ import { sampleItems } from "./sampleData"
 interface Props { items?: AtlasItem[] }
 
 const Atlas: React.FC<Props> = ({ items = sampleItems }) => {
-  const [selected, setSelected] = React.useState<string | null>(null)
+  const [selected] = React.useState<string | null>(null)
 
   const selectedItem = selected ? items.find(i => i.slug === selected) || null : null
   const [hoverTip, setHoverTip] = React.useState<{ slug: string | null; cx: number; cy: number } | null>(null)
@@ -29,7 +29,7 @@ const Atlas: React.FC<Props> = ({ items = sampleItems }) => {
     setVisited(prev => {
       const next = new Set(prev)
       next.add(slug)
-      try { localStorage.setItem('atlasVisited', JSON.stringify(Array.from(next))) } catch {}
+      try { localStorage.setItem('atlasVisited', JSON.stringify(Array.from(next))) } catch (_) { return next }
       return next
     })
   }, [])

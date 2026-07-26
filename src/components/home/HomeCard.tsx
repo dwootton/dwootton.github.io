@@ -1,7 +1,8 @@
 import React from 'react'
-import styled, { css, keyframes } from 'styled-components'
+import styled from 'styled-components'
 import { Link } from 'gatsby'
-import { GatsbyImage, IGatsbyImageData } from 'gatsby-plugin-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
+import type { IGatsbyImageData } from 'gatsby-plugin-image'
 
 export interface HomeCardProps {
   title: string

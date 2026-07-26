@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import TypeChip from './TypeChip'
 import StatusChip from './StatusChip'
-// TOC temporarily removed for single-column layout
 import HeadingIndicator from './HeadingIndicator'
 import FooterNav from './FooterNav'
 import DesktopTOC from './DesktopTOC'
@@ -26,46 +25,60 @@ export default function PageType({ frontmatter: fm, children, related, prev, nex
     })
     setTocItems(items)
 
-    const compute = () => {
-      const viewportMid = window.innerHeight * 0.5
-      let active: HTMLElement | null = null
-      for (const h of hs) {
-        const top = h.getBoundingClientRect().top
-        if (top <= viewportMid + 1) active = h
-        else break
-      }
-      setActiveId((active || hs[0])?.id)
+    if (!hs.length || typeof IntersectionObserver === 'undefined') {
+      setActiveId(undefined)
+      return
     }
+
+    let frame = 0
+
+    const compute = () => {
+      window.cancelAnimationFrame(frame)
+      frame = window.requestAnimationFrame(() => {
+        const activationY = window.innerHeight * 0.32
+        let active: HTMLElement | null = hs[0]
+
+        for (const h of hs) {
+          const top = h.getBoundingClientRect().top
+          if (top <= activationY + 1) active = h
+          else break
+        }
+
+        setActiveId(active?.id)
+      })
+    }
+
+    const observer = new IntersectionObserver(compute, {
+      root: null,
+      rootMargin: '-20% 0px -65% 0px',
+      threshold: 0,
+    })
+
+    hs.forEach(h => observer.observe(h))
     compute()
-    const onScroll = () => compute()
-    const onResize = () => compute()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onResize)
+
+    const resizeObserver =
+      typeof ResizeObserver === 'undefined'
+        ? null
+        : new ResizeObserver(compute)
+
+    resizeObserver?.observe(root)
+    window.addEventListener('resize', compute)
+
     return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onResize)
+      window.cancelAnimationFrame(frame)
+      observer.disconnect()
+      resizeObserver?.disconnect()
+      window.removeEventListener('resize', compute)
     }
   }, [children])
-
-  // Auto-collapse DesktopTOC after initial scroll past header
-  const [tocCollapsed, setTocCollapsed] = React.useState(false)
-  React.useEffect(() => {
-    const onScroll = () => {
-      if (typeof window === 'undefined') return
-      const y = window.scrollY || window.pageYOffset
-      setTocCollapsed(y > 120)
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   return (
       <Article className="post prose-wrapper">
       <PostGrid className="post-grid">
         <DesktopRail>
           <StickyRail topOffsetPx={24}>
-            <DesktopTOC items={tocItems} activeId={activeId} accentColor="var(--accent)" collapsed={tocCollapsed} />
+            <DesktopTOC items={tocItems} activeId={activeId} accentColor="var(--survey-marker)" />
           </StickyRail>
         </DesktopRail>
         

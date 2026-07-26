@@ -26,7 +26,7 @@ const useSiteMetadata = (): SiteMetadataShape => {
     menuLinks: [
       { link: "/", name: "Home" },
       { link: "/about/", name: "About" },
-      { link: "/atlas/", name: "Atlas" },
+      { link: "/atlas/", name: "Writing Atlas" },
       { link: meta.links.github, name: "Github" },
     ],
   }
@@ -36,5 +36,4 @@ const useSiteMetadata = (): SiteMetadataShape => {
 export type UseSiteMetaDataReturnType = ReturnType<typeof useSiteMetadata>
 
 export default useSiteMetadata
-
 

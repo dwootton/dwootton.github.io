@@ -1,11 +1,14 @@
 const React = require("react")
 const { MDXProvider } = require("@mdx-js/react")
 const mdxComponents = require("./src/components/mdx").default
+const AtlasTransitionLayer =
+  require("./src/components/atlas/AtlasTransitionLayer").default
 
 exports.wrapRootElement = ({ element }) => {
   return React.createElement(
     MDXProvider,
     { components: mdxComponents },
+    React.createElement(AtlasTransitionLayer, { key: "atlas-transition" }),
     element
   )
 }
@@ -30,6 +33,7 @@ exports.onRenderBody = ({ setPreBodyComponents, setHeadComponents }) => {
   ])
   setPreBodyComponents([
     React.createElement("script", {
+      key: "theme-bootstrap",
       dangerouslySetInnerHTML: {
         __html: `
           (() => {    
@@ -82,7 +86,7 @@ exports.onRenderBody = ({ setPreBodyComponents, setHeadComponents }) => {
               window.__setPreferredTheme(e.matches ? 'dark' : 'light')
             })
 
-            setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'))
+            setTheme(preferredTheme || 'light')
           })()
         `,
       },

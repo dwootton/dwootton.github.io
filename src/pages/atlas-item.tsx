@@ -1,56 +1,45 @@
 import React from "react"
 import styled from "styled-components"
 import { graphql, type PageProps } from "gatsby"
-// MDX types may not export Renderer typings; cast to any to satisfy TS
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { MDXRenderer: GatsbyMDXRenderer } = require("gatsby-plugin-mdx")
-const MDXRendererAny: React.FC<{ children: string }> = (GatsbyMDXRenderer as any)
+
 import Layout from "Layouts/layout"
 import SEO from "Components/seo"
-import PageType from "Components/atlas/post/PageType"
-import type { AtlasItem } from "Components/atlas/types"
+import CurrentHeadingMarker from "Components/portfolio/CurrentHeadingMarker"
+import PageIntro from "Components/portfolio/PageIntro"
+import Markdown from "Styles/markdown"
+import { rhythm } from "Styles/typography"
 
 const useSlug = (): string | null => {
-  if (typeof window === 'undefined') return null
-  // Expect pathname like /atlas/<slug>
-  const parts = window.location.pathname.split('/').filter(Boolean)
-  const idx = parts.indexOf('atlas')
+  if (typeof window === "undefined") return null
+  const parts = window.location.pathname.split("/").filter(Boolean)
+  const idx = parts.indexOf("atlas")
   if (idx >= 0 && parts[idx + 1]) return decodeURIComponent(parts[idx + 1])
   return null
 }
 
 const AtlasItemPage: React.FC<PageProps<any>> = ({ data }) => {
+  const articleRef = React.useRef<HTMLElement>(null)
   const slug = useSlug()
-  
 
   const mdNodes = data.allMarkdownRemark.edges.map((e: any) => ({
-    kind: 'md',
     id: e.node.id,
     html: e.node.html,
     frontmatter: e.node.frontmatter,
     slug: e.node.fields.slug,
   }))
-  const mdxNodes = data.allMdx.edges
-    .filter((e: any) => e.node.fields?.slug?.startsWith('/atlas/'))
-    .map((e: any) => ({
-      kind: 'mdx',
-      id: e.node.id,
-      body: e.node.internal?.content,
-      frontmatter: e.node.frontmatter,
-      slug: e.node.fields.slug,
-    }))
-  const nodes = [...mdNodes, ...mdxNodes]
+  const nodes = mdNodes
+
   const match = React.useMemo(() => {
     if (!slug) return null
-    const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
-    const decamel = (s: string) => s.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
-    // 1) match by title normalized
-    let n = nodes.find((n: any) => n.frontmatter?.title && norm(n.frontmatter.title) === slug)
+    const norm = (s: string) =>
+      s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
+    const decamel = (s: string) =>
+      s.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
+    let n = nodes.find((node: any) => node.frontmatter?.title && norm(node.frontmatter.title) === slug)
     if (n) return n
-    // 2) match by fields.slug includes slug (tolerate camelCase vs kebab-case)
-    n = nodes.find((n: any) => {
-      const f = (n.fields?.slug || '').toLowerCase()
-      return f.includes(slug) || f.includes(decamel(slug))
+    n = nodes.find((node: any) => {
+      const fieldSlug = (node.slug || "").toLowerCase()
+      return fieldSlug.includes(slug) || fieldSlug.includes(decamel(slug))
     })
     return n || null
   }, [nodes, slug])
@@ -58,79 +47,182 @@ const AtlasItemPage: React.FC<PageProps<any>> = ({ data }) => {
   if (!match) {
     return (
       <Layout>
-        <SEO title="Atlas Item" />
-        <Main><Empty>Item not found.</Empty></Main>
+        <SEO title="Atlas item" />
+        <PageWrap>
+          <PageIntro
+            label="ATLAS"
+            title="Item not found."
+            description="The requested atlas entry is not available in the current collection."
+          />
+        </PageWrap>
       </Layout>
     )
   }
 
   const fm = match.frontmatter || {}
-  const title = fm.title || 'Atlas Item'
-  const pageFm = {
-    type: mapCategoryToType(fm.category),
-    title: fm.title || '',
-    deck: fm.desc || '',
-    topics: [],
-    date: fm.date || undefined,
-    status: 'charted',
-    tags: [],
-    repo_url: fm.githubLink || undefined,
-    live_url: (fm as any).liveLink || undefined,
-  } as any
+  const title = fm.title || "Atlas Item"
 
   return (
     <Layout>
       <SEO title={title} />
-      <Main>
-        <PageType frontmatter={pageFm}>
-          {match.kind === 'mdx' ? (
-            <MDXRendererAny>{match.body}</MDXRendererAny>
-          ) : (
-            <div dangerouslySetInnerHTML={{ __html: match.html || '' }} />
-          )}
-        </PageType>
-      </Main>
+      <PageWrap>
+        <PageIntro
+          label={String(fm.category || "Atlas").toUpperCase()}
+          title={title}
+          description={fm.desc || fm.subtitle || ""}
+          align="wide"
+        />
+
+        <ContentGrid>
+          <ArticleCard ref={articleRef}>
+            <CurrentHeadingMarker
+              containerRef={articleRef}
+              headingSelector="h2, h3"
+              markerSize={10}
+              offsetX={18}
+            />
+            <Markdown rhythm={rhythm} dangerouslySetInnerHTML={{ __html: match.html || "" }} />
+          </ArticleCard>
+          <Rail>
+            {fm.date ? (
+              <RailCard>
+                <RailLabel>DATE</RailLabel>
+                <RailText>{fm.date}</RailText>
+              </RailCard>
+            ) : null}
+            {fm.tags && fm.tags.length > 0 ? (
+              <RailCard>
+                <RailLabel>TOPICS</RailLabel>
+                <TagList>
+                  {fm.tags.map((tag: string) => (
+                    <span key={tag}>{tag}</span>
+                  ))}
+                </TagList>
+              </RailCard>
+            ) : null}
+            {(fm.githubLink || fm.paperLink || fm.demoLink || fm.liveLink) ? (
+              <RailCard>
+                <RailLabel>LINKS</RailLabel>
+                <LinkList>
+                  {fm.liveLink ? <a href={fm.liveLink}>Live project</a> : null}
+                  {fm.demoLink ? <a href={fm.demoLink}>Demo</a> : null}
+                  {fm.paperLink ? <a href={fm.paperLink}>Paper</a> : null}
+                  {fm.githubLink ? <a href={fm.githubLink}>Source</a> : null}
+                </LinkList>
+              </RailCard>
+            ) : null}
+          </Rail>
+        </ContentGrid>
+      </PageWrap>
     </Layout>
   )
 }
 
-// Note: previously had per-type rendering helpers; consolidate into PageType usage
+const PageWrap = styled.div`
+  width: var(--site-content-width);
+  margin: 0 auto;
+  padding: 56px 0 72px;
+  display: grid;
+  gap: 34px;
 
-const Main = styled.main`
-  min-width: var(--min-width);
-  min-height: calc(100vh - var(--nav-height) - var(--footer-height));
-  background: var(--color-background);
-  padding: 16px 0 40px;
+  @media (max-width: ${({ theme }) => theme.device.sm}) {
+    width: var(--site-content-width);
+    padding: 42px 0 56px;
+  }
 `
 
-const Article = styled.article`
-  width: 87.5%; max-width: var(--post-width); margin: 0 auto; display: grid; gap: 12px;
-  background: var(--color-post-background);
+const ContentGrid = styled.section`
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 28px;
+
+  @media (max-width: ${({ theme }) => theme.device.md}) {
+    grid-template-columns: minmax(0, 1fr);
+  }
 `
 
-const Empty = styled.div`
-  width: 87.5%; max-width: var(--post-width); margin: 0 auto; color: var(--charcoal);
+const ArticleCard = styled.article`
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+  overflow: visible;
+  padding: 30px clamp(20px, 3vw, 38px);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  background: var(--color-card);
+  box-shadow:
+    0 1px 2px var(--shadow),
+    0 8px 24px var(--shadow);
 `
 
-function mapCategoryToType(cat?: string | null): any {
-  const c = (cat || '').toLowerCase()
-  if (c.includes('guide')) return 'guidepost'
-  if (c.includes('note')) return 'field_note'
-  if (c.includes('essay') || c.includes('paper')) return 'essay'
-  return 'project'
-}
+const Rail = styled.aside`
+  min-width: 0;
+  display: grid;
+  gap: 18px;
+  align-content: start;
+`
+
+const RailCard = styled.section`
+  padding: 18px 18px 20px;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  background: var(--color-card);
+`
+
+const RailLabel = styled.span`
+  display: inline-block;
+  margin-bottom: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  color: var(--color-text-3);
+  text-transform: uppercase;
+`
+
+const RailText = styled.p`
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--color-text-2);
+`
+
+const TagList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  span {
+    border: 1px solid var(--color-divider);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 0.76rem;
+    color: var(--color-text-2);
+  }
+`
+
+const LinkList = styled.div`
+  display: grid;
+  gap: 10px;
+
+  a {
+    width: fit-content;
+    color: var(--accent);
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+`
 
 export default AtlasItemPage
+
 export const pageQuery = graphql`
   query AtlasItemsQueryPage {
     allMarkdownRemark(
-      filter: { fileAbsolutePath: { regex: "/(posts)/" } }
+      filter: { fileAbsolutePath: { regex: "/(content/essays|posts)/" } }
       sort: { frontmatter: { date: DESC } }
     ) {
-      edges { node { id html frontmatter { title desc date category demoLink githubLink paperLink liveLink } fields { slug } } }
-    }
-    allMdx {
-      edges { node { id internal { content } } }
+      edges { node { id html frontmatter { title desc subtitle date category tags demoLink githubLink paperLink liveLink } fields { slug } } }
     }
   }
 `

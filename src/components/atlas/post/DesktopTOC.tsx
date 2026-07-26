@@ -33,7 +33,7 @@ const DesktopTOC: React.FC<DesktopTOCProps> = ({
   const toggle = React.useCallback(() => {
     setCollapsed(prev => {
       const next = !prev
-      try { onToggle && onToggle(next) } catch (_) {}
+      try { onToggle && onToggle(next) } catch (_) { return next }
       return next
     })
   }, [onToggle])
@@ -121,5 +121,4 @@ const Nav = styled.nav`
 `
 
 export default DesktopTOC
-
 

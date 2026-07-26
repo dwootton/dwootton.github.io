@@ -1,0 +1,15 @@
+{
+  "score": 95,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "Generated screenshot includes the site header and full viewport while the provided reference is a cropped hero.",
+    "The atlas map remains intentionally legible, but its home-page surface no longer reads as a separate pale panel."
+  ],
+  "suggestions": [],
+  "reasoning": "The home atlas now uses an alpha mask so the real page background shows through the blend, and the side gutter tick origin aligns with the atlas grid.",
+  "threshold_passed": true,
+  "next_actions": [],
+  "generated_screenshot": "/tmp/home-atlas-1440-dev-final.png",
+  "secondary_screenshot": "/tmp/home-atlas-464-dev-final.png"
+}

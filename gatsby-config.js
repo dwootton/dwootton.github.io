@@ -21,7 +21,7 @@ const siteMetadata = {
     },
     {
       link: "/atlas/",
-      name: "Atlas",
+      name: "Writing Atlas",
     },
 
     {
@@ -72,7 +72,7 @@ const devPlugins = [
         Types: "src/types",
         Utils: "src/utils",
       },
-      extensions: ["js", "ts", "tsx"],
+      extensions: [".js", ".ts", ".tsx"],
     },
   },
   {

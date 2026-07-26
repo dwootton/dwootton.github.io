@@ -1,5 +1,6 @@
 import React from "react"
 import styled from "styled-components"
+
 import type { AtlasItem } from "./types"
 import { iconForType } from "../atlas/icons"
 
@@ -9,12 +10,21 @@ interface Props {
   onClick?: (slug: string) => void
   visited?: boolean
   logoAlt?: string
+  density?: "normal" | "compact"
 }
 
-const ItemCard: React.FC<Props> = ({ item, onHover, onClick, visited = false, logoAlt }) => {
+const ItemCard: React.FC<Props> = ({
+  item,
+  onHover,
+  onClick,
+  visited = false,
+  logoAlt,
+  density = "normal",
+}) => {
   const Icon = iconForType(item.type)
   const since = timeSince(item.date)
   const logoSrc = resolveLogo(item.thumbnail)
+
   return (
     <Card
       onMouseEnter={() => onHover?.(item.slug)}
@@ -23,195 +33,197 @@ const ItemCard: React.FC<Props> = ({ item, onHover, onClick, visited = false, lo
       tabIndex={0}
       role="button"
       aria-label={`${item.title} ${item.type}`}
+      data-density={density}
     >
-      <TitleRow>
-        <Title $visited={visited}>{item.title}</Title>
-        <InlineIcon><Icon size={16} /></InlineIcon>
-      </TitleRow>
+      <Header>
+        <Kicker>{labelForType(item.type)}</Kicker>
+        <ArrowWrap>
+          <Icon size={14} />
+        </ArrowWrap>
+      </Header>
+      <Title $visited={visited}>{item.title}</Title>
+      <Subtitle>{item.desc}</Subtitle>
+      <MetaRow>
+        <span>{since}</span>
+        {visited ? <span>Visited</span> : null}
+      </MetaRow>
       {logoSrc ? (
         <LogoRight>
           <img src={logoSrc} alt={logoAlt || item.alt || item.title} />
         </LogoRight>
       ) : null}
-      <Subtitle>{item.desc}</Subtitle>
-      <MetaRow>
-        <span className="type">{labelForType(item.type)}</span>
-        <span className="dot">·</span>
-        <span className="time">{since}</span>
-        {visited && <span className="dot">·</span>}
-        {visited && <span className="visited">Visited</span>}
-      </MetaRow>
     </Card>
   )
 }
 
-const statusLabel = (s: AtlasItem["status"]) =>
-  ({ uncharted: "Uncharted", in_progress: "In progress", charted: "Charted" } as const)[s]
-
 const Card = styled.article`
+  position: relative;
+  min-width: 0;
   display: grid;
-  gap: 6px;
-  padding: 12px;
-  border-radius: 10px;
+  gap: 12px;
+  padding: 18px 18px 20px;
+  border-radius: 6px;
   background: var(--color-card);
-  border: 1px solid var(--color-divider);
-  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 1px 2px var(--shadow), 0 8px 24px var(--shadow);
   cursor: pointer;
-  transition: box-shadow 160ms ease, border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
-  max-width: 100%;
-  
-  @media (min-width: 480px) {
-    gap: 7px;
-    padding: 14px;
-    border-radius: 11px;
+  transition: transform 0.18s ease, border-color 0.18s ease,
+    box-shadow 0.18s ease, background-color 0.18s ease;
+
+  &:hover,
+  &:focus {
+    transform: translateY(-2px);
+    border-color: var(--color-floating-button-border-hover);
+    box-shadow: 0 1px 2px var(--shadow), 0 12px 30px var(--shadow);
   }
-  
-  @media (min-width: 641px) {
+
+  &[data-density="compact"] {
     gap: 8px;
-    padding: 16px;
-    border-radius: 12px;
-    max-width: 360px;
-  }
-  
-  &:hover, &:focus {
-    border-color: transparent;
-    background: var(--card-hover-bg);
-    box-shadow: var(--card-hover-shadow);
+    padding: 12px 12px 13px;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(50, 42, 32, 0.06),
+      0 6px 18px rgba(50, 42, 32, 0.06);
+
+    &:hover,
+    &:focus {
+      transform: translateY(-1px);
+      box-shadow: 0 1px 2px rgba(50, 42, 32, 0.08),
+        0 8px 22px rgba(50, 42, 32, 0.09);
+    }
   }
 `
 
-const TitleRow = styled.div`
-  display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;
+const Header = styled.div`
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 `
 
-const InlineIcon = styled.span`
-  display: inline-flex; align-items: center; color: var(--color-text-2);
+const Kicker = styled.span`
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  color: var(--color-text-3);
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+
+  [data-density="compact"] & {
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+  }
+`
+
+const ArrowWrap = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-3);
 `
 
 const Title = styled.h3<{ $visited?: boolean }>`
-  font-size: 15px;
-  line-height: 1.3;
-  font-weight: 800;
-  font-family: var(--font-sans);
-  color: ${p => (p.$visited ? 'var(--atlas-visited)' : 'var(--color-text)')};
-  
-  @media (min-width: 480px) {
-    font-size: 16px;
-    line-height: 1.32;
-  }
-  
-  @media (min-width: 641px) {
-    font-size: 18px;
-    line-height: 1.35;
+  min-width: 0;
+  font-size: 1.55rem;
+  line-height: 1.08;
+  letter-spacing: 0;
+  color: ${p => (p.$visited ? "var(--green)" : "var(--color-text)")};
+  overflow-wrap: break-word;
+
+  [data-density="compact"] & {
+    font-size: 1.08rem;
+    line-height: 1.08;
+    letter-spacing: 0;
   }
 `
 
 const Subtitle = styled.p`
-  font-size: 12px;
-  line-height: 1.2;
-  color: var(--color-text-3);
-  
-  @media (min-width: 480px) {
-    font-size: 13px;
-    line-height: 1.18;
-  }
-  
-  @media (min-width: 641px) {
-    font-size: 14px;
-    line-height: 1.15;
+  min-width: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--color-text-2);
+  overflow-wrap: break-word;
+
+  [data-density="compact"] & {
+    font-size: 0.78rem;
+    line-height: 1.42;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
   }
 `
 
 const MetaRow = styled.div`
-  display: inline-flex; 
-  align-items: center; 
-  gap: 6px;
-  font-size: 10px; 
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
   color: var(--color-text-3);
-  
-  .dot { opacity: .6 }
-  .visited { color: var(--atlas-visited); }
-  
-  @media (min-width: 480px) {
-    gap: 7px;
-    font-size: 11px;
-  }
-  
-  @media (min-width: 641px) {
-    gap: 8px;
-    font-size: 12px;
+
+  [data-density="compact"] & {
+    font-size: 0.56rem;
   }
 `
 
 function timeSince(iso?: string) {
-  if (!iso) return ''
+  if (!iso) return ""
   const then = new Date(iso).getTime()
-  if (isNaN(then)) return ''
+  if (isNaN(then)) return ""
   const s = Math.floor((Date.now() - then) / 1000)
   const units: [number, string][] = [
-    [60*60*24*365, 'y'],
-    [60*60*24*30, 'mo'],
-    [60*60*24*7, 'w'],
-    [60*60*24, 'd'],
-    [60*60, 'h'],
-    [60, 'm'],
+    [60 * 60 * 24 * 365, "y ago"],
+    [60 * 60 * 24 * 30, "mo ago"],
+    [60 * 60 * 24 * 7, "w ago"],
+    [60 * 60 * 24, "d ago"],
   ]
   for (const [sec, label] of units) {
     const v = Math.floor(s / sec)
-    if (v >= 1) return `${v}${label} ago`
+    if (v >= 1) return `${v}${label}`
   }
-  return 'just now'
+  return "new"
 }
 
-const labelForType = (t: AtlasItem['type']) => ({
-  project: 'Project',
-  route: 'Route',
-  waypoint: 'Waypoint',
-  field_note: 'Note',
-  map: 'Map',
-}[t] || t)
+const labelForType = (t: AtlasItem["type"]) =>
+  ({
+    project: "Project",
+    route: "Route",
+    waypoint: "Waypoint",
+    field_note: "Field note",
+    map: "Map",
+  }[t] || t)
 
 function resolveLogo(thumbnail?: string) {
   if (!thumbnail) return undefined
   if (/^https?:\/\//.test(thumbnail)) return thumbnail
-  if (thumbnail.startsWith('/')) return thumbnail
-  // Support common public paths (user can place logos in /static or /public)
-  // If provided a relative path (e.g., src/posts/... or ./images/...), we cannot reliably require it here.
-  // Encourage absolute site path; otherwise skip.
+  if (thumbnail.startsWith("/")) return thumbnail
   return undefined
 }
 
 const LogoRight = styled.div`
-  position: absolute; 
-  right: 10px; 
-  top: 10px;
-  
-  img { 
-    width: 24px; 
-    height: 24px; 
-    border-radius: 4px; 
-    object-fit: cover; 
-    border: 1px solid var(--color-divider); 
+  position: absolute;
+  top: 16px;
+  right: 16px;
+
+  [data-density="compact"] & {
+    top: 10px;
+    right: 10px;
   }
-  
-  @media (min-width: 480px) {
-    right: 11px;
-    top: 11px;
-    img { 
-      width: 28px; 
-      height: 28px; 
-      border-radius: 5px;
-    }
+
+  img {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    object-fit: cover;
+    border: 1px solid var(--color-divider);
   }
-  
-  @media (min-width: 641px) {
-    right: 12px;
-    top: 12px;
-    img { 
-      width: 32px; 
-      height: 32px; 
-      border-radius: 6px;
-    }
+
+  [data-density="compact"] & img {
+    width: 24px;
+    height: 24px;
   }
 `
 

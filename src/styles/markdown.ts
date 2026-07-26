@@ -2,150 +2,145 @@ import styled from "styled-components"
 import type typography from "./typography"
 
 const Markdown = styled.article<{ rhythm: typeof typography["rhythm"] }>`
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-weight: var(--font-weight-bold);
-  }
+  min-width: 0;
+  max-width: 100%;
+  color: var(--color-text);
 
-  td,
-  th {
-    border-bottom: 1px solid var(--color-gray-3);
-  }
-
-  strong {
-    font-weight: var(--font-weight-semi-bold);
-  }
-
-  a,
-  p {
-    font-weight: var(--font-weight-regular);
-  }
-
-  a {
-    text-decoration: none;
-    color: var(--color-blue) !important;
-    * {
-      color: var(--color-blue) !important;
-    }
-    &:hover,
-    &:active {
-      text-decoration: underline;
-    }
+  & > * {
+    max-width: 100%;
   }
 
   & > *:first-child {
     margin-top: 0;
   }
 
-  h1 {
-    font-size: 2.5rem;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--color-text);
+  }
 
-    @media (max-width: ${({ theme }) => theme.device.sm}) {
-      font-size: 2rem;
-    }
+  h1 {
+    font-size: clamp(2.25rem, 4vw, 3.45rem);
+    line-height: 0.98;
+    margin-bottom: ${({ rhythm }) => rhythm(1)};
   }
 
   h2 {
-    font-size: 1.75rem;
-    line-height: 1.3;
-    margin-bottom: ${({ rhythm }) => rhythm(1)};
-    margin-top: ${({ rhythm }) => rhythm(2.25)};
-
-    @media (max-width: ${({ theme }) => theme.device.sm}) {
-      font-size: 1.3125rem;
-    }
+    font-size: clamp(1.7rem, 2vw, 2.2rem);
+    line-height: 1.06;
+    margin-top: ${({ rhythm }) => rhythm(2.4)};
+    margin-bottom: ${({ rhythm }) => rhythm(0.8)};
   }
 
   h3 {
-    font-size: 1.31951rem;
-    line-height: 1.3;
-    margin-bottom: ${({ rhythm }) => rhythm(1)};
-    margin-top: ${({ rhythm }) => rhythm(1.5)};
-
-    @media (max-width: ${({ theme }) => theme.device.sm}) {
-      font-size: 1.1875rem;
-    }
+    font-size: clamp(1.35rem, 1.4vw, 1.65rem);
+    line-height: 1.14;
+    margin-top: ${({ rhythm }) => rhythm(1.8)};
+    margin-bottom: ${({ rhythm }) => rhythm(0.65)};
   }
 
   h4,
   h5,
   h6 {
-    margin-bottom: ${({ rhythm }) => rhythm(0.5)};
-    margin-top: ${({ rhythm }) => rhythm(1)};
+    margin-top: ${({ rhythm }) => rhythm(1.4)};
+    margin-bottom: ${({ rhythm }) => rhythm(0.45)};
+  }
+
+  p,
+  li,
+  blockquote {
+    font-size: 1rem;
+    line-height: 1.78;
+    color: var(--color-text-2);
+    overflow-wrap: break-word;
+  }
+
+  p {
+    margin-bottom: ${({ rhythm }) => rhythm(1.05)};
+  }
+
+  strong {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  a {
+    color: var(--accent) !important;
+    text-decoration: underline;
+    text-decoration-color: rgba(155, 104, 71, 0.28);
+    text-underline-offset: 0.18em;
+
+    * {
+      color: inherit !important;
+    }
+
+    &:hover {
+      text-decoration-color: rgba(155, 104, 71, 0.6);
+    }
   }
 
   ul,
   ol {
-    margin-top: ${({ rhythm }) => rhythm(1)};
-    margin-bottom: ${({ rhythm }) => rhythm(1)};
-    margin-left: ${({ rhythm }) => rhythm(1.25)};
-  }
-
-  li > ul,
-  li > ol {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-
-  li > p {
-    margin-bottom: 0;
-  }
-
-  li > ol,
-  li > ul {
-    margin-left: ${({ rhythm }) => rhythm(1.25)};
+    margin: ${({ rhythm }) => rhythm(1)} 0 ${({ rhythm }) => rhythm(1)} ${({ rhythm }) => rhythm(1.2)};
   }
 
   li {
     margin-bottom: ${({ rhythm }) => rhythm(0.3)};
   }
 
-  p,
-  li,
-  blockquote {
-    font-size: 1.0625rem;
-  }
-
-  p {
-    line-height: 1.68;
-    text-align: left;
-    margin-bottom: var(--sizing-md);
-  }
-
   hr {
-    margin: var(--sizing-lg) 0;
-    background: var(--color-gray-3);
+    height: 1px;
+    border: 0;
+    margin: ${({ rhythm }) => rhythm(1.8)} 0;
+    background: var(--color-divider);
   }
 
   blockquote {
-    border-left: 0.25rem solid var(--color-gray-2);
-    padding-left: var(--sizing-base);
-    margin: var(--sizing-md) 0;
-    * {
-      color: var(--color-gray-6);
-    }
+    margin: ${({ rhythm }) => rhythm(1.3)} 0;
+    padding: 0.1rem 0 0.1rem 1rem;
+    border-left: 2px solid rgba(155, 104, 71, 0.38);
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  td,
+  th {
+    border-bottom: 1px solid var(--color-divider);
   }
 
   img {
     display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    border: 1px solid var(--card-border);
   }
 
   pre,
   code {
-    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+    font-family: var(--font-mono);
     background-color: var(--color-code-block);
   }
 
   pre {
-    border: 1px solid var(--color-gray-3);
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: ${({ rhythm }) => rhythm(1.2)} 0;
+    padding: 1rem 1.05rem;
+    border: 1px solid var(--color-divider);
+    border-radius: 6px;
+    overflow-x: auto;
   }
 
   pre.grvsc-container {
-    margin: var(--sizing-md) 0;
+    margin: ${({ rhythm }) => rhythm(1.2)} 0;
   }
 
   .grvsc-line-highlighted::before {
@@ -155,10 +150,10 @@ const Markdown = styled.article<{ rhythm: typeof typography["rhythm"] }>`
 
   *:not(pre) > code {
     background-color: var(--color-code);
-    padding: 0.2rem 0.4rem;
+    padding: 0.16rem 0.34rem;
     margin: 0;
     font-size: 85%;
-    border-radius: 3px;
+    border-radius: 4px;
   }
 `
 

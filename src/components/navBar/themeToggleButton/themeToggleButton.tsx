@@ -36,7 +36,6 @@ const Icon = styled.svg`
 `
 
 const Text = styled.span`
-  margin-left: 8px;
   color: var(--color-text-2);
   font-size: 0.95rem;
   @media (min-width: ${({ theme }) => theme.device.sm}) {
@@ -50,12 +49,14 @@ const Button = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 10px;
+  width: 36px;
+  height: 36px;
   background: transparent;
   color: var(--color-text);
   border: 1px solid transparent;
   border-radius: 999px;
-  padding: 6px 8px;
+  padding: 8px;
   line-height: 1;
   font-weight: var(--font-weight-medium);
 
@@ -72,8 +73,9 @@ const Button = styled.button`
   /* Mobile menu list: allow label next to icon */
   @media (max-width: ${({ theme }) => theme.device.sm}) {
     width: 100%;
+    height: auto;
     justify-content: flex-start;
-    padding: 8px 0;
+    padding: 10px 0;
   }
 `
 

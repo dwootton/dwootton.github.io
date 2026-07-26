@@ -4,12 +4,13 @@ import styled from "styled-components"
 
 import Layout from "Layouts/layout"
 import SEO from "Components/seo"
-import { rhythm } from "Styles/typography"
-import DateTime from "Styles/dateTime"
+import CurrentHeadingMarker from "Components/portfolio/CurrentHeadingMarker"
+import PageIntro from "Components/portfolio/PageIntro"
 import Markdown from "Styles/markdown"
-import PageType from "Components/atlas/post/PageType"
+import { rhythm } from "Styles/typography"
 
 const BlogPost: React.FC<PageProps<Queries.Query>> = ({ data }) => {
+  const articleRef = React.useRef<HTMLElement>(null)
   const { markdownRemark } = data
   const { frontmatter, html } = markdownRemark!
   const {
@@ -17,145 +18,170 @@ const BlogPost: React.FC<PageProps<Queries.Query>> = ({ data }) => {
     desc,
     thumbnail,
     date,
-    audience,
     category,
     demoLink,
     githubLink,
     paperLink,
     liveLink,
+    tags,
   } = frontmatter!
 
   const ogImagePath =
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     thumbnail &&
     thumbnail?.childImageSharp?.gatsbyImageData!.images!.fallback!.src
-
-  const fm = {
-    type: "project",
-    title,
-    deck: desc,
-    topics: [category].filter(Boolean) as string[],
-    date,
-    audience: audience || undefined,
-    status: "charted" as const,
-    repo_url: githubLink || undefined,
-    live_url: liveLink || undefined,
-  }
 
   return (
     <Layout>
       <SEO title={title} desc={desc} image={ogImagePath} />
-      <main>
-        <article>
-          <PageTypeWrapper>
-            <PageType frontmatter={fm as any}>
-              {(demoLink || paperLink) && (
-                <Materials>
-                  {demoLink && <MaterialLink href={demoLink}>Demo</MaterialLink>}
-                  {paperLink && <MaterialLink href={paperLink}>Paper</MaterialLink>}
-                </Materials>
-              )}
-              <Divider />
-              <Markdown
-                dangerouslySetInnerHTML={{ __html: html ?? "" }}
-                rhythm={rhythm}
-              />
-            </PageType>
-          </PageTypeWrapper>
-        </article>
-      </main>
+      <PageWrap>
+        <PageIntro
+          label={(category || "Essay").toUpperCase()}
+          title={title || "Untitled"}
+          description={desc || ""}
+          align="wide"
+          backHref="/atlas/"
+          backLabel="Back to Writing Atlas"
+        />
+
+        <ContentGrid>
+          <ArticleCard ref={articleRef}>
+            <CurrentHeadingMarker
+              containerRef={articleRef}
+              headingSelector="h2, h3"
+              markerSize={10}
+              offsetX={18}
+            />
+            <Markdown
+              dangerouslySetInnerHTML={{ __html: html ?? "" }}
+              rhythm={rhythm}
+            />
+          </ArticleCard>
+          <Rail>
+            <RailCard>
+              <RailLabel>DATE</RailLabel>
+              <RailText>{date || "In progress"}</RailText>
+            </RailCard>
+            {(demoLink || paperLink || githubLink || liveLink) ? (
+              <RailCard>
+                <RailLabel>LINKS</RailLabel>
+                <LinkList>
+                  {liveLink ? <a href={liveLink}>Live project</a> : null}
+                  {demoLink ? <a href={demoLink}>Demo</a> : null}
+                  {paperLink ? <a href={paperLink}>Paper</a> : null}
+                  {githubLink ? <a href={githubLink}>Source</a> : null}
+                </LinkList>
+              </RailCard>
+            ) : null}
+            {tags && tags.length > 0 ? (
+              <RailCard>
+                <RailLabel>TOPICS</RailLabel>
+                <TagList>
+                  {tags.map((tag: string) => (
+                    <span key={tag}>{tag}</span>
+                  ))}
+                </TagList>
+              </RailCard>
+            ) : null}
+          </Rail>
+        </ContentGrid>
+      </PageWrap>
     </Layout>
   )
 }
 
-const PageTypeWrapper = styled.div`
-  margin-top: var(--sizing-xl);
-  /* Allow full width for the grid layout */
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
-  box-sizing: border-box;
-  padding-bottom: var(--sizing-lg);
-
-  @media (max-width: ${({ theme }) => theme.device.sm}) {
-    margin-top: var(--sizing-lg);
-  }
-`
-
-const OuterWrapper = styled.div`
-  margin-top: var(--sizing-xl);
-
-  @media (max-width: ${({ theme }) => theme.device.sm}) {
-    margin-top: var(--sizing-lg);
-  }
-`
-
-const InnerWrapper = styled.div`
-  width: var(--post-width);
+const PageWrap = styled.div`
+  width: var(--site-content-width);
   margin: 0 auto;
-  padding-bottom: var(--sizing-lg);
+  padding: 56px 0 72px;
+  display: grid;
+  gap: 34px;
 
   @media (max-width: ${({ theme }) => theme.device.sm}) {
-    width: 87.5%;
+    width: var(--site-content-width);
+    padding: 42px 0 56px;
   }
 `
 
-const CommentWrap = styled.section`
-  width: 100%;
-  padding: 0 var(--padding-sm);
-  margin: 0 auto;
-  margin-bottom: var(--sizing-xl);
-
-  @media (max-width: ${({ theme }) => theme.device.sm}) {
-    width: auto;
-  }
-`
-
-const Materials = styled.div`
-  display: flex; gap: 10px; flex-wrap: wrap; margin: 6px 0 0;
-`
-const MaterialLink = styled.a`
-  justify-self: end;
-  font-size: 0.875rem;
-  font-weight: var(--font-weight-regular);
-  color: var(--color-text-3);
-`
-const Info = styled.div``
-
-const Time = styled(DateTime)``
-
-const Desc = styled.p`
-  margin-top: var(--sizing-lg);
-  line-height: 1.5;
-  font-size: var(--text-lg);
-
-  @media (max-width: ${({ theme }) => theme.device.sm}) {
-    line-height: 1.31579;
-    font-size: 1.1875rem;
-  }
-`
-
-const Divider = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: var(--color-gray-3);
-  margin-top: var(--sizing-lg);
-  margin-bottom: var(--sizing-lg);
-`
-
-const Title = styled.h1`
-  font-weight: var(--font-weight-bold);
-  line-height: 1.1875;
-  font-size: var(--text-xl);
+const ContentGrid = styled.section`
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 28px;
 
   @media (max-width: ${({ theme }) => theme.device.md}) {
-    line-height: 1.21875;
-    font-size: 2.5rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+`
+
+const ArticleCard = styled.article`
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+  overflow: visible;
+  padding: 30px clamp(20px, 3vw, 38px);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  background: var(--color-card);
+  box-shadow:
+    0 1px 2px var(--shadow),
+    0 8px 24px var(--shadow);
+`
+
+const Rail = styled.aside`
+  min-width: 0;
+  display: grid;
+  gap: 18px;
+  align-content: start;
+`
+
+const RailCard = styled.section`
+  padding: 18px 18px 20px;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  background: var(--color-card);
+`
+
+const RailLabel = styled.span`
+  display: inline-block;
+  margin-bottom: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  color: var(--color-text-3);
+  text-transform: uppercase;
+`
+
+const RailText = styled.p`
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--color-text-2);
+`
+
+const LinkList = styled.div`
+  display: grid;
+  gap: 10px;
+
+  a {
+    width: fit-content;
+    color: var(--accent);
   }
 
-  @media (max-width: ${({ theme }) => theme.device.sm}) {
-    line-height: 1.21875;
-    font-size: 2rem;
+  a:hover {
+    text-decoration: underline;
+  }
+`
+
+const TagList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  span {
+    border: 1px solid var(--color-divider);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 0.76rem;
+    color: var(--color-text-2);
   }
 `
 
@@ -166,12 +192,13 @@ export const query = graphql`
       frontmatter {
         title
         desc
+        tags
         thumbnail {
           childImageSharp {
             gatsbyImageData(placeholder: BLURRED, layout: FIXED)
           }
         }
-        date(formatString: "YYYY")
+        date(formatString: "MMM D, YYYY")
         category
         demoLink
         paperLink

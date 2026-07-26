@@ -1,0 +1,14 @@
+{
+  "score": 95,
+  "verdict": "pass",
+  "category_match": true,
+  "differences": [
+    "The supplied mobile reference shows project prose and code clipped past the right edge.",
+    "The generated mobile screenshot keeps the project title, description, prose, and article card inside the viewport.",
+    "The generated homepage screenshot keeps the atlas frame inside the content gutter and uses a softer home-state map treatment."
+  ],
+  "suggestions": [],
+  "reasoning": "The mobile project page no longer overflows horizontally, and the homepage atlas is visually lighter while aligned to the site content bounds.",
+  "threshold_passed": true,
+  "next_actions": []
+}

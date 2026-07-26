@@ -70,7 +70,9 @@ const HomeBackgroundSVG: React.FC<Props> = ({ items, focus = 0.7 }) => {
                     const set = new Set<string>(raw ? JSON.parse(raw) : [])
                     set.add(d.slug)
                     localStorage.setItem('atlasVisited', JSON.stringify(Array.from(set)))
-                  } catch {}
+                  } catch (_) {
+                    return undefined
+                  }
                   navigate(buildItemUrl(d.slug))
                 }}
               />

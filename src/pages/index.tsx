@@ -1,432 +1,290 @@
 import React from "react"
-import { graphql, useStaticQuery, Link } from "gatsby"
+import { Link, type PageProps } from "gatsby"
 import styled from "styled-components"
 
 import Layout from "Layouts/layout"
 import SEO from "Components/seo"
-import Markdown from "Styles/markdown"
-import { rhythm } from "Styles/typography"
-import { getImage } from "gatsby-plugin-image"
-import HomeCard from "Components/home/HomeCard"
+import { navigateWithAtlasTransition } from "Components/atlas/AtlasTransitionLayer"
+import CoordinateLabel from "Components/portfolio/CoordinateLabel"
+import ProjectCard from "Components/portfolio/ProjectCard"
+import SectionSeparator from "Components/portfolio/SectionSeparator"
+import {
+  baseCoordinate,
+  selectedProjects,
+} from "Components/portfolio/content"
 
-const Home = () => {
-  const data = useStaticQuery<Queries.Query>(graphql`
-    query Home {
-      home: allMarkdownRemark(filter: { fileAbsolutePath: { regex: "/home/" } }) {
-        edges { node { html } }
-      }
-      essays: allMarkdownRemark(
-        filter: { fileAbsolutePath: { regex: "/content/essays/" } }
-        sort: { frontmatter: { date: DESC } }
-      ) {
-        edges {
-          node {
-            id
-            frontmatter {
-              title
-              date
-              desc
-              category
-              tags
-              thumbnail { childImageSharp { gatsbyImageData(width: 640, placeholder: BLURRED, aspectRatio: 1.5) } }
-            }
-            fields { slug }
-          }
-        }
-      }
-    }
-  `)
+const Home: React.FC<PageProps> = ({ location }) => {
+  const showCoordinate = location.pathname === "/"
 
-  const markdown = data.home.edges[0]?.node.html
-  // Compact hero: auto height so content flows quickly
-
-  // Process essays from markdown files
-  const essays = React.useMemo(() => (data.essays?.edges || []).map(({ node }: any) => ({
-    id: node.id,
-    title: node.frontmatter?.title,
-    date: node.frontmatter?.date,
-    desc: node.frontmatter?.desc,
-    category: node.frontmatter?.category,
-    slug: node.fields?.slug,
-    img: getImage(node.frontmatter?.thumbnail?.childImageSharp),
-  })), [data.essays])
-
-  // For now, we'll use empty arrays for other content types until we have proper MDX content
-  const guides: any[] = []
-  const prototypes: any[] = []
-  const fieldNotes: any[] = []
+  const openAtlas = React.useCallback(() => {
+    navigateWithAtlasTransition("/atlas/")
+  }, [])
 
   return (
     <Layout>
       <SEO title="Home" />
-      <HeroWrap>
-        <HeroGrid>
-          <H1>
-            <NameEmphasis>Dylan</NameEmphasis> builds interactive systems that make information explorable.
-          </H1>
-          <Subline>HCI and VIS researcher. PhD'ing at MIT.</Subline>
-          {/* <BodyCopy>
-            My work explores the boundary between rigid computational formalisms and the softer, exploratory reasoning of analysts. I’m currently PhD’ing at
-            {' '}<a href="https://vis.csail.mit.edu/" target="_blank" rel="noreferrer">MIT</a> working with {' '}
-            <a href="https://arvindsatya.com/" target="_blank" rel="noreferrer">Arvind Satyanarayan</a>.
-          </BodyCopy> */}
-        </HeroGrid>
-      </HeroWrap>
+      <Page>
+        <HeroSection>
+          <HeroAtlasStage onClick={openAtlas} />
 
-      <AtlasHeaderLink to="/atlas/">The Atlas</AtlasHeaderLink>
-      <AtlasSubline style={{ display: "block", marginBottom: "1.5rem", color: "var(--color-text-2)", fontSize: "1.08rem" }}>
-        A <span style={{ color: "var(--color-text-3)" }}>(WIP)</span>  compendium of interactive essays, prototypes, and field notes.
-      </AtlasSubline>
-      <Sections>
-        {[
-          { id: 'essays', title: 'Essays', explainer: 'Papers, essays, and long-form arguments on interaction.', items: essays },
-          { id: 'guides', title: 'Guideposts', explainer: 'Reusable techniques and patterns.', items: guides },
-          { id: 'prototypes', title: 'Prototypes', explainer: 'Code and prototypes with write-ups.', items: prototypes },
-          { id: 'field', title: 'Field Notes', explainer: 'Shorter thoughts and provisional ideas.', items: fieldNotes },
-        ].map((sec) => {
-          if (sec.items.length === 0) return null
-          return (
-          <Section key={sec.id}>
-            <SectionHead>
-              <Link to="/atlas/"><h3>{sec.title} →</h3></Link>
-              <p>{sec.explainer}</p>
-            </SectionHead>
-            {sec.id === 'essays' ? (
-              <Cards>
-                {sec.items.map((p) => (
-                  <HomeCard
-                    key={p.id}
-                    title={p.title}
-                    desc={p.desc}
-                    slug={p.slug || '#'}
-                    date={p.date}
-                    type={'Essay'}
-                    image={p.img}
-                  />
-                ))}
-              </Cards>
-            ) : (
-              <SimpleList>
-                {sec.items.map((p) => (
-                  <li key={p.id}>
-                    <Link to={p.slug || '#'}>{p.title}</Link>
-                    {p.desc && <span className="muted"> — {p.desc}</span>}
-                  </li>
-                ))}
-              </SimpleList>
-            )}
-          </Section>
-        )})}
-      </Sections>
+          <HeroCopy data-atlas-home-chrome="true">
+            {showCoordinate ? (
+              <CoordinateRow>
+                <CoordinateLabel coordinate={baseCoordinate} />
+              </CoordinateRow>
+            ) : null}
+            <HeroTitle>
+              Dylan builds <MobileBreak />
+              interactive systems <LineBreak />
+              that make information <LineBreak />
+              <AccentWord>explorable.</AccentWord>
+            </HeroTitle>
+            <HeroBody>
+              Design Engineer and HCI Researcher working on human-AI
+              interaction to expand human capability.
+            </HeroBody>
+            <HeroActions>
+              <HeroLink to="/about/">About me</HeroLink>
+              <HeroSecondaryLink to="/research/">Research</HeroSecondaryLink>
+            </HeroActions>
+          </HeroCopy>
+
+          <HeroAtlasSlot data-atlas-home-anchor="true" aria-hidden="true" />
+
+          <AtlasPrompt
+            type="button"
+            data-atlas-home-chrome="true"
+            onClick={event => {
+              event.stopPropagation()
+              openAtlas()
+            }}
+          >
+            Open Atlas
+          </AtlasPrompt>
+        </HeroSection>
+
+        <SectionSeparator title="Selected Work" href="/projects/" />
+
+        <SelectedWorkSection id="selected-work">
+          <WorkGrid>
+            {selectedProjects.map(project => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </WorkGrid>
+        </SelectedWorkSection>
+      </Page>
     </Layout>
   )
 }
 
-const Container = styled(Markdown).attrs({
-  as: "main",
-})`
-  width: var(--post-width);
+const Page = styled.div`
+  width: var(--site-content-width);
   margin: 0 auto;
-  margin-top: 40px;
-  margin-bottom: 6rem;
+
   @media (max-width: ${({ theme }) => theme.device.sm}) {
-    margin-top: var(--sizing-xl);
-    width: 87.5%;
-  }
-  h1 {
-    margin-bottom: 2rem;
-  }
-  h2 {
-    margin-top: var(--sizing-lg);
-    @media (max-width: ${({ theme }) => theme.device.sm}) {
-      font-size: 1.75rem;
-    }
-  }
-  h3 {
-    @media (max-width: ${({ theme }) => theme.device.sm}) {
-      font-size: 1.25rem;
-    }
+    width: calc(100% - 30px);
   }
 `
 
-const HeroWrap = styled.section`
+const HeroSection = styled.section`
+  position: relative;
+  min-height: clamp(410px, 44vw, 560px);
+  padding: 58px 0 50px;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+
+  @media (max-width: ${({ theme }) => theme.device.md}) {
+    min-height: 520px;
+    align-items: start;
+    padding: 46px 0 30px;
+  }
+
+  @media (max-width: ${({ theme }) => theme.device.sm}) {
+    min-height: 0;
+    padding: 36px 0 30px;
+  }
+`
+
+const HeroCopy = styled.div`
+  max-width: 840px;
+  position: relative;
+  z-index: 2;
+  opacity: var(--atlas-hero-progress, 1);
+  transform: translate3d(0, var(--atlas-hero-offset, 0px), 0);
+  transition: opacity 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+`
+
+const HeroAtlasStage = styled.div`
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: pointer;
+`
+
+const HeroAtlasSlot = styled.div`
+  display: none;
+
+  @media (max-width: ${({ theme }) => theme.device.sm}) {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 182px;
+    margin-top: 26px;
+    pointer-events: none;
+  }
+
+  @media (max-width: ${({ theme }) => theme.device.xs}) {
+    height: 150px;
+    margin-top: 22px;
+  }
+`
+
+const atlasControlStyles = `
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 8px 10px;
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--color-text);
+  box-shadow: 0 6px 18px rgba(50, 42, 32, 0.08);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+`
+
+const AtlasPrompt = styled.button`
+  ${atlasControlStyles}
+  position: absolute;
+  right: 18px;
+  bottom: 42px;
+  z-index: 3;
+  cursor: pointer;
+  opacity: var(--atlas-hero-progress, 1);
+  transform: translate3d(0, var(--atlas-hero-offset, 0px), 0);
+  transition: opacity 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  &:hover {
+    border-color: var(--color-floating-button-border-hover);
+    color: var(--accent);
+  }
+
+  @media (max-width: ${({ theme }) => theme.device.md}) {
+    bottom: 34px;
+  }
+
+  @media (max-width: ${({ theme }) => theme.device.sm}) {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    justify-self: end;
+    margin-top: 10px;
+  }
+`
+
+const CoordinateRow = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--color-text-3);
+  margin-bottom: 16px;
+`
+
+const HeroTitle = styled.h1`
+  max-width: 840px;
+  font-size: 3.55rem;
+  line-height: 0.97;
+  letter-spacing: 0;
+
+  @media (max-width: ${({ theme }) => theme.device.md}) {
+    font-size: 3.3rem;
+  }
+
+  @media (max-width: ${({ theme }) => theme.device.sm}) {
+    font-size: 2.28rem;
+    line-height: 1.02;
+  }
+
+  @media (max-width: ${({ theme }) => theme.device.xs}) {
+    font-size: 2.18rem;
+  }
+`
+
+const LineBreak = styled.br`
+`
+
+const MobileBreak = styled.br`
+  display: none;
+
+  @media (max-width: ${({ theme }) => theme.device.sm}) {
+    display: block;
+  }
+`
+
+const AccentWord = styled.span`
+  color: var(--green);
+  font-style: italic;
+  font-weight: 500;
+`
+
+const HeroBody = styled.p`
+  margin-top: 16px;
+  max-width: 540px;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--color-text-2);
+`
+
+const HeroActions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+  margin-top: 16px;
+`
+
+const HeroLink = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: var(--accent);
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
+const HeroSecondaryLink = styled(HeroLink)`
+  color: var(--color-text-2);
+`
+
+const SelectedWorkSection = styled.section`
   position: relative;
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-  align-items: start;
-  padding: 24px 0;
-  width: 90%;
-  max-width: var(--width);
-  margin: 32px auto;
-  
-  @media (min-width: 480px) {
-    gap: 14px;
-    padding: 28px 0;
-    margin: 40px auto;
-  }
-  
-  @media (min-width: 641px) {
-    gap: 16px;
-    padding: 32px 0;
-    width: 87.5%;
-    margin: 60px auto;
-  }
+  padding: 22px 0 24px;
 `
 
-const HeroGrid = styled.div`
+const WorkGrid = styled.div`
   display: grid;
-  gap: 14px;
-`
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
 
-/* CTA row removed per request */
+  @media (max-width: ${({ theme }) => theme.device.md}) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
-const Sections = styled.section`
-  width: 90%; 
-  max-width: var(--width); 
-  margin: 24px auto 48px;
-  display: grid; 
-  gap: 20px; 
-  grid-template-columns: 1fr; 
-  align-items: start;
-  
-  @media (min-width: 480px) {
-    gap: 22px;
-    margin: 28px auto 52px;
-  }
-  
-  @media (min-width: 641px) {
-    width: 87.5%;
-    gap: 24px;
-    margin: 32px auto 64px;
-  }
-  
-  @media (min-width: 1024px) { 
-    grid-template-columns: 1fr 1fr; 
-    gap: 28px; 
+  @media (max-width: ${({ theme }) => theme.device.sm}) {
+    grid-template-columns: 1fr;
   }
 `
-
-const Col = styled.div`display: grid; gap: 16px;`
-
-const SectionHead = styled.header`
-  display: grid; 
-  gap: 4px;
-  
-  h3 { 
-    font-weight: 800; 
-    display: inline;
-    font-size: 1.1rem;
-  }
-  
-  p { 
-    color: var(--color-text-3); 
-    font-size: 12px;
-    line-height: 1.3;
-  }
-  
-  a { 
-    color: var(--color-text); 
-    text-decoration: underline; 
-  }
-  
-  @media (min-width: 480px) {
-    h3 { font-size: 1.2rem; }
-    p { font-size: 12px; }
-  }
-  
-  @media (min-width: 641px) {
-    h3 { font-size: 1.3rem; }
-    p { font-size: 13px; }
-  }
-`
-
-const Cards = styled.div`
-  display: grid; 
-  gap: 12px; 
-  grid-template-columns: 1fr;
-  
-  @media (min-width: 480px) {
-    gap: 14px;
-  }
-  
-  @media (min-width: 641px) {
-    gap: 16px;
-  }
-  
-  @media (min-width: 720px) { 
-    grid-template-columns: 1fr 1fr; 
-  }
-`
-
-const SimpleList = styled.ul`
-  list-style: none; padding: 0; margin: 0; display: grid; gap: 10px;
-  li { padding: 6px 0; border-bottom: 1px solid var(--color-divider); }
-  a { color: var(--color-text); }
-  .muted { color: var(--color-text-3); }
-`
-
-/* Old Card styles removed in favor of HomeCard */
-
-/* Old Thumb removed */
-
-/* Old NotesList removed */
-
-const Name = styled.h5`
-  text-transform: uppercase; color: gray; letter-spacing: .08em;
-`
-
-const H1 = styled.h1`
-  font-size: 1.5rem; 
-  font-weight: 600; 
-  line-height: 1.2; 
-  margin-bottom: 4px;
-  
-  @media (min-width: 480px) {
-    font-size: 1.75rem;
-    line-height: 1.18;
-  }
-  
-  @media (min-width: 641px) {
-    font-size: 2.4rem;
-    line-height: 1.15;
-  }
-  
-  @media (min-width: 1024px) { 
-    font-size: 3rem; 
-  }
-`
-
-const NameEmphasis = styled.span`
-  font-weight: 800;
-`
-
-const BodyCopy = styled.p`
-  color: var(--color-text-2); max-width: 80ch; line-height: 1.6; margin-top: 4px;
-`
-
-/* Motif removed from homepage */
-
-const Subline = styled.p`
-  color: var(--color-text-3);
-  font-size: 0.875rem;
-  
-  @media (min-width: 480px) {
-    font-size: 0.95rem;
-  }
-  
-  @media (min-width: 641px) {
-    font-size: 1rem;
-  }
-`
-
-const AtlasHeaderLink = styled(Link)`
-  width: 90%; 
-  max-width: var(--width); 
-  margin: 20px auto 8px; 
-  display: block;
-  font-weight: 800; 
-  font-size: 1.25rem; 
-  color: var(--color-text);
-  text-decoration: none;
-  
-  &:hover { text-decoration: underline; }
-  
-  @media (min-width: 480px) {
-    font-size: 1.5rem;
-  }
-  
-  @media (min-width: 641px) {
-    width: 87.5%;
-    margin: 24px auto 8px;
-    font-size: 1.75rem;
-  }
-  
-  @media (min-width: 1024px) { 
-    font-size: 2rem; 
-  }
-`
-
-const AtlasSubline = styled.p`
-  width: 90%; 
-  max-width: var(--width); 
-  margin: 0 auto 16px; 
-  display: block;
-  font-weight: 300; 
-  font-size: 0.875rem; 
-  line-height: 1.4;
-  color: var(--color-text-2);
-  text-decoration: none;
-  
-  @media (min-width: 480px) {
-    font-size: 0.95rem;
-  }
-  
-  @media (min-width: 641px) {
-    width: 87.5%;
-    margin: 0 auto 24px;
-    font-size: 1.08rem;
-  }
-  
-  @media (min-width: 1024px) { 
-    font-size: 1.2rem; 
-  }
-`
-
-// Section wrapper for home categories
-const Section = styled.section`
-  display: grid; 
-  gap: 10px; 
-  padding: 6px 0; 
-  margin-bottom: 32px;
-  
-  @media (min-width: 480px) {
-    gap: 11px;
-    padding: 7px 0;
-    margin-bottom: 40px;
-  }
-  
-  @media (min-width: 641px) {
-    gap: 12px;
-    padding: 8px 0;
-    margin-bottom: 48px;
-  }
-  
-  @media (min-width: 1024px) { 
-    margin-bottom: 64px; 
-  }
-`
-
-function hashToXY(slug: string) {
-  // Deterministic hash → pseudo-random point in [-1,1]^2
-  let h1 = 2166136261, h2 = 388650253
-  for (let i = 0; i < slug.length; i++) {
-    h1 ^= slug.charCodeAt(i); h1 = Math.imul(h1, 16777619)
-    h2 ^= slug.charCodeAt(slug.length - 1 - i); h2 = Math.imul(h2, 2246822519)
-  }
-  const f = (x: number) => ((x >>> 0) / 0xffffffff) * 2 - 1
-  const x = f(h1), y = f(h2)
-  return { x, y }
-}
-
-function timeSince(iso?: string) {
-  if (!iso) return ''
-  const then = new Date(iso).getTime()
-  if (isNaN(then)) return ''
-  const s = Math.floor((Date.now() - then) / 1000)
-  const units: [number, string][] = [
-    [60*60*24*365, 'y'],
-    [60*60*24*30, 'mo'],
-    [60*60*24*7, 'w'],
-    [60*60*24, 'd'],
-    [60*60, 'h'],
-    [60, 'm'],
-  ]
-  for (const [sec, label] of units) {
-    const v = Math.floor(s / sec)
-    if (v >= 1) return `${v}${label} ago`
-  }
-  return 'just now'
-}
 
 export default Home

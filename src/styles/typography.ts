@@ -1,24 +1,33 @@
 import Typography from "typography"
 
-const fontStack = [
-  "Comic Sans MS",
-  "Comic Sans",
-  "Cabin",
-  "Inter",
-  "ui-sans-serif",
-  "system-ui",
-  "-apple-system",
-  "Segoe UI",
-  "Roboto",
-  "Helvetica",
-  "Arial",
-  "Apple Color Emoji",
-  "Segoe UI Emoji",
-]
-
 const typography = new Typography({
-  bodyFontFamily: fontStack,
-  headerFontFamily: fontStack,
+  bodyFontFamily: [
+    "Inter",
+    "Avenir Next",
+    "Helvetica Neue",
+    "Arial",
+    "sans-serif",
+  ],
+  headerFontFamily: [
+    "Newsreader",
+    "Cormorant Garamond",
+    "Iowan Old Style",
+    "Georgia",
+    "serif",
+  ],
+  baseFontSize: "18px",
+  baseLineHeight: 1.7,
+  scaleRatio: 2.2,
+  includeNormalize: false,
+  overrideStyles: () => ({
+    a: {
+      textDecoration: "none",
+      color: "inherit",
+    },
+    body: {
+      backgroundColor: "transparent",
+    },
+  }),
 })
 
 export const rhythm = typography.rhythm

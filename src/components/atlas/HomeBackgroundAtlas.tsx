@@ -17,7 +17,7 @@ const HomeBackgroundAtlas: React.FC<{ items: AtlasItem[]; focus?: number }> = ({
   }, [focus])
   return (
     <Wrap aria-hidden ref={ref}>
-      <AtlasMap data={items} onSelect={() => {}} onHover={() => {}} drawOffsetY={offsetY} />
+      <AtlasMap data={items} onSelect={() => undefined} onHover={() => undefined} />
     </Wrap>
   )
 }
