@@ -1,0 +1,21 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="64"
+  height="64"
+  viewBox="0 0 64 64"
+  fill="none"
+>
+  <style>
+    rect { stroke: #111111; }
+    @media (prefers-color-scheme: dark) {
+      rect { stroke: #f5f5f5; }
+    }
+  </style>
+  <g stroke-width="3" shape-rendering="geometricPrecision">
+    <rect x="1.75" y="1.75" width="9.5" height="60.5" />
+    <rect x="52.75" y="1.75" width="9.5" height="60.5" />
+    <rect x="14.75" y="39.75" width="9.5" height="22.5" />
+    <rect x="39.75" y="39.75" width="9.5" height="22.5" />
+    <rect x="27.25" y="24.75" width="9.5" height="37.5" />
+  </g>
+</svg>
