@@ -1,29 +1,8 @@
-# Logs
-logs
-*.log
-
-# Coverage directory used by tools like istanbul
-coverage
-
-# Dependency directories
-node_modules/
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Output of 'npm pack'
-*.tgz
-
-# dotenv environment variable files
-.env*
-
-# Gatsby files
-.cache/
-public
-src/gatsby-types.d.ts
-
-# Mac files
+# Local files
 .DS_Store
+*.log
+.env*
+.omx/
+
+# Reserved for future interactive widgets
+node_modules/

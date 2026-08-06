@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Dylan Wootton is a PhD student at MIT CSAIL working on steerable data agents."
+    />
+    <meta name="author" content="Dylan Wootton" />
+    <meta name="theme-color" content="#f2f0e8" />
+    <meta property="og:title" content="Dylan Wootton" />
+    <meta
+      property="og:description"
+      content="PhD’ing at MIT CSAIL, working on steerable data agents."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.dylanwootton.com/" />
+    <link rel="canonical" href="https://www.dylanwootton.com/" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2317221e'/%3E%3Cpath d='M18 17h13c11 0 18 5.7 18 15s-7 15-18 15H18V17Zm12.5 23c6.8 0 10.5-2.8 10.5-8s-3.7-8-10.5-8H26v16h4.5Z' fill='%23f2f0e8'/%3E%3C/svg%3E"
+    />
+    <title>Dylan Wootton</title>
+
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f2f0e8;
+        --ink: #17221e;
+        --muted: #5e6964;
+        --line: #c9cdc5;
+        --ice: #7394a1;
+        --signal: #c74f39;
+        --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Baskerville,
+          "Times New Roman", serif;
+        --sans: "Avenir Next", Avenir, "Century Gothic", Futura, sans-serif;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        min-width: 20rem;
+        margin: 0;
+        color: var(--ink);
+        background:
+          radial-gradient(
+            circle at 92% -8%,
+            rgb(115 148 161 / 20%),
+            transparent 31rem
+          ),
+          var(--paper);
+        font-family: var(--serif);
+        font-size: 1.125rem;
+        line-height: 1.62;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body::before {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 2;
+        height: 0.25rem;
+        background: linear-gradient(
+          90deg,
+          var(--signal) 0 16%,
+          var(--ink) 16% 72%,
+          var(--ice) 72% 100%
+        );
+        content: "";
+      }
+
+      ::selection {
+        color: var(--paper);
+        background: var(--ink);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      a:focus-visible {
+        outline: 0.16rem solid var(--signal);
+        outline-offset: 0.24rem;
+      }
+
+      .page {
+        width: min(100% - 3rem, 68rem);
+        margin-inline: auto;
+        padding: 2.5rem 0 5rem;
+      }
+
+      .masthead {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 2rem;
+        padding-bottom: 1.1rem;
+        border-bottom: 1px solid var(--line);
+        font-family: var(--sans);
+      }
+
+      .masthead h1,
+      .masthead p {
+        margin: 0;
+      }
+
+      .masthead h1 {
+        font-size: 0.88rem;
+        font-weight: 650;
+        letter-spacing: 0.13em;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+
+      .masthead p {
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        line-height: 1.4;
+        text-align: right;
+        text-transform: uppercase;
+      }
+
+      main {
+        margin-top: clamp(4.5rem, 10vw, 8.5rem);
+      }
+
+      .introduction {
+        max-width: 58rem;
+      }
+
+      .lede {
+        max-width: 15ch;
+        margin: 0;
+        font-size: clamp(3rem, 8vw, 6.75rem);
+        font-weight: 400;
+        letter-spacing: -0.055em;
+        line-height: 0.96;
+      }
+
+      .lede em {
+        color: var(--signal);
+        font-style: italic;
+        white-space: nowrap;
+      }
+
+      .bio {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: clamp(2rem, 6vw, 5.5rem);
+        max-width: 55rem;
+        margin-top: clamp(3.5rem, 7vw, 6rem);
+      }
+
+      .bio p {
+        margin: 0;
+      }
+
+      .projects {
+        margin-top: clamp(7rem, 14vw, 12rem);
+      }
+
+      .section-heading {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 0 0 2.1rem;
+        font-family: var(--sans);
+        font-size: 0.78rem;
+        font-weight: 650;
+        letter-spacing: 0.15em;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+
+      .section-heading::after {
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+        content: "";
+      }
+
+      .project {
+        display: grid;
+        grid-template-columns: 3.5rem minmax(0, 1fr);
+        gap: 0 1.5rem;
+        padding: 2.25rem 0 2.5rem;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .project:first-of-type {
+        border-top: 1px solid var(--line);
+      }
+
+      .project-number {
+        padding-top: 0.32rem;
+        color: var(--ice);
+        font-family: var(--sans);
+        font-size: 0.72rem;
+        font-weight: 650;
+        letter-spacing: 0.12em;
+      }
+
+      .project h3 {
+        max-width: 29ch;
+        margin: 0 0 0.75rem;
+        font-size: clamp(1.45rem, 3vw, 2.15rem);
+        font-weight: 400;
+        letter-spacing: -0.025em;
+        line-height: 1.18;
+      }
+
+      .project p {
+        max-width: 49rem;
+        margin: 0;
+        color: #34403b;
+      }
+
+      .project-link {
+        display: inline-block;
+        margin-left: 0.28rem;
+        color: var(--ink);
+        font-family: var(--sans);
+        font-size: 0.72em;
+        font-weight: 650;
+        letter-spacing: 0.08em;
+        text-decoration-color: var(--signal);
+        text-decoration-thickness: 0.11rem;
+        text-underline-offset: 0.22rem;
+        text-transform: uppercase;
+      }
+
+      .project-link:hover {
+        color: var(--signal);
+      }
+
+      .status {
+        white-space: nowrap;
+      }
+
+      .introduction,
+      .projects {
+        animation: arrive 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      .projects {
+        animation-delay: 120ms;
+      }
+
+      @keyframes arrive {
+        from {
+          opacity: 0;
+          transform: translateY(0.8rem);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 42rem) {
+        body {
+          font-size: 1.04rem;
+        }
+
+        .page {
+          width: min(100% - 2.25rem, 68rem);
+          padding-top: 2rem;
+        }
+
+        .masthead {
+          align-items: flex-start;
+        }
+
+        .masthead p {
+          max-width: 12rem;
+        }
+
+        main {
+          margin-top: 4.5rem;
+        }
+
+        .lede {
+          max-width: 12ch;
+          font-size: clamp(2.85rem, 14vw, 4.8rem);
+        }
+
+        .bio {
+          grid-template-columns: 1fr;
+          gap: 1.4rem;
+          margin-top: 3.25rem;
+        }
+
+        .projects {
+          margin-top: 6.5rem;
+        }
+
+        .project {
+          grid-template-columns: 2.2rem minmax(0, 1fr);
+          gap: 0 0.8rem;
+          padding: 1.75rem 0 2rem;
+        }
+
+        .project-number {
+          padding-top: 0.26rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        .introduction,
+        .projects {
+          animation: none;
+        }
+      }
+
+      @media print {
+        body {
+          background: white;
+        }
+
+        body::before {
+          display: none;
+        }
+
+        .page {
+          width: 100%;
+          padding: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page">
+      <header class="masthead">
+        <h1>Dylan Wootton</h1>
+        <p>MIT CSAIL · PhD · 2027</p>
+      </header>
+
+      <main>
+        <section class="introduction" aria-labelledby="introduction-heading">
+          <h2 class="lede" id="introduction-heading">
+            PhD’ing at MIT CSAIL, graduating in <em>2027.</em>
+          </h2>
+
+          <div class="bio">
+            <p>
+              I work with Arvind Satyanarayan on steerable data agents. I’ve
+              interned at AI2 and Salesforce Research and was previously an
+              engineer at Microsoft.
+            </p>
+
+            <p>
+              I have given talks at SciPy, PositConf, and a variety of industry
+              research groups. As a literal side quest during my PhD, I conduct
+              polar research in Antarctica and the Arctic as a National
+              Geographic Explorer.
+            </p>
+          </div>
+        </section>
+
+        <section class="projects" aria-labelledby="projects-heading">
+          <h2 class="section-heading" id="projects-heading">Projects</h2>
+
+          <article class="project">
+            <span class="project-number" aria-hidden="true">01</span>
+            <div>
+              <h3>Steering Long-Horizon Agents</h3>
+              <p>
+                How can we build user models that better align long-horizon
+                research agents with the people directing them?
+                <span class="status">Ongoing at AI2.</span>
+              </p>
+            </div>
+          </article>
+
+          <article class="project">
+            <span class="project-number" aria-hidden="true">02</span>
+            <div>
+              <h3>Mapping an Evolving Analysis</h3>
+              <p>
+                Our project Ptolemy provides an interface for navigating and
+                steering long-running analytical investigations. Ptolemy turns
+                individual analytical moves into persistent, executable objects
+                called analets, then uses CellQL and semantic embeddings to
+                organize them into a navigable map. The map helps analysts
+                understand where an inquiry has been, how different explorations
+                relate, and where new analyses fall within the larger
+                investigation. Work done with Vidya Setlur and Denny Bromley.
+                <a
+                  class="project-link"
+                  href=""
+                  aria-label="Documentation for Mapping an Evolving Analysis"
+                  >docs</a
+                >
+              </p>
+            </div>
+          </article>
+
+          <article class="project">
+            <span class="project-number" aria-hidden="true">03</span>
+            <div>
+              <h3>Composing Interactive Instruments to Express Analytical Intent</h3>
+              <p>
+                Analytical intent is often grounded in specific data points,
+                outliers, clusters, and relationships that are difficult to
+                express in words alone. Meros is a declarative language for
+                constructing bespoke interactive visualization instruments
+                through which analysts can express those intentions directly. It
+                offers a concise set of components and a binding algebra that
+                defines how they compose, letting authors build interactions that
+                group, rank, and relate elements—restructuring an analysis rather
+                than merely adjusting its parameters. Work done with Arvind
+                Satyanarayan.
+                <a
+                  class="project-link"
+                  href=""
+                  aria-label="Documentation for Composing Interactive Instruments to Express Analytical Intent"
+                  >docs</a
+                >
+              </p>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
