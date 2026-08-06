@@ -8,7 +8,7 @@
       content="Dylan Wootton is a PhD student at MIT CSAIL working on steerable data agents."
     />
     <meta name="author" content="Dylan Wootton" />
-    <meta name="theme-color" content="#f2f0e8" />
+    <meta name="theme-color" content="#ffffff" />
     <meta property="og:title" content="Dylan Wootton" />
     <meta
       property="og:description"
@@ -19,22 +19,18 @@
     <link rel="canonical" href="https://www.dylanwootton.com/" />
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2317221e'/%3E%3Cpath d='M18 17h13c11 0 18 5.7 18 15s-7 15-18 15H18V17Zm12.5 23c6.8 0 10.5-2.8 10.5-8s-3.7-8-10.5-8H26v16h4.5Z' fill='%23f2f0e8'/%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%233f3f3f'/%3E%3Cpath d='M18 17h13c11 0 18 5.7 18 15s-7 15-18 15H18V17Zm12.5 23c6.8 0 10.5-2.8 10.5-8s-3.7-8-10.5-8H26v16h4.5Z' fill='white'/%3E%3C/svg%3E"
     />
     <title>Dylan Wootton</title>
 
     <style>
       :root {
         color-scheme: light;
-        --paper: #f2f0e8;
-        --ink: #17221e;
-        --muted: #5e6964;
-        --line: #c9cdc5;
-        --ice: #7394a1;
-        --signal: #c74f39;
-        --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Baskerville,
-          "Times New Roman", serif;
-        --sans: "Avenir Next", Avenir, "Century Gothic", Futura, sans-serif;
+        --background: #ffffff;
+        --text: #3f3f3f;
+        --sans: "Helvetica Neue", Helvetica, "Nimbus Sans L", "Liberation Sans",
+          sans-serif;
+        --serif: Georgia, "Times New Roman", serif;
       }
 
       *,
@@ -43,301 +39,160 @@
         box-sizing: border-box;
       }
 
-      html {
-        scroll-behavior: smooth;
-      }
-
       body {
         min-width: 20rem;
         margin: 0;
-        color: var(--ink);
-        background:
-          radial-gradient(
-            circle at 92% -8%,
-            rgb(115 148 161 / 20%),
-            transparent 31rem
-          ),
-          var(--paper);
-        font-family: var(--serif);
-        font-size: 1.125rem;
-        line-height: 1.62;
+        color: var(--text);
+        background: var(--background);
+        font-family: var(--sans);
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
       }
 
-      body::before {
-        position: fixed;
-        inset: 0 0 auto;
-        z-index: 2;
-        height: 0.25rem;
-        background: linear-gradient(
-          90deg,
-          var(--signal) 0 16%,
-          var(--ink) 16% 72%,
-          var(--ice) 72% 100%
-        );
-        content: "";
-      }
-
       ::selection {
-        color: var(--paper);
-        background: var(--ink);
+        color: var(--background);
+        background: var(--text);
       }
 
       a {
         color: inherit;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.14em;
+      }
+
+      a:hover {
+        text-decoration-thickness: 2px;
       }
 
       a:focus-visible {
-        outline: 0.16rem solid var(--signal);
-        outline-offset: 0.24rem;
+        outline: 2px solid currentColor;
+        outline-offset: 4px;
       }
 
       .page {
-        width: min(100% - 3rem, 68rem);
+        width: min(calc(100% - 3rem), 81.75rem);
         margin-inline: auto;
-        padding: 2.5rem 0 5rem;
+        padding: 4.4rem 0 8rem;
       }
 
-      .masthead {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: 2rem;
-        padding-bottom: 1.1rem;
-        border-bottom: 1px solid var(--line);
-        font-family: var(--sans);
-      }
-
-      .masthead h1,
-      .masthead p {
+      h1,
+      h2,
+      h3,
+      p {
         margin: 0;
       }
 
-      .masthead h1 {
-        font-size: 0.88rem;
-        font-weight: 650;
-        letter-spacing: 0.13em;
+      h1 {
+        font-size: 1.75rem;
+        font-weight: 500;
+        letter-spacing: -0.025em;
         line-height: 1.2;
-        text-transform: uppercase;
-      }
-
-      .masthead p {
-        color: var(--muted);
-        font-size: 0.72rem;
-        font-weight: 600;
-        letter-spacing: 0.12em;
-        line-height: 1.4;
-        text-align: right;
-        text-transform: uppercase;
-      }
-
-      main {
-        margin-top: clamp(4.5rem, 10vw, 8.5rem);
       }
 
       .introduction {
-        max-width: 58rem;
+        max-width: 78rem;
+        margin-top: 6.1rem;
+        font-size: clamp(1.65rem, 1.92vw, 2rem);
+        letter-spacing: -0.034em;
+        line-height: 1.72;
       }
 
-      .lede {
-        max-width: 15ch;
-        margin: 0;
-        font-size: clamp(3rem, 8vw, 6.75rem);
+      .introduction p + p {
+        margin-top: 3.55rem;
+      }
+
+      .introduction em {
+        font-family: var(--serif);
         font-weight: 400;
-        letter-spacing: -0.055em;
-        line-height: 0.96;
-      }
-
-      .lede em {
-        color: var(--signal);
-        font-style: italic;
-        white-space: nowrap;
-      }
-
-      .bio {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: clamp(2rem, 6vw, 5.5rem);
-        max-width: 55rem;
-        margin-top: clamp(3.5rem, 7vw, 6rem);
-      }
-
-      .bio p {
-        margin: 0;
+        letter-spacing: -0.018em;
       }
 
       .projects {
-        margin-top: clamp(7rem, 14vw, 12rem);
+        max-width: 64rem;
+        margin-top: 7.7rem;
       }
 
-      .section-heading {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin: 0 0 2.1rem;
-        font-family: var(--sans);
-        font-size: 0.78rem;
-        font-weight: 650;
-        letter-spacing: 0.15em;
-        line-height: 1.2;
-        text-transform: uppercase;
+      .projects h2 {
+        font-size: 1.55rem;
+        font-weight: 500;
+        letter-spacing: -0.028em;
+        line-height: 1.3;
       }
 
-      .section-heading::after {
-        flex: 1;
-        height: 1px;
-        background: var(--line);
-        content: "";
-      }
-
-      .project {
+      .project-list {
         display: grid;
-        grid-template-columns: 3.5rem minmax(0, 1fr);
-        gap: 0 1.5rem;
-        padding: 2.25rem 0 2.5rem;
-        border-bottom: 1px solid var(--line);
-      }
-
-      .project:first-of-type {
-        border-top: 1px solid var(--line);
-      }
-
-      .project-number {
-        padding-top: 0.32rem;
-        color: var(--ice);
-        font-family: var(--sans);
-        font-size: 0.72rem;
-        font-weight: 650;
-        letter-spacing: 0.12em;
+        gap: 3.7rem;
+        margin-top: 3.25rem;
       }
 
       .project h3 {
-        max-width: 29ch;
-        margin: 0 0 0.75rem;
-        font-size: clamp(1.45rem, 3vw, 2.15rem);
+        font-size: clamp(1.45rem, 1.75vw, 1.8rem);
         font-weight: 400;
-        letter-spacing: -0.025em;
-        line-height: 1.18;
+        letter-spacing: -0.035em;
+        line-height: 1.35;
       }
 
       .project p {
-        max-width: 49rem;
-        margin: 0;
-        color: #34403b;
+        max-width: 58rem;
+        margin-top: 0.36rem;
+        font-size: clamp(1.18rem, 1.45vw, 1.45rem);
+        letter-spacing: -0.025em;
+        line-height: 1.62;
       }
 
       .project-link {
         display: inline-block;
-        margin-left: 0.28rem;
-        color: var(--ink);
-        font-family: var(--sans);
-        font-size: 0.72em;
-        font-weight: 650;
-        letter-spacing: 0.08em;
-        text-decoration-color: var(--signal);
-        text-decoration-thickness: 0.11rem;
-        text-underline-offset: 0.22rem;
-        text-transform: uppercase;
-      }
-
-      .project-link:hover {
-        color: var(--signal);
-      }
-
-      .status {
+        margin-left: 0.16em;
+        font-size: 0.82em;
         white-space: nowrap;
       }
 
-      .introduction,
-      .projects {
-        animation: arrive 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
-      }
-
-      .projects {
-        animation-delay: 120ms;
-      }
-
-      @keyframes arrive {
-        from {
-          opacity: 0;
-          transform: translateY(0.8rem);
-        }
-
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @media (max-width: 42rem) {
-        body {
-          font-size: 1.04rem;
-        }
-
+      @media (max-width: 44rem) {
         .page {
-          width: min(100% - 2.25rem, 68rem);
-          padding-top: 2rem;
+          width: min(calc(100% - 2.5rem), 81.75rem);
+          padding: 2.8rem 0 5.5rem;
         }
 
-        .masthead {
-          align-items: flex-start;
+        h1 {
+          font-size: 1.35rem;
         }
 
-        .masthead p {
-          max-width: 12rem;
+        .introduction {
+          margin-top: 4.6rem;
+          font-size: 1.4rem;
+          letter-spacing: -0.027em;
+          line-height: 1.58;
         }
 
-        main {
-          margin-top: 4.5rem;
-        }
-
-        .lede {
-          max-width: 12ch;
-          font-size: clamp(2.85rem, 14vw, 4.8rem);
-        }
-
-        .bio {
-          grid-template-columns: 1fr;
-          gap: 1.4rem;
-          margin-top: 3.25rem;
+        .introduction p + p {
+          margin-top: 2.2rem;
         }
 
         .projects {
-          margin-top: 6.5rem;
+          margin-top: 5.3rem;
         }
 
-        .project {
-          grid-template-columns: 2.2rem minmax(0, 1fr);
-          gap: 0 0.8rem;
-          padding: 1.75rem 0 2rem;
+        .projects h2 {
+          font-size: 1.3rem;
         }
 
-        .project-number {
-          padding-top: 0.26rem;
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        html {
-          scroll-behavior: auto;
+        .project-list {
+          gap: 2.8rem;
+          margin-top: 2.5rem;
         }
 
-        .introduction,
-        .projects {
-          animation: none;
+        .project h3 {
+          font-size: 1.3rem;
+        }
+
+        .project p {
+          margin-top: 0.45rem;
+          font-size: 1.08rem;
+          line-height: 1.55;
         }
       }
 
       @media print {
-        body {
-          background: white;
-        }
-
-        body::before {
-          display: none;
-        }
-
         .page {
           width: 100%;
           padding: 0;
@@ -348,51 +203,39 @@
 
   <body>
     <div class="page">
-      <header class="masthead">
+      <header>
         <h1>Dylan Wootton</h1>
-        <p>MIT CSAIL · PhD · 2027</p>
       </header>
 
       <main>
-        <section class="introduction" aria-labelledby="introduction-heading">
-          <h2 class="lede" id="introduction-heading">
-            PhD’ing at MIT CSAIL, graduating in <em>2027.</em>
-          </h2>
+        <section class="introduction" aria-label="About">
+          <p>
+            <em>PhD’ing at MIT CSAIL, graduating in 2027.</em> I work with Arvind
+            Satyanarayan on steerable data agents. I’ve interned at AI2 and
+            Salesforce Research and was previously an engineer at Microsoft.
+          </p>
 
-          <div class="bio">
-            <p>
-              I work with Arvind Satyanarayan on steerable data agents. I’ve
-              interned at AI2 and Salesforce Research and was previously an
-              engineer at Microsoft.
-            </p>
-
-            <p>
-              I have given talks at SciPy, PositConf, and a variety of industry
-              research groups. As a literal side quest during my PhD, I conduct
-              polar research in Antarctica and the Arctic as a National
-              Geographic Explorer.
-            </p>
-          </div>
+          <p>
+            I have given talks at SciPy, PositConf, and a variety of industry
+            research groups. As a literal side quest during my PhD, I conduct
+            polar research in Antarctica and the Arctic as a National Geographic
+            Explorer.
+          </p>
         </section>
 
         <section class="projects" aria-labelledby="projects-heading">
-          <h2 class="section-heading" id="projects-heading">Projects</h2>
+          <h2 id="projects-heading">Projects</h2>
 
-          <article class="project">
-            <span class="project-number" aria-hidden="true">01</span>
-            <div>
+          <div class="project-list">
+            <article class="project">
               <h3>Steering Long-Horizon Agents</h3>
               <p>
                 How can we build user models that better align long-horizon
-                research agents with the people directing them?
-                <span class="status">Ongoing at AI2.</span>
+                research agents with the people directing them? Ongoing at AI2.
               </p>
-            </div>
-          </article>
+            </article>
 
-          <article class="project">
-            <span class="project-number" aria-hidden="true">02</span>
-            <div>
+            <article class="project">
               <h3>Mapping an Evolving Analysis</h3>
               <p>
                 Our project Ptolemy provides an interface for navigating and
@@ -410,12 +253,9 @@
                   >docs</a
                 >
               </p>
-            </div>
-          </article>
+            </article>
 
-          <article class="project">
-            <span class="project-number" aria-hidden="true">03</span>
-            <div>
+            <article class="project">
               <h3>Composing Interactive Instruments to Express Analytical Intent</h3>
               <p>
                 Analytical intent is often grounded in specific data points,
@@ -435,8 +275,8 @@
                   >docs</a
                 >
               </p>
-            </div>
-          </article>
+            </article>
+          </div>
         </section>
       </main>
     </div>
