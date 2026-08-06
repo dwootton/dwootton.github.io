@@ -8,7 +8,7 @@
       content="Dylan Wootton is a PhD student at MIT CSAIL working on steerable data agents."
     />
     <meta name="author" content="Dylan Wootton" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#fbfbfa" />
     <meta property="og:title" content="Dylan Wootton" />
     <meta
       property="og:description"
@@ -23,11 +23,17 @@
     <style>
       :root {
         color-scheme: light;
-        --background: #ffffff;
-        --text: #3f3f3f;
-        --sans: "Helvetica Neue", Helvetica, "Nimbus Sans L", "Liberation Sans",
-          sans-serif;
-        --serif: Georgia, "Times New Roman", serif;
+        --background: #fbfbfa;
+        --text: #3f3f3d;
+        --sans: "Söhne", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        --text-size: clamp(1.0625rem, 0.98vw, 1.1875rem);
+        --page-width: 78rem;
+        --page-inset: clamp(4.8rem, calc(89.28vw - 34.24rem), 80rem);
+        --space-about: clamp(1.5rem, 1.75vw, 2rem);
+        --space-paragraph: clamp(1.5rem, 1.75vw, 2rem);
+        --space-section: clamp(3rem, 4vw, 4rem);
+        --space-heading: clamp(1.75rem, 2.5vw, 2.5rem);
+        --space-project: clamp(1.75rem, 2.25vw, 2.5rem);
       }
 
       *,
@@ -37,7 +43,6 @@
       }
 
       body {
-        min-width: 20rem;
         margin: 0;
         color: var(--text);
         background: var(--background);
@@ -53,12 +58,14 @@
 
       a {
         color: inherit;
-        text-decoration-thickness: 1px;
-        text-underline-offset: 0.14em;
+        text-decoration-thickness: 0.055em;
+        text-underline-offset: 0.12em;
+        transition: color 120ms ease, text-decoration-thickness 120ms ease;
       }
 
       a:hover {
-        text-decoration-thickness: 2px;
+        color: #242423;
+        text-decoration-thickness: 0.09em;
       }
 
       a:focus-visible {
@@ -67,9 +74,9 @@
       }
 
       .page {
-        width: min(calc(100% - 3rem), 81.75rem);
+        width: min(calc(100% - var(--page-inset)), var(--page-width));
         margin-inline: auto;
-        padding: 4.4rem 0 8rem;
+        padding-block: clamp(6rem, 6vw, 7.5rem) 6rem;
       }
 
       h1,
@@ -80,116 +87,156 @@
       }
 
       h1 {
-        font-size: 1.75rem;
+        font-size: var(--text-size);
         font-weight: 500;
-        letter-spacing: -0.025em;
-        line-height: 1.2;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
       }
 
       .introduction {
-        max-width: 78rem;
-        margin-top: 6.1rem;
-        font-size: clamp(1.65rem, 1.92vw, 2rem);
-        letter-spacing: -0.034em;
-        line-height: 1.72;
+        margin-top: var(--space-about);
+        font-size: var(--text-size);
+        letter-spacing: -0.022em;
+        line-height: 1.58;
+        text-align: justify;
+        text-justify: inter-word;
       }
 
       .introduction p + p {
-        margin-top: 3.55rem;
+        margin-top: var(--space-paragraph);
       }
 
       .introduction em {
-        font-family: var(--serif);
+        font-style: normal;
         font-weight: 400;
-        letter-spacing: -0.018em;
+        letter-spacing: inherit;
       }
 
       .projects {
-        max-width: 64rem;
-        margin-top: 7.7rem;
+        margin-top: clamp(0.5rem, 0.65vw, 0.75rem);
       }
 
       .projects h2 {
-        font-size: 1.55rem;
+        font-size: var(--text-size);
+        font-weight: 550;
+        letter-spacing: -0.03em;
+        line-height: 1.2;
+      }
+
+      .project-list {
+        display: grid;
+        gap: var(--space-project);
+        margin-top: 0;
+      }
+
+      .project h3 {
+        font-size: var(--text-size);
         font-weight: 500;
         letter-spacing: -0.028em;
         line-height: 1.3;
       }
 
-      .project-list {
-        display: grid;
-        gap: 3.7rem;
-        margin-top: 3.25rem;
-      }
-
-      .project h3 {
-        font-size: clamp(1.45rem, 1.75vw, 1.8rem);
-        font-weight: 400;
-        letter-spacing: -0.035em;
-        line-height: 1.35;
-      }
-
       .project p {
-        max-width: 58rem;
-        margin-top: 0.36rem;
-        font-size: clamp(1.18rem, 1.45vw, 1.45rem);
-        letter-spacing: -0.025em;
-        line-height: 1.62;
+        margin-top: clamp(0.5rem, 0.65vw, 0.75rem);
+        font-size: var(--text-size);
+        letter-spacing: -0.016em;
+        line-height: 1.6;
+        text-align: justify;
+        text-justify: inter-word;
       }
 
       .project-link {
-        display: inline-block;
-        margin-left: 0.16em;
-        font-size: 0.82em;
+        margin-left: 0.18em;
+        font-size: inherit;
+        line-height: inherit;
         white-space: nowrap;
+      }
+
+      .contact {
+        margin-top: var(--space-section);
+        font-size: var(--text-size);
+        letter-spacing: -0.016em;
+        line-height: 1.6;
+      }
+
+      header,
+      .introduction > p,
+      .project,
+      .contact {
+        opacity: 0;
+        animation: fade-in 300ms ease-out forwards;
+        animation-delay: var(--fade-delay, 0ms);
+      }
+
+      .introduction > p:nth-child(1) {
+        --fade-delay: 60ms;
+      }
+
+      .introduction > p:nth-child(2) {
+        --fade-delay: 120ms;
+      }
+
+      .introduction > p:nth-child(3) {
+        --fade-delay: 180ms;
+      }
+
+      .project:nth-child(1) {
+        --fade-delay: 240ms;
+      }
+
+      .project:nth-child(2) {
+        --fade-delay: 300ms;
+      }
+
+      .project:nth-child(3) {
+        --fade-delay: 360ms;
+      }
+
+      .contact {
+        --fade-delay: 420ms;
+      }
+
+      @keyframes fade-in {
+        to {
+          opacity: 1;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        header,
+        .introduction > p,
+        .project,
+        .contact {
+          opacity: 1;
+          animation: none;
+        }
       }
 
       @media (max-width: 44rem) {
         .page {
-          width: min(calc(100% - 2.5rem), 81.75rem);
-          padding: 2.8rem 0 5.5rem;
-        }
-
-        h1 {
-          font-size: 1.35rem;
-        }
-
-        .introduction {
-          margin-top: 4.6rem;
-          font-size: 1.4rem;
-          letter-spacing: -0.027em;
-          line-height: 1.58;
-        }
-
-        .introduction p + p {
-          margin-top: 2.2rem;
-        }
-
-        .projects {
-          margin-top: 5.3rem;
-        }
-
-        .projects h2 {
-          font-size: 1.3rem;
-        }
-
-        .project-list {
-          gap: 2.8rem;
-          margin-top: 2.5rem;
-        }
-
-        .project h3 {
-          font-size: 1.3rem;
+          width: calc(100% - var(--page-inset));
+          padding-block: clamp(3.5rem, 12vw, 5rem) 4.5rem;
         }
 
         .project p {
-          margin-top: 0.45rem;
-          font-size: 1.08rem;
-          line-height: 1.55;
+          line-height: 1.57;
+        }
+
+        .introduction,
+        .project p {
+          hyphens: auto;
         }
       }
 
       @media print {
+        header,
+        .introduction > p,
+        .project,
+        .contact {
+          opacity: 1;
+          animation: none;
+        }
+
         .page {
           width: 100%;
           padding: 0;
@@ -207,28 +254,35 @@
       <main>
         <section class="introduction" aria-label="About">
           <p>
-            <em>PhD’ing at MIT CSAIL, graduating in 2027.</em> I work with Arvind
-            Satyanarayan on steerable data agents. I’ve interned at AI2 and
-            Salesforce Research and was previously an engineer at Microsoft.
+            <em>PhD’ing at <a href="https://www.csail.mit.edu/">MIT CSAIL</a>, graduating in 2027.</em>
+            I work with <a href="https://vis.mit.edu/">Arvind Satyanarayan</a> on
+            steerable data agents. I’ve interned at
+            <a href="https://allenai.org/">AI2</a> and
+            <a href="https://www.salesforceairesearch.com/">Salesforce Research</a>
+            and was previously an engineer at
+            <a href="https://www.microsoft.com/">Microsoft</a>.
           </p>
 
           <p>
-            I have given talks at SciPy, PositConf, and a variety of industry
-            research groups. As a literal side quest during my PhD, I conduct
-            polar research in Antarctica and the Arctic as a National Geographic
-            Explorer.
+            I have given talks at <a href="https://posit.co/conference/">PositConf</a>, <a href="https://www.youtube.com/watch?v=93fWJxzcapg/">SciPy</a>, and a variety of
+            industry research groups. As a (literal) side quest during my PhD, I
+            conduct polar research in Antarctica and the Arctic as a
+            <a href="https://explorers.nationalgeographic.org/directory/dylan-wootton"
+              >National Geographic Explorer</a
+            >.
           </p>
+          <p>Some of the recent things on my mind:</p>
+
         </section>
 
         <section class="projects" aria-labelledby="projects-heading">
-          <h2 id="projects-heading">Projects</h2>
-
           <div class="project-list">
             <article class="project">
               <h3>Steering Long-Horizon Agents</h3>
               <p>
                 How can we build user models that better align long-horizon
-                research agents with the people directing them? Ongoing at AI2.
+                research agents with the people directing them? Ongoing at
+                <a href="https://allenai.org/">AI2</a>.
               </p>
             </article>
 
@@ -242,7 +296,7 @@
                 organize them into a navigable map. The map helps analysts
                 understand where an inquiry has been, how different explorations
                 relate, and where new analyses fall within the larger
-                investigation. Work done with Vidya Setlur and Denny Bromley.
+                investigation. Work done at Salesforce Research with Vidya Setlur and Denny Bromley.
                 <a
                   class="project-link"
                   href=""
@@ -258,13 +312,14 @@
                 Analytical intent is often grounded in specific data points,
                 outliers, clusters, and relationships that are difficult to
                 express in words alone. Meros is a declarative language for
-                constructing bespoke interactive visualization instruments
-                through which analysts can express those intentions directly. It
-                offers a concise set of components and a binding algebra that
-                defines how they compose, letting authors build interactions that
-                group, rank, and relate elements—restructuring an analysis rather
-                than merely adjusting its parameters. Work done with Arvind
-                Satyanarayan.
+                generating bespoke interactive visualizations
+                through which analysts can express those intentions directly.
+                Meros offers a concise set of components and a
+                binding algebra that defines how they compose, letting authors
+                build interactions that group, rank, and relate
+                elements—restructuring an analysis rather than merely adjusting
+                its parameters.  Work done with
+                <a href="https://vis.mit.edu/">Arvind Satyanarayan</a>.
                 <a
                   class="project-link"
                   href=""
@@ -276,6 +331,14 @@
           </div>
         </section>
       </main>
+
+      <footer class="contact">
+        <p>
+          Contact me at dwooton [at] mit [dot] edu or on
+          <a href="https://x.com/woottondylan" rel="me">Twitter</a>.
+        </p>
+      </footer>
     </div>
+
   </body>
 </html>
