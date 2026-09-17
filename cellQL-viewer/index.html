@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CellQL - Compositional SQL for Multi-View Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .hero {
+            background: #1e1e2e;
+            padding: 40px;
+            margin: 40px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .hero pre {
+            color: #cdd6f4;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .hero .kw { color: #cba6f7; }
+        .hero .fn { color: #89b4fa; }
+        .hero .str { color: #a6e3a1; }
+        .hero .cm { color: #6c7086; }
+
+        .content {
+            background: white;
+            padding: 40px;
+            margin: 40px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .content h2 {
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+            color: #222;
+        }
+
+        .content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .content code {
+            background: #f1f1f3;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #000;
+            color: white;
+            padding: 16px 40px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: background 0.2s;
+            margin-top: 20px;
+        }
+
+        .cta-button:hover {
+            background: #333;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .feature {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .feature h3 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            color: #222;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+        }
+
+        .feature p {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .content p {
+                font-size: 1rem;
+            }
+
+            .hero {
+                padding: 24px;
+            }
+
+            .hero pre {
+                font-size: 0.8rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>CellQL</h1>
+            <p class="subtitle">Made by Dylan Wootton</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <a href="https://cellql.vercel.app" target="_blank" rel="noopener">
+<pre><span class="kw">REPEAT</span> col <span class="kw">IN</span> (<span class="str">"price"</span>, <span class="str">"carat"</span>, <span class="str">"depth"</span>):
+  <span class="kw">BRANCH WHEN</span> <span class="fn">TYPE</span>(col) = <span class="kw">NUMERIC THEN</span>
+    <span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="fn">BIN_COUNT1D</span>(<span class="str">"diamonds"</span>, col, 20);
+  <span class="kw">ELSE</span>
+    <span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="fn">VALUE_COUNT</span>(<span class="str">"diamonds"</span>, col);
+  <span class="kw">END</span>
+<span class="kw">END</span>
+
+<span class="cm">-- compiles to 3 SQL queries, one per column --</span></pre>
+            </a>
+        </div>
+
+        <div class="content">
+            <h2>The Problem</h2>
+            <p>
+                Building a dashboard or an exploratory-analysis view almost always means writing the same SQL query over and over &mdash; once per column, once per facet, once per pairwise combination &mdash; with only a table or column name changing each time. Writing that by hand is tedious, and doing it programmatically means dropping into a general-purpose language and losing the readability of plain SQL.
+            </p>
+
+            <h2 style="margin-top: 40px;">CellQL: SQL, with Combinators</h2>
+            <p>
+                CellQL is a small orchestration language that sits directly on top of SQL. It adds four combinators &mdash; <code>REPEAT</code>, <code>BRANCH</code>, <code>CONCAT</code>, and <code>QUANTIZE</code> &mdash; for describing a family of related queries in one specification, plus data-analysis built-ins like <code>BIN_COUNT1D</code> and <code>VALUE_COUNT</code>. A CellQL program compiles directly to a list of plain SQL statements: nothing to execute at runtime, nothing beyond what a database already understands.
+            </p>
+            <p>
+                The viewer below is a live REPL for that compiler &mdash; write CellQL on the left, see the generated SQL (and, against the bundled sample dataset, its actual results) on the right.
+            </p>
+
+            <div style="text-align: center;">
+                <a href="https://cellql.vercel.app" class="cta-button" target="_blank" rel="noopener">Open the Viewer</a>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <h3>REPEAT</h3>
+                <p>Loop a query template over a list of columns or values, generating one statement per iteration.</p>
+            </div>
+            <div class="feature">
+                <h3>BRANCH</h3>
+                <p>Pick a query shape based on a column's type &mdash; a histogram for numeric data, a count for categorical.</p>
+            </div>
+            <div class="feature">
+                <h3>CONCAT</h3>
+                <p>Run independent queries side by side as separate views in the same specification.</p>
+            </div>
+            <div class="feature">
+                <h3>QUANTIZE</h3>
+                <p>Split a query over data-driven buckets, such as deciles of a numeric column, computed from the data itself.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 CellQL. A compositional query language for multi-view data analysis.</p>
+    </footer>
+</body>
+</html>
