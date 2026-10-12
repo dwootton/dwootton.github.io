@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Could language models turn everyday work into deliberate practice, the way an apprenticeship does? An interactive essay by Dylan Wootton on embedded learning systems."><meta name="theme-color" content="#fbfbfa"><title>Embedded Learning Systems · Dylan Wootton</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23fbfbfa'/%3E%3Cpath d='M8 8h16v4H12v4h10v4H12v4h12' fill='none' stroke='%233f3f3d' stroke-width='3'/%3E%3C/svg%3E"><link rel="stylesheet" href="style.css"><script src="app.js" defer></script></head>
+<body><a class="skip" href="#content">Skip to the essay</a><div class="reading-progress" aria-hidden="true"></div><header class="site-head"><a class="home" href="https://www.dylanwootton.com/">Dylan Wootton</a><a href="revised-essay.docx" download>Download essay</a></header><main id="content"><header class="cover"><h1>Embedded Learning Systems</h1><p class="deck">Could language models turn everyday work into deliberate practice, the way an apprenticeship does?</p></header><article class="article"><div class="prose demo-intro"><p>It’s Thursday afternoon. You’re writing the weekly update your manager will skim between meetings, and you can tell it’s vague. You could paste it into Claude and ask for a better version. You’d have one in seconds, and next Thursday you’d be back in the same spot.</p>
+<p>A good editor works differently. They don’t rewrite your paragraph. They circle a phrase, ask a question in the margin, and hand it back. You do the fixing. The next time, they circle less.</p>
+<p>Here’s a small version of that. Try revising the highlighted phrase yourself.</p></div>
+<figure class="wide core-demo" id="learning-demo" aria-labelledby="core-title">
+<div class="figure-head"><div><span class="fig-number">Figure 1 · Try the idea</span><h2 id="core-title">The coach asks. You write. The help fades.</h2></div><button type="button" id="core-reset" class="quiet js-control">Start over</button></div>
+<div class="doc-shell">
+<div class="doc-page">
+<div class="doc-meta"><span>Onboarding redesign · weekly update</span><span class="mini" id="doc-status">Draft</span></div>
+<div class="doc-body" id="doc-body">
+<p>Hi Priya, a quick update on the new onboarding flow.</p>
+<p>This week we <span class="anchor" id="anchor-a" data-step="a">made good progress on the new screens</span>. We <span class="anchor" id="anchor-b" data-step="b">expect to ship soon</span>, once we sort out <span class="anchor" id="anchor-c" data-step="c">a few open questions</span> with legal.</p>
+<p>Next week we’ll keep iterating on the designs.</p>
+<p>Thanks,<br>Sam</p>
+</div>
+</div>
+<aside class="doc-margin js-control" id="doc-margin" aria-label="Coach comments" aria-live="polite">
+
+<div class="comment" id="comment-a" data-for="anchor-a">
+<p class="comment-quote">“made good progress on the new screens”</p>
+<div class="comment-who"><span class="avatar" aria-hidden="true">C</span>Coach</div>
+<p class="comment-text" id="comment-a-text">“Good progress” is hard for Priya to act on. What changed this week that she could check?</p>
+<div class="comment-actions" id="comment-a-actions">
+<button type="button" class="action" data-edit="a">Revise it myself</button>
+<button type="button" class="secondary" data-hint="a">Give me a hint</button>
+<button type="button" class="quiet" id="fix-it">Just fix it</button>
+</div>
+<div class="hint" id="hint-a" hidden>
+<p>Specific usually means a count, a name, or a date. Which of these could Priya check?</p>
+<div class="choices" role="group" aria-label="Three possible revisions">
+<button type="button" class="choice" data-choice="a" data-text="made great progress on the new screens">made great progress on the new screens</button>
+<button type="button" class="choice" data-choice="a" data-text="worked hard on the new screens">worked hard on the new screens</button>
+<button type="button" class="choice" data-choice="a" data-text="finished 4 of the 6 new screens; 2 are in design review">finished 4 of the 6 new screens; 2 are in design review</button>
+</div>
+</div>
+<div class="editing" id="editing-a" hidden><p class="mini">Edit the highlighted text in the doc, then:</p><button type="button" class="action" data-check="a">Check my revision</button></div>
+<p class="reply" id="reply-a" hidden></p>
+</div>
+
+<div class="comment comment-short" id="comment-b" data-for="anchor-b" hidden>
+<p class="comment-quote">“expect to ship soon”</p>
+<div class="comment-who"><span class="avatar" aria-hidden="true">C</span>Coach</div>
+<p class="comment-text" id="comment-b-text">Same move here?</p>
+<div class="comment-actions" id="comment-b-actions">
+<button type="button" class="action" data-edit="b">Revise it</button>
+<button type="button" class="quiet" data-hint="b">Hint</button>
+</div>
+<div class="hint" id="hint-b" hidden><p>When could Priya expect it? A date, or what it’s waiting on.</p></div>
+<div class="editing" id="editing-b" hidden><p class="mini">Edit the highlighted text in the doc, then:</p><button type="button" class="action" data-check="b">Check</button></div>
+<p class="reply" id="reply-b" hidden></p>
+</div>
+
+<div class="comment comment-ghost" id="comment-c" data-for="anchor-c" hidden>
+<p class="mini" id="comment-c-text">The coach noticed this phrase and left it for you.</p>
+<div class="comment-actions" id="comment-c-actions"><button type="button" class="secondary" data-edit="c">Revise it</button></div>
+<div class="editing" id="editing-c" hidden><button type="button" class="action" data-check="c">Done</button></div>
+<p class="reply" id="reply-c" hidden></p>
+</div>
+
+</aside>
+</div>
+<div class="tracker js-control" id="tracker" aria-live="polite">
+<div><span class="mini">What the coach is tracking</span><p class="tracker-skill">Turning judgments into claims someone can check</p></div>
+<ol class="tracker-steps" aria-label="How much help the coach gives">
+<li id="track-a"><span class="dot" aria-hidden="true"></span><span>Asks a full question</span></li>
+<li id="track-b"><span class="dot" aria-hidden="true"></span><span>Gives a short nudge</span></li>
+<li id="track-c"><span class="dot" aria-hidden="true"></span><span>Stays quiet</span></li>
+</ol>
+</div>
+<figcaption>The comment is attached to your own words, you make the change, and the coach steps back once you’ve shown you can do it.</figcaption>
+<noscript><p class="fallback">In the interactive version, a coach comments on “made good progress” and asks what Priya could check. You revise the phrase yourself. The next vague phrase gets a shorter nudge. The third gets none.</p></noscript>
+</figure>
+<div class="prose"><h2 id="the-transfer-problem">The transfer problem</h2>
+<p>In 2018 I tried to teach myself to code the way everyone tells you to teach yourself to code. I enrolled in online classes, watched lectures on data structures, and completed some exercises on recursion. After each course, I did well on quizzes and would feel briefly competent. Then I'd try to build something of my own, and the knowledge would evaporate. Three courses in, I had little to show for it other than some checkmarks on Coursera.</p>
+<p>What eventually worked was not “educational.” It was moving to San Francisco and falling into a group of software engineers. Nobody sat me down and taught me anything, but suddenly I was around it. Watching them debug side projects in real time, hearing how they describe their work, picking up on what “good” looked like before I could even articulate why. After a summer in San Francisco, I felt like a “programmer.”</p>
+<p>Learning scientists have a name for the thing that didn't happen during my online courses: the transfer problem. Knowledge acquired in one context doesn't automatically become usable in another. You learn recursion in a browser tab, and it stays in the browser tab. Recognizing an answer on a quiz is different from recognizing when an idea is useful, adapting it to a new problem, and deciding what to do next.</p>
+<p>Context is part of this. But so are practice, feedback, and the opportunity to see how experienced people make decisions. My courses gave me concepts. The summer gave me somewhere to use them.</p>
+<p>I bring this up because the same thing is now happening at work, at a much larger scale, and AI is part of the reason.</p>
+<h2 id="the-exoskeleton">The exoskeleton</h2>
+<p>In a <a href="https://www.bcg.com/publications/2024/gen-ai-increases-productivity-and-expands-capabilities">2024 experiment</a>, BCG gave 480 of its consultants data-science tasks they had never been trained for: cleaning and merging datasets in Python, building a predictive model. With an AI tool, their coding work reached 86% of the benchmark set by actual data scientists. Without it, 29%. But afterward, the consultants who had done the tasks knew no more about data science than the ones who hadn't. The researchers called the AI an exoskeleton. Take it off, and the capability goes with it.</p>
+<p>It's my Coursera problem turned inside out. My courses gave me the concepts without the work. The exoskeleton gives people the work without the concepts. Either way, nothing carries over to the next problem.</p>
+<p>And people are spending more of their day inside the exoskeleton. When Anthropic <a href="https://www.anthropic.com/research/how-ai-is-transforming-work-at-anthropic">studied how its own engineers use Claude</a>, it found them becoming more “full-stack”: a backend engineer working on front-end code they “would've been scared to touch,” researchers building their own data visualizations. About 27% of the Claude-assisted work wouldn't have been done at all otherwise. The range of what models can take on keeps growing fast. By <a href="https://metr.org/blog/2026-1-29-time-horizon-1-1/">METR's measure</a>, the length of software task they can complete on their own has been doubling roughly every four months since 2023. Each jump pulls more people into unfamiliar work next to their own.</p>
+<p>That raises a fair question. If a model can do the data science, why should the consultant learn it? Because someone still has to decide what to ask, notice when the answer is wrong, and know what to do next. Anthropic's engineers put it plainly: “effectively using Claude requires supervision, and supervising Claude requires the very coding skills that may atrophy from AI overuse.” The goal isn't for people to out-compete the model. It's for working with the model to build people up instead of deskilling them, so that the person and the model together keep getting more capable, and the person does too.</p>
+<p>The usual answer to changing work is to retrain people, mostly through courses. The <a href="https://www.oecd.org/en/publications/trends-in-adult-learning_ec0624a6-en.html">OECD's 2025 analysis of adult learning</a> found that 8% of adults were in formal education and 37% in job-related training, much of it short. That has its place. But courses happen away from the work, which is exactly where my own learning failed. The unfamiliar work people are already doing every day is the better opportunity. The question is how to make it teach.</p>
+<h2 id="what-apprenticeship-gives-you">What apprenticeship gives you</h2>
+<p>Most work isn't practice. You do what you already know how to do, as well as you need to, and move on. Feedback, when it comes, comes late: a quarterly review, a bug report weeks later, a manager's edits you never see the reasoning behind.</p>
+<p>Researchers who study expertise draw a sharp line here. Experience alone doesn't make people much better. <a href="https://doi.org/10.1037/0033-295X.100.3.363">Deliberate practice</a> does: work aimed just past what you can currently do, with clear goals, immediate feedback, and a chance to try again. The trouble is that deliberate practice usually happens somewhere else: a piano studio, a training ground, a problem set. Away from the work.</p>
+<p>Apprenticeship is the old exception. The apprentice does real work, and the practice is built into it. A master is close enough to see the decisions as they happen. They point out the alternative you didn't consider (“you could have cut it the other way”), review what you made, and explain why. <a href="https://www.aft.org/ae/winter1991/collins_brown_holum">Cognitive apprenticeship</a> names the parts: modeling, coaching, scaffolding, asking the learner to articulate their reasoning, and fading support as the learner gets better. It's deliberate practice applied to the work you already have to do.</p>
+<p>I often think of the time I lived in San Francisco as one of the highest growth experiences of my life. I didn't know any of this terminology at the time, but apprenticeship is what I stumbled into. My friends saw my code, told me what they would have done differently, and why. It depended entirely on the accident of who I happened to be around and the fact that they were willing to give their time.</p>
+<p>You can't give millions of people a friend group full of senior engineers.</p>
+<p>Or can you?</p>
+<h2 id="embedded-learning-systems">Embedded learning systems</h2>
+<p>Here's a familiar way people use AI to learn something right now. You're working on a document or a spreadsheet and you get stuck. You open a new tab, navigate to a chatbot, and try to describe what you were doing.</p>
+<p>The tutor in a chat window can be useful. But it creates a familiar distance: you extract yourself from the context where you need the knowledge in order to go ask about it. You also have to notice the gap and know enough to describe it. And more and more often, the chatbot just does the work for you, which is the exoskeleton again.</p>
+<p>It's also unrealistically tidy. Real work doesn't happen in one application. Even a weekly update draws on a project tracker, a Slack thread, last Tuesday's meeting, and the doc you're writing it in. The task is one continuous thread. The tools are separate worlds. An assistant confined to one of them only sees its own keyhole.</p></div><figure class="wide context-demo" aria-labelledby="context-title">
+<div class="figure-head"><div><span class="fig-number">Figure 2 · Context across tools</span><h3 id="context-title">The task is one thread. Each tool sees a piece.</h3></div></div>
+<p class="figure-intro">Back to Sam’s weekly update from Figure 1. Choose what the coach can see. Its comment changes with what it knows.</p>
+<div class="artifact-grid js-control" role="group" aria-label="What the coach can see">
+<label class="artifact"><span class="artifact-name"><input id="context-doc" type="checkbox" checked> The draft</span><code>“We made good progress…”</code><span>What Sam wrote.</span></label>
+<label class="artifact"><span class="artifact-name"><input id="context-tracker" type="checkbox"> Project tracker</span><code>4 of 6 screens done · 2 in review</code><span>What’s actually finished.</span></label>
+<label class="artifact"><span class="artifact-name"><input id="context-slack" type="checkbox"> #legal thread</span><code>“Retention question, need a call by Fri”</code><span>What’s actually blocking.</span></label>
+</div>
+<div class="context-output"><div class="comment-who"><span class="avatar" aria-hidden="true">C</span>Coach, on “made good progress”</div><p id="context-reply" role="status">“Good progress” and “soon” are hard for Priya to act on. I can ask what changed, but I can’t tell whether what you wrote is accurate.</p><ul id="context-evidence"><li>Sees: your draft</li><li>Missing: what’s actually done</li><li>Missing: what legal is asking</li></ul></div>
+<figcaption>With more context, the coach can ask a sharper question. It still asks rather than rewrites. Sharing is the learner’s choice.</figcaption>
+</figure>
+<div class="prose">
+<p>An embedded learning system would follow the task, with the learner's permission, across those boundaries. It would combine the immediate work with a persistent, inspectable model of what the learner knows, what they're trying to do, and where support might help. If it thinks I know pivot tables but not Python, I should be able to see that—and tell it when it's wrong.</p>
+<p>Today's agents often have this context already. They can take screenshots, operate your computer, or connect to the tools you give them access to. But they mostly use that context to do the work for you, out of view. You ask, and the doc or spreadsheet comes back changed. For getting things done, that's the point. For learning, it's the exoskeleton taken one step further: you skip the practice, and you don't even see the work. The work is where you learn what good and bad look like. It's the draft you reread, the chart you compare against another, the cell you rerun to see what changed. An embedded learning system uses the same context in the opposite direction. It keeps you in the interface, attaches its feedback to your own work, and leaves the change to you.</p>
+<p>Standards such as <a href="https://github.com/adlnet/xAPI-Spec">xAPI</a> already make it possible to record learning experiences across platforms. But apprenticeship requires more than recording activity. The master in the workshop does more than review a transcript of the apprentice's mistakes at the end of the day. They're standing next to the apprentice while the mistakes are happening. That's the difference between a system that records your learning and a system that participates in it.</p>
+<p>Another way to put it: pull-based learning is when you go looking for help because you know you have a gap. Push-based learning is when the system notices a possible gap and offers support. Pull requires you to know what you don't know, which is precisely the thing novices often struggle with. Push could help, provided a guess about the learner stays a guess that the learner can correct.</p>
+<p>This idea has close precedents. Andy Matuschak's <a href="https://andymatuschak.org/hmwl/"><em>How Might We Learn?</em></a> imagines AI support around authentic projects, with enough context to guide people in the middle of their work. His work with Michael Nielsen on <a href="https://quantum.country/">the mnemonic medium</a>, and the related <a href="https://github.com/andymatuschak/orbit">Orbit project</a>, puts opportunities for remembering directly into explanatory material. Judy Kay and Bob Kummerfeld's work on <a href="https://doi.org/10.1111/bjet.12878">personal user models for lifelong, lifewide learning</a> argues that learners should be able to scrutinize and control the models built about them.</p>
+<p>These are important inspirations. The emphasis here is on bringing practice and feedback into the work people already do: not just helping someone finish a task, but helping them become more capable of doing the next one. <a href="https://arxiv.org/abs/2505.10831">Recent General User Model research</a> demonstrates contextual modeling from computer activity, including screenshots. But interpreting activity is not the same as reliably diagnosing understanding. The engineering pieces are becoming available. The educational question still needs testing.</p>
+<h2 id="renatta-learning-to-see-the-choices">Renatta: learning to see the choices</h2>
+<p>Consider an illustrative case. Renatta works for a county health department in New Mexico. Her director asked her to prepare a brief for next month's board meeting comparing environmental health trends across the state's counties. A colleague pointed her to a paper with a similar dataset and the notebook used to generate its figures. “Start from their analysis,” her colleague said. “Adapt it to our question.”</p>
+<p>Renatta knows Excel. She's built pivot tables, made charts for grant reports, filtered and sorted her way through messy spreadsheets for years. She has never used a notebook. She opens the paper's: code cells instead of a grid. She can see the outputs, but the connection between the code and what it produces is opaque.</p>
+<p>An embedded learning system is running alongside her. With her permission, it can see the notebook, the data, and the paper. It knows, because she told it, that she's comfortable with spreadsheets and new to Python. Here's what that could look like.</p></div><figure class="wide nb-demo" id="nb-demo" aria-labelledby="nb-title">
+<div class="figure-head"><div><span class="fig-number">Figure 3 · Inside Renatta’s notebook</span><h3 id="nb-title">A bridge, an alternative, and a review, each attached to the cell it’s about.</h3></div><button type="button" id="nb-reset" class="quiet js-control">Start over</button></div>
+<div class="jp">
+<div class="jp-bar"><span class="jp-file">county_brief.ipynb</span><span class="jp-kernel"><span class="jp-dot" aria-hidden="true"></span>Python 3 · learning support on</span></div>
+
+<div class="jp-cell">
+<div class="jp-in"><span class="jp-prompt">In [1]:</span><pre class="jp-code"><code>import pandas as pd
+df = pd.read_csv("county_health.csv")
+df.head(3)</code></pre></div>
+<div class="jp-out"><span class="jp-prompt out">Out[1]:</span><div class="table-wrap"><table class="jp-table"><thead><tr><th>county</th><th>cases</th><th>population</th><th>exposure</th></tr></thead><tbody><tr><th>Arroyo</th><td>7</td><td>55,000</td><td>1</td></tr><tr><th>Basin</th><td>32</td><td>180,000</td><td>2</td></tr><tr><th>Cedar</th><td>21</td><td>92,000</td><td>4</td></tr></tbody></table></div></div>
+</div>
+
+<div class="jp-cell" id="nb-cell2">
+<div class="jp-in"><span class="jp-prompt" id="nb-prompt2">In [2]:</span>
+<div class="jp-codewrap">
+<pre class="jp-code" id="nb-code2"><code><span class="jp-line hl" id="nb-line-group">by_county = <span id="nb-expr">df.groupby("county")["cases"].sum()</span></span><span class="jp-line">by_county.nlargest(6).plot.barh()</span></code></pre>
+<div class="nb-note nb-bridge js-control" id="nb-bridge">
+<div class="nb-who"><span class="avatar" aria-hidden="true">C</span>Bridge<span class="mini" id="nb-bridge-basis">· based on: you know Excel</span></div>
+<p id="nb-bridge-text">This line is a pivot table. <b>Rows:</b> county. <b>Values:</b> sum of cases.</p>
+<button type="button" class="quiet inline" id="nb-bridge-toggle">I don’t really use pivot tables</button>
+</div>
+<div class="nb-diff js-control" id="nb-diff" hidden aria-label="Suggested change, preview only">
+<div class="nb-diff-line del">- by_county = df.groupby("county")["cases"].sum()</div>
+<div class="nb-diff-line add">+ by_county = df.groupby("county")["cases"].sum() / df.groupby("county")["population"].sum() * 100_000</div>
+<p class="mini">Preview only. Your cell hasn’t changed.</p>
+</div>
+<div class="nb-edit js-control" id="nb-edit" hidden>
+<label for="nb-input" class="mini">Edit line 1 (it’s yours to change):</label>
+<textarea id="nb-input" rows="3" spellcheck="false">by_county = df.groupby("county")["cases"].sum()</textarea>
+<div class="nb-edit-row"><button type="button" class="action" id="nb-run">Run cell</button><span class="mini">or Shift+Enter</span></div>
+</div>
+</div></div>
+<div class="jp-out"><span class="jp-prompt out" id="nb-outprompt2">Out[2]:</span>
+<div class="nb-bars-wrap"><p class="nb-chart-title" id="nb-bars-title">Reported cases (count) · top 6 counties</p><ol class="bar-chart" id="nb-bars"></ol></div>
+</div>
+<div class="nb-note nb-suggest js-control" id="nb-suggest">
+<div class="nb-who"><span class="avatar" aria-hidden="true">C</span>Another way to see it</div>
+<p id="nb-suggest-text">Harbor has the most cases. It also has more people than any other county. Is a count the comparison you want for the board?</p>
+<div class="comment-actions" id="nb-suggest-actions">
+<button type="button" class="action" id="nb-try">Edit the cell myself</button>
+<button type="button" class="secondary" id="nb-show">Show the alternative</button>
+<button type="button" class="quiet" id="nb-keep">Keep counts</button>
+</div>
+<p class="reply" id="nb-suggest-reply" hidden></p>
+</div>
+</div>
+
+<div class="jp-cell" id="nb-cell3">
+<div class="jp-in"><span class="jp-prompt">In [3]:</span><pre class="jp-code"><code>df["rate"] = df["cases"] / df["population"] * 100_000
+df.plot.scatter(x="exposure", y="rate")</code></pre></div>
+<div class="jp-out"><span class="jp-prompt out">Out[3]:</span>
+<div><div class="scatter-wrap"><svg id="scatter-chart" width="100%" viewBox="0 0 640 330" role="img" aria-labelledby="scatter-svg-title scatter-svg-desc"><title id="scatter-svg-title">County data on a linear x-axis</title><desc id="scatter-svg-desc">Enable JavaScript to compare a linear and logarithmic x-axis and inspect the effect of excluding smaller counties.</desc><text x="24" y="45" fill="#60605b">Enable JavaScript to explore this plot.</text></svg></div>
+<p id="scatter-count" class="mini nb-scatter-count">17 of 17 counties shown</p></div>
+</div>
+<div class="nb-note nb-review js-control" id="nb-review">
+<div class="nb-who"><span class="avatar" aria-hidden="true">C</span>Review · compared with the paper’s Figure 2</div>
+<p>The paper’s version of this chart made two choices yours doesn’t. Neither is visible in the finished figure. Preview each one:</p>
+<div class="chart-controls"><label class="check-label"><input id="scatter-log" type="checkbox"> Log-scale the x-axis</label><label class="check-label"><input id="scatter-filter" type="checkbox"> Drop counties under 10,000 people</label></div>
+<p class="nb-explain" id="scatter-explanation" role="status"></p>
+<div class="nb-why" id="nb-why">
+<label for="nb-why-input"><span class="jp-md-tag">Markdown</span> Before you change your cell, add a note for the board: would you make these choices, and why?</label>
+<textarea id="nb-why-input" rows="3" placeholder="I’d use a log axis because… I would/wouldn’t drop small counties because…"></textarea>
+<div class="nb-edit-row"><button type="button" class="action" id="nb-why-done">Add note</button></div>
+<p class="reply" id="nb-why-reply" hidden></p>
+</div>
+</div>
+</div>
+
+</div>
+<details class="data-disclosure"><summary>Inspect the data</summary><div class="table-wrap" tabindex="0" role="region" aria-label="County data used in the notebook"><table><caption>County data</caption><thead><tr><th scope="col">County</th><th scope="col">Exposure</th><th scope="col">Cases</th><th scope="col">Population</th><th scope="col">Rate / 100k</th></tr></thead><tbody id="scatter-data"></tbody></table></div></details>
+<figcaption>Every comment is attached to a specific cell, and none of them change Renatta’s code. She makes the edit. The review asks her to write down her reasoning before she changes anything, because explaining a choice is part of learning to make it.</figcaption>
+<noscript><p class="fallback">In the interactive version, the system explains a groupby as a pivot table, suggests comparing rates instead of counts and lets Renatta make that edit, then reviews her scatterplot against the paper’s choices of a log axis and a population filter.</p></noscript>
+</figure>
+<div class="prose">
+<p>The system's comments show up where the work is, next to the cell they're about. The first one connects the unfamiliar thing to something she already knows: a groupby is a pivot table. That's enough for her to start editing instead of just reading.</p>
+<p>The second is an alternative decision. Her bar chart of raw counts says the biggest county has the biggest problem. The system doesn't fix the chart. It asks whether a count is the comparison she wants, and lets her make the change. A count asks how many cases there are; a rate asks how common they are relative to the population. Once she's made the change, she can say which question her chart answers.</p>
+<p>The third is review. Her scatterplot doesn't look like the paper's, and the system points out two choices the authors made that aren't visible in the finished figure: a log-scaled axis, and a filter that drops counties under 10,000 people. She can preview each separately. Then it asks her to write down why she would or wouldn't make each choice. A log scale changes how differences appear. Excluding smaller counties changes which places the analysis represents. Those choices need reasons, and writing the reason is part of the practice.</p>
+<p>What Renatta is learning is not just how to use a notebook. It's how to think about data the way an analyst does: which transformations reveal structure, which visualizations mislead, which choices are invisible in a finished chart.</p>
+<p>The test comes later. Can she recognize the same issue in a new dataset, explain her choice, and make it without the prompt? A better chart today is useful. Better judgment tomorrow, the kind that makes her and the model sharper together, is the learning outcome. That's the difference from the exoskeleton.</p>
+<h2 id="what-could-go-wrong">What could go wrong?</h2>
+<p>First is the Clippy problem. Microsoft's Clippy tried to be contextually helpful and became reliably irritating. Systems that intervene too often will be disabled. Systems that intervene too rarely won't produce learning.</p>
+<p>The right intervention varies across people and across moments for the same person. Deep focus makes interruption costly. Frustration makes a well-timed suggestion a gift. Playful exploration means staying quiet and letting productive mistakes happen. Pause patterns, errors, and task switching might offer clues, but they don't reveal someone's mental state with certainty.</p>
+<p>This is a research problem, not a solved interface detail. Scrutable user models point toward one part of the answer: let learners see why help appeared, correct the system's assumptions, and control when it intervenes. They should also choose which tools it can observe and be able to delete what it remembers. Scaffolding should adapt to the person rather than the other way around.</p>
+<p>Second is social erosion. My San Francisco story was not just about contextual learning. It was about identity formation, social accountability, and the organic unpredictability of watching real humans navigate real problems. Anthropic's engineers noticed this too: junior colleagues came to them with fewer questions. If these systems become the primary source of support, they may reduce the incentive to ask colleagues for help.</p>
+<p>So the goal can't be a tutor that stands in for people. Andy Matuschak makes a similar argument in <a href="https://andymatuschak.org/hmwl/"><em>How Might We Learn?</em></a>: support inside a project should connect learners to the communities doing that work. Jean Lave and Etienne Wenger called these <a href="https://doi.org/10.1017/CBO9780511815355">communities of practice</a>. Newcomers start at the edge with small, real contributions, and move toward the center as they become capable. An embedded system could be an on-ramp to that. It builds enough skill that you can take part, and then points you to the people: the colleague who solved this last year, the channel where the analysts argue about denominators, the moment a question is better asked of a person than a model. Handing you off to people is one more way the support fades.</p>
+<p>Third, digital scaffolding is inherently limited. A coding environment has a property that makes it natural: the work is the screen. But a nursing student practicing intubation or a diver learning buoyancy control is developing an embodied skill. You can watch a video on holding neutral buoyancy at a safety stop, but the actual skill is in your breath. It's feeling that you're rising or sinking before your depth gauge changes. A screen doesn't capture all of that.</p>
+<h2 id="who-decides-what-to-learn">Who decides what to learn?</h2>
+<p>If the system decides what gap you have, when to intervene, and what to teach you, who's writing the curriculum?</p>
+<p>In traditional education, there are at least legible structures of accountability: syllabi, accreditation boards, teachers you can argue with. A system that's watching your work and nudging your learning is making pedagogical decisions constantly. Those decisions are shaped by whoever built it, trained it, and defined what “competent” looks like.</p>
+<p>This is why the model layer matters as much as the interface layer. If embedded learning depends exclusively on proprietary models controlled by a handful of companies, it becomes harder for educators and learners to inspect or challenge the pedagogy. Open models alone won't solve accountability, but they could make more of those choices available for scrutiny.</p>
+<p>We need a healthy diversity here: publicly funded learning models trained on appropriately shared educational data, open-source alternatives that researchers and educators can inspect and modify, and enough competition that no single company gets to define what “learning” means inside the tools where most people work. Learners should have a say in the goals, not just permission to dismiss the prompts.</p>
+<h2 id="practice-where-the-work-is">Practice where the work is</h2>
+<p>What changed for me that summer wasn't that someone made my work easier. It was that people who knew more than me could see my work while I was doing it. They showed me the decision I hadn't considered, looked at what I'd made, and told me what they'd have done differently. I did the work. They made my practice deliberate.</p>
+<p>Most people will never get that summer. But almost everyone is about to spend their working days doing things that are new to them, like a backend engineer touching front-end code or a consultant running a regression. Right now, AI mostly helps them get that work done. The work gets finished, and the person stays where they were.</p>
+<p>Embedded learning systems are a bet that the same moments can become deliberate practice. The feedback lives in the doc, the notebook, the spreadsheet, at the moment the decision is being made. It shows the alternative, asks for the reason, and asks less as the person starts bringing the judgment themselves. The learner can see what the system thinks they know, and can tell it when it's wrong.</p>
+<p>The measure isn't how much work the system helps finish. It's whether the person, working with it, ends up better than the model alone, and keeps getting better.</p></div></article></main><footer class="footer"><a href="https://www.dylanwootton.com/">Back to Dylan’s website</a><a href="revised-essay.docx" download>Download the revised essay</a></footer></body></html>
