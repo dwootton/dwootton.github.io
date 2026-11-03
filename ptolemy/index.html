@@ -2,105 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Ptolemy — A Semantic Map of Exploratory Data Analysis</title>
-  <meta name="description" content="Ptolemy maps analytical steps by what they do. Explore the UIST 2026 paper, an interactive walkthrough, and supporting materials.">
-  <meta name="theme-color" content="#fbfbfa">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ptolemy: A Semantic Map of Exploratory Data Analysis</title>
+  <meta name="description" content="Ptolemy: A Semantic Map of Exploratory Data Analysis. Dylan Wootton, Denny Bromley, and Vidya Setlur.">
   <meta property="og:title" content="Ptolemy: A Semantic Map of Exploratory Data Analysis">
-  <meta property="og:description" content="What if your notebook had a map of your analysis? Research, an interactive walkthrough, and supporting materials.">
+  <meta property="og:description" content="Paper, code, and a bird-strikes analysis map.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.dylanwootton.com/ptolemy/">
-  <meta property="og:image" content="https://www.dylanwootton.com/ptolemy/assets/teaser.png">
-  <meta property="og:image:alt" content="Notebook cells become analets, CellQL representations, and points on a semantic map.">
-  <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://www.dylanwootton.com/ptolemy/">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./style.css">
-  <script src="./walkthrough.js" defer></script>
-  <script src="./page.js" defer></script>
+  <script src="./playground.js" defer></script>
 </head>
 <body>
-  <a class="skip" href="#main">Skip to content</a>
-  <div class="shell">
-    <header class="topbar">
-      <a class="wordmark" href="../">Dylan Wootton <span>/ Ptolemy</span></a>
-      <nav aria-label="Page sections"><a href="#walkthrough">Walkthrough</a><a href="#research">Research</a><a href="#resources">Resources</a></nav>
-    </header>
-    <main id="main">
-      <section class="hero" aria-labelledby="title">
-        <p class="eyebrow">UIST 2026 · Research project</p>
-        <h1 id="title">Ptolemy<span>A Semantic Map of<br>Exploratory Data Analysis</span></h1>
-        <p class="lead">What if your notebook had a map of your analysis?</p>
-        <p class="intro">An investigation can branch into dozens of questions, charts, and transformations. Ptolemy arranges analytical steps by what they do, helping you see where you have been and how your next question relates.</p>
-        <div class="authors"><a href="https://www.dylanwootton.com/">Dylan Wootton</a><span>Denny Bromley</span><span>Vidya Setlur</span></div>
-        <p class="affiliations">MIT CSAIL · Tableau Research</p>
-        <div class="actions"><a class="button primary" href="https://arxiv.org/abs/2609.16539">Read the paper <span aria-hidden="true">↗</span></a><a class="button" href="#walkthrough">Explore the walkthrough <span aria-hidden="true">↓</span></a></div>
-        <figure class="pipeline"><a href="./assets/teaser.png" aria-label="Open the full-size Ptolemy pipeline figure"><img src="./assets/teaser.png" width="2212" height="636" alt="Ptolemy pipeline: notebook cells become analets, then CellQL representations, embeddings, and a semantic map. The study compares the map with canvas and tree layouts."></a><figcaption>From a sequence of notebook cells to a space of related analyses.</figcaption></figure>
-      </section>
-
-      <section class="wayfinding ruled" aria-labelledby="wayfinding-title">
-        <div class="section-heading"><p class="eyebrow">01 / The idea</p><h2 id="wayfinding-title">Analysis is also<br>a wayfinding problem.</h2></div>
-        <div class="questions">
-          <article><span class="index">History</span><h3>Where have I been?</h3><p>Keep earlier analyses in view as an investigation grows and branches.</p></article>
-          <article><span class="index">Orientation</span><h3>Where am I now?</h3><p>Find the neighborhood around a question and compare it with related analytical steps.</p></article>
-          <article><span class="index">Planning</span><h3>Where could I go next?</h3><p>Use the broader analysis space to consider possible directions for exploration.</p></article>
+  <main>
+    <h1>Ptolemy: A Semantic Map of Exploratory Data Analysis</h1>
+    <p class="authors"><a href="https://www.dylanwootton.com/">Dylan Wootton</a>, <a href="https://www.tableau.com/research/people/dennis-bromley">Denny Bromley</a>, <a href="https://www.vidyasetlur.com/">Vidya Setlur</a></p>
+    <section aria-labelledby="abstract-title">
+      <h2 id="abstract-title">Abstract</h2>
+      <p>A central challenge in exploratory data analysis (EDA) is keeping track of what has already been examined in order to decide what to analyze next. In practice, analysts often run dozens of analyses while building an understanding of a dataset. However, most tools provide little support for maintaining an overview of this evolving process, instead exposing only a linear history of analysis steps. These tools show sequence, what came before, but not position, how a current analysis relates to the broader space of possible analyses. As a result, analysts must mentally reconstruct which parts of the space they have explored and where gaps remain, increasing the risk of redundant work or overlooked patterns. We present Ptolemy, a navigational interface that externalizes analysis history as a semantic map. Each analytic step is represented as a point positioned by embeddings derived from a structured description of its effective data view (e.g., columns, filters, transformations), allowing spatial distance to reflect analytic similarity. In a mixed-methods study comparing map, canvas, and tree representations, we find that maps improve global orientation and local comparison, while ordered layouts reduce decision cost. These findings surface a trade-off between orientation and actionability, and highlight design principles for supporting strategic exploration in EDA.</p>
+    </section>
+    <p class="links"><a href="https://github.com/dwootton/meridian">GitHub (currently private)</a><a href="https://arxiv.org/abs/2609.16539">arXiv paper</a></p>
+    <section id="playground" aria-labelledby="playground-title">
+      <h2 id="playground-title">Bird-strikes playground</h2>
+      <p id="map-status" class="caption" role="status">Loading the analysis map…</p>
+      <noscript><p>Enable JavaScript to explore the analysis map.</p></noscript>
+      <div class="playground-layout">
+        <svg id="map" role="group" aria-label="Bird-strike analyses positioned by Ptolemy"></svg>
+        <div class="analysis">
+          <h3 id="analysis-title">Hover over a point</h3>
+          <p id="analysis-description">Inspect an analysis question and its code. Click a point to keep it selected.</p>
+          <p id="analysis-fields"></p>
+          <img id="analysis-plot" alt="" hidden>
+          <pre hidden><code id="analysis-code"></code></pre>
+          <button id="clear-selection" type="button" hidden>Clear selection</button>
         </div>
-        <p class="mechanism">Each step becomes an <strong>analet</strong>. <strong>CellQL</strong> describes its effective data view—columns, filters, transformations, and aggregations—so comparison can go beyond code syntax. Embeddings and a 2D projection turn these descriptions into a map, coordinated with a tree of the investigation.</p>
-      </section>
-
-      <section class="ruled" id="walkthrough" aria-labelledby="walkthrough-title">
-        <div class="section-heading"><p class="eyebrow">02 / Try the idea</p><h2 id="walkthrough-title">Follow a question<br>through the map.</h2></div>
-        <p class="section-intro">Imagine exploring wildlife strikes on aircraft. Select a point, inspect its question and example code, then mark it reviewed to trace your path.</p>
-        <p class="demo-notice"><strong>Illustrative walkthrough.</strong> This is a small, authored example inspired by the paper’s scenario. Positions are schematic. It does not run Python, generate analyses, or display computed results from the research system.</p>
-        <noscript><p class="demo-notice">Enable JavaScript to use the walkthrough. The paper and all project information remain available below.</p></noscript>
-        <div class="demo" id="demo-controls" hidden>
-          <div class="map-panel">
-            <div class="map-header"><span>Wildlife strikes / analysis map</span><span><span id="visited-count">0</span> reviewed</span></div>
-            <div id="map-points" aria-label="Illustrative map of analysis questions"></div>
-            <div class="legend"><span><i></i> Available question</span><span><i class="done"></i> Reviewed</span><span><i class="active"></i> Selected</span></div>
-            <p id="map-status" class="map-status" aria-live="polite">Select any question to begin.</p>
-          </div>
-          <div class="detail-panel">
-            <label for="analysis-select">Choose an analysis</label>
-            <select id="analysis-select"></select>
-            <h3 id="detail-title"></h3>
-            <p id="detail-description"></p>
-            <p id="detail-fields" class="fields"></p>
-            <p class="code-label">Example Python · shown, not executed</p>
-            <pre><code id="detail-code"></code></pre>
-            <button class="button primary" id="visit-button" type="button">Mark reviewed</button>
-          </div>
-          <div class="history-panel"><div><h3>Your walkthrough path</h3><p>Selections you mark reviewed appear here.</p></div><ol id="history-list"></ol><button id="reset-demo" class="text-button" type="button">Reset walkthrough</button></div>
-        </div>
-        <p class="small-note">In Ptolemy, nearby points suggest similar analyses. The map’s axes have no fixed meaning, and empty space is not proof of a missing analysis.</p>
-      </section>
-
-      <section class="ruled" id="research" aria-labelledby="research-title">
-        <div class="section-heading"><p class="eyebrow">03 / What we learned</p><h2 id="research-title">An overview helps.<br>Choosing a route still matters.</h2></div>
-        <p class="section-intro">In a study with 12 participants, we compared a semantic map, a tree, and a static canvas. Participants favored maps for understanding the broader analysis space and recognizing similar analyses. Ordered layouts made immediate next steps easier to choose.</p>
-        <figure class="conditions"><img src="./assets/interface-conditions.png" loading="lazy" alt="The three study conditions: a semantic map, a hierarchical tree, and a static grid canvas."><figcaption>Three ways to organize the same set of analytical steps.</figcaption></figure>
-        <div class="research-note"><h3>Orientation is not the same as breadth.</h3><p>The static canvas produced the widest measured coverage in these short sessions. A semantic overview can support comparison while adding decision effort. The design opportunity is to pair that overview with clear cues for the next action.</p><p class="small-note">This was a small comparative study with fixed candidates; live insertion and Bearings were disabled. The findings do not establish that maps make analysis universally faster or more complete.</p></div>
-      </section>
-
-      <section class="ruled" id="resources" aria-labelledby="resources-title">
-        <div class="section-heading"><p class="eyebrow">04 / Take it further</p><h2 id="resources-title">Paper, materials,<br>and access.</h2></div>
-        <div class="resource-list">
-          <a class="resource" href="https://arxiv.org/abs/2609.16539"><span><strong>Read the paper</strong><small>Full project description, system design, and evaluation.</small></span><span aria-hidden="true">↗</span></a>
-          <a class="resource" href="https://arxiv.org/pdf/2609.16539"><span><strong>Technical &amp; study appendices</strong><small>Included in the paper: CellQL, study protocol, and additional results.</small></span><span aria-hidden="true">↗</span></a>
-          <a class="resource" href="https://www.tableau.com/blog/ptolemy-semantic-map-exploratory-data-analysis"><span><strong>Tableau Research overview</strong><small>A guided introduction to the project and its findings.</small></span><span aria-hidden="true">↗</span></a>
-          <div class="resource"><span><strong>Research code &amp; full execution demo</strong><small>The research implementation is not currently public. <a href="mailto:dwootton@mit.edu?subject=Ptolemy%20code%20and%20demo%20access">Contact the authors about access.</a></small></span><span class="status">By request</span></div>
-        </div>
-        <details class="citation"><summary>Cite this work</summary><pre id="citation-text">@inproceedings{wootton2026ptolemy,
-  author = {Wootton, Dylan and Bromley, Denny and Setlur, Vidya},
-  title = {Ptolemy: A Semantic Map of Exploratory Data Analysis},
-  booktitle = {Proceedings of the 39th Annual ACM Symposium on
-               User Interface Software and Technology},
-  year = {2026},
-  doi = {10.1145/3830398.3830537}
-}</pre><button type="button" class="text-button" id="copy-citation">Copy BibTeX</button><span id="copy-status" role="status"></span></details>
-      </section>
-    </main>
-    <footer><a href="../">Dylan Wootton</a><p>Ptolemy · UIST 2026 · Detroit, Michigan<br>Figures by Wootton, Bromley &amp; Setlur · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></p><a href="mailto:dwootton@mit.edu">Get in touch <span aria-hidden="true">↗</span></a></footer>
-  </div>
+      </div>
+      <p class="caption provenance">Positions are recomputed with Ptolemy’s projection code from saved bird-strike analysis embeddings; plots are saved notebook outputs. <a href="https://github.com/vega/vega-datasets/blob/main/data/birdstrikes.csv">Dataset</a>. Python does not run in this page.</p>
+    </section>
+  </main>
 </body>
 </html>

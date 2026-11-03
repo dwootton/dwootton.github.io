@@ -1,0 +1,294 @@
+{
+  "dataset": "Bird strikes",
+  "datasetSource": "https://github.com/vega/vega-datasets/blob/main/data/birdstrikes.csv",
+  "points": [
+    {
+      "id": "1001",
+      "title": "How many strikes are reported each year?",
+      "x": 5.543247470455843,
+      "y": 4.841016473607917,
+      "fields": [
+        "Flight Date"
+      ],
+      "code": "# analet: How many strikes are reported each year?\ncounts = df.groupby(df['Flight Date'].dt.year).size()\ncounts.plot(marker='o', color='#7dd3fc', title='Reported strikes by year \u2014 partial 1990 and 2002')\nplt.xlabel('Year'); plt.ylabel('Reports'); plt.tight_layout(); plt.show()",
+      "image": "plots/1001.png"
+    },
+    {
+      "id": "1002",
+      "title": "Which months contain the most reported strikes?",
+      "x": 5.393375866587786,
+      "y": 5.03935621839983,
+      "fields": [
+        "Flight Date"
+      ],
+      "code": "# analet: Which months contain the most reported strikes?\ncounts = df.groupby(df['Flight Date'].dt.month).size().reindex(range(1,13), fill_value=0)\ncounts.plot.bar(color='#38bdf8', rot=0, title='Reported strikes by calendar month')\nplt.xlabel('Month'); plt.ylabel('Reports'); plt.tight_layout(); plt.show()",
+      "image": "plots/1002.png"
+    },
+    {
+      "id": "1003",
+      "title": "Which wildlife species appear most often in strike reports?",
+      "x": 7.65802700848133,
+      "y": 3.309702830094754,
+      "fields": [
+        "Wildlife Species"
+      ],
+      "code": "# analet: Which wildlife species appear most often in strike reports?\ncounts = df['Wildlife Species'].value_counts().head(12).sort_values()\ncounts.plot.barh(color='#a78bfa', title='Most frequently reported species / labels')\nplt.xlabel('Reports'); plt.tight_layout(); plt.show()",
+      "image": "plots/1003.png"
+    },
+    {
+      "id": "1004",
+      "title": "How does reported wildlife size vary by time of day?",
+      "x": 5.720006959541628,
+      "y": 5.56665907751102,
+      "fields": [
+        "Wildlife Size",
+        "Time of day"
+      ],
+      "code": "# analet: How does reported wildlife size vary by time of day?\ntable = pd.crosstab(df['Time of day'], df['Wildlife Size'])\ndisplay(table)\ntable.div(table.sum(axis=1), axis=0).plot.bar(stacked=True, rot=0, title='Reported size composition by time of day')\nplt.ylabel('Share of reports'); plt.tight_layout(); plt.show()",
+      "image": "plots/1004.png"
+    },
+    {
+      "id": "1005",
+      "title": "How do seasonal patterns differ for common identified species?",
+      "x": 5.050992110746694,
+      "y": 5.384141127600544,
+      "fields": [
+        "Flight Date",
+        "Wildlife Species"
+      ],
+      "code": "# analet: How do seasonal patterns differ for common identified species?\nspecies = df.loc[~df['Wildlife Species'].str.contains('Unknown', case=False), 'Wildlife Species'].value_counts().head(4).index\nfig, axes = plt.subplots(2,2,figsize=(11,6), sharex=True)\nfor ax, name in zip(axes.flat, species):\n    df.loc[df['Wildlife Species'].eq(name)].groupby(df['Flight Date'].dt.month).size().reindex(range(1,13),fill_value=0).plot(ax=ax, marker='o', color='#c4b5fd')\n    ax.set_title(name); ax.set_xlabel('Month'); ax.set_ylabel('Reports')\nfig.suptitle('Seasonality within the historical sample'); fig.tight_layout(); plt.show()",
+      "image": "plots/1005.png"
+    },
+    {
+      "id": "1006",
+      "title": "What do the underlying wildlife strike records look like?",
+      "x": 7.210501476322941,
+      "y": 3.27474613998108,
+      "fields": [
+        "Airport Name",
+        "Wildlife Species",
+        "Phase of flight",
+        "Time of day",
+        "Cost Total $"
+      ],
+      "code": "# analet: What do the underlying wildlife strike records look like?\ndisplay(df[['Flight Date','Airport Name','Wildlife Species','Wildlife Size','Phase of flight','Time of day','Cost Total $']].head(15))"
+    },
+    {
+      "id": "1007",
+      "title": "How are reported damage categories distributed?",
+      "x": 9.755661409069107,
+      "y": 1.095846721868729,
+      "fields": [
+        "Effect Amount of damage"
+      ],
+      "code": "# analet: How are reported damage categories distributed?\ncounts = df['Effect Amount of damage'].value_counts()\ndisplay(counts.rename('reports').to_frame())\ncounts.plot.bar(color='#fb7185', rot=25, title='Damage labels exactly as recorded')\nplt.ylabel('Reports'); plt.tight_layout(); plt.show()",
+      "image": "plots/1007.png"
+    },
+    {
+      "id": "1008",
+      "title": "What is the distribution of strictly positive recorded total costs?",
+      "x": 7.734533551365093,
+      "y": 2.4534754130659784,
+      "fields": [
+        "Cost Total $"
+      ],
+      "code": "# analet: What is the distribution of strictly positive recorded total costs?\npositive = df.loc[df['Cost Total $'].gt(0), 'Cost Total $']\nprint(f'{len(positive):,} positive recorded costs; {df[\"Cost Total $\"].eq(0).sum():,} recorded zeros')\nprint('Recorded zeros are excluded; they do not establish absence of loss.')\nplt.hist(np.log10(positive), bins=30, color='#fbbf24', edgecolor='#292524')\nplt.title('Distribution of positive recorded total costs'); plt.xlabel('log10(recorded dollars)'); plt.ylabel('Reports'); plt.tight_layout(); plt.show()",
+      "image": "plots/1008.png"
+    },
+    {
+      "id": "1009",
+      "title": "How do positive recorded repair costs compare across damage categories?",
+      "x": 10.122296661788717,
+      "y": 1.4710904505298725,
+      "fields": [
+        "Cost Repair",
+        "Effect Amount of damage"
+      ],
+      "code": "# analet: How do positive recorded repair costs compare across damage categories?\nsub = df.loc[df['Cost Repair'].gt(0) & known_damage]\norder = ['None','Minor','Medium','Substantial']\nvalues = [sub.loc[sub['Effect Amount of damage'].eq(x),'Cost Repair'] for x in order]\nplt.boxplot(values, tick_labels=order, showfliers=False)\nplt.yscale('log'); plt.title('Positive recorded repair costs by damage label'); plt.ylabel('Recorded repair dollars (log scale)'); plt.tight_layout(); plt.show()",
+      "image": "plots/1009.png"
+    },
+    {
+      "id": "1010",
+      "title": "Does recorded flight speed vary with positive recorded total cost?",
+      "x": 8.138067889900224,
+      "y": 2.265258237398284,
+      "fields": [
+        "Speed IAS in knots",
+        "Cost Total $"
+      ],
+      "code": "# analet: Does recorded flight speed vary with positive recorded total cost?\nsub = df.loc[df['Cost Total $'].gt(0) & df['Speed IAS in knots'].notna()]\nplt.scatter(sub['Speed IAS in knots'], sub['Cost Total $'], alpha=.3, s=18, color='#fb923c')\nplt.yscale('log'); plt.xlabel('Reported speed (knots)'); plt.ylabel('Positive recorded total dollars (log scale)'); plt.title('Recorded speed and positive reported total cost'); plt.tight_layout(); plt.show()",
+      "image": "plots/1010.png"
+    },
+    {
+      "id": "1011",
+      "title": "Which species have the largest sums of positive recorded costs?",
+      "x": 7.5161372225343275,
+      "y": 2.854153077830339,
+      "fields": [
+        "Wildlife Species",
+        "Cost Total $"
+      ],
+      "code": "# analet: Which species have the largest sums of positive recorded costs?\npositive = df.loc[df['Cost Total $'].gt(0)]\nsummary = positive.groupby('Wildlife Species')['Cost Total $'].agg(['count','sum','median']).sort_values('sum',ascending=False).head(12)\ndisplay(summary.rename(columns={'count':'positive-cost reports','sum':'recorded total dollars','median':'median positive dollars'}).style.format(precision=0))"
+    },
+    {
+      "id": "1012",
+      "title": "How does the share with reported damage vary by wildlife size?",
+      "x": 9.684737687527033,
+      "y": 0.6715671804505025,
+      "fields": [
+        "Wildlife Size",
+        "Effect Amount of damage"
+      ],
+      "code": "# analet: How does the share with reported damage vary by wildlife size?\nsub = df.loc[known_damage]\nsummary = sub.groupby('Wildlife Size')['Reported damage'].agg(['count','mean'])\nsummary['mean'].mul(100).plot.bar(color='#fda4af',rot=0,title='Reports with a non-None damage label by wildlife size')\nplt.ylabel('Percent within known damage labels'); plt.tight_layout(); plt.show()\ndisplay(summary.rename(columns={'count':'known-label reports','mean':'share with reported damage'}))",
+      "image": "plots/1012.png"
+    },
+    {
+      "id": "1013",
+      "title": "During which flight phases are strikes most often reported?",
+      "x": 9.923402107613773,
+      "y": 2.810396212231498,
+      "fields": [
+        "Phase of flight"
+      ],
+      "code": "# analet: During which flight phases are strikes most often reported?\ncounts = df['Phase of flight'].replace('', 'Unspecified').value_counts().sort_values()\ncounts.plot.barh(color='#5eead4',title='Reported strikes by phase of flight')\nplt.xlabel('Reports'); plt.tight_layout(); plt.show()",
+      "image": "plots/1013.png"
+    },
+    {
+      "id": "1014",
+      "title": "How do flight phase and time of day occur together?",
+      "x": 10.144155242137462,
+      "y": 3.0782883740173523,
+      "fields": [
+        "Phase of flight",
+        "Time of day"
+      ],
+      "code": "# analet: How do flight phase and time of day occur together?\ntable = pd.crosstab(df['Phase of flight'],df['Time of day'])\nfig,ax=plt.subplots(figsize=(10,5)); im=ax.imshow(table.values,cmap='YlGnBu',aspect='auto')\nax.set_xticks(range(len(table.columns)),table.columns); ax.set_yticks(range(len(table.index)),table.index)\nax.set_title('Reported strikes: phase \u00d7 time of day'); fig.colorbar(im,ax=ax,label='Reports'); fig.tight_layout(); plt.show()",
+      "image": "plots/1014.png"
+    },
+    {
+      "id": "1015",
+      "title": "How do reported speed distributions differ across flight phases?",
+      "x": 9.284247554110664,
+      "y": 2.5473056748668745,
+      "fields": [
+        "Phase of flight",
+        "Speed IAS in knots"
+      ],
+      "code": "# analet: How do reported speed distributions differ across flight phases?\nphases = df['Phase of flight'].value_counts().head(6).index\nvalues = [df.loc[df['Phase of flight'].eq(p),'Speed IAS in knots'].dropna() for p in phases]\nplt.boxplot(values,tick_labels=phases,showfliers=False,vert=False)\nplt.xlabel('Reported speed (knots)'); plt.title('Recorded speeds by common flight phases'); plt.tight_layout(); plt.show()",
+      "image": "plots/1015.png"
+    },
+    {
+      "id": "1016",
+      "title": "Which flight phases have the largest reported damage share?",
+      "x": 9.813874922147244,
+      "y": 2.4162441121994576,
+      "fields": [
+        "Phase of flight",
+        "Effect Amount of damage"
+      ],
+      "code": "# analet: Which flight phases have the largest reported damage share?\nsummary = df.loc[known_damage].groupby('Phase of flight')['Reported damage'].agg(['count','mean'])\nsummary = summary.loc[summary['count'].ge(50)].sort_values('mean',ascending=False)\ndisplay(summary.rename(columns={'count':'known-label reports','mean':'damage share'}).style.format({'damage share':'{:.1%}'}))\nprint('Only phases with at least 50 known-label reports. No exposure adjustment.')"
+    },
+    {
+      "id": "1017",
+      "title": "Which airports account for the most reports in this sample?",
+      "x": 6.087415726706139,
+      "y": 4.531811434761058,
+      "fields": [
+        "Airport Name"
+      ],
+      "code": "# analet: Which airports account for the most reports in this sample?\ncounts = df['Airport Name'].value_counts().head(10).sort_values()\ncounts.plot.barh(color='#2dd4bf',title='Top airports by number of sampled reports')\nplt.xlabel('Reports \u2014 not an airport risk ranking'); plt.tight_layout(); plt.show()",
+      "image": "plots/1017.png"
+    },
+    {
+      "id": "1018",
+      "title": "What should be checked before comparing flight conditions?",
+      "x": 9.569715546035253,
+      "y": 2.154079002608375,
+      "fields": [
+        "Speed IAS in knots",
+        "Phase of flight",
+        "Time of day",
+        "Effect Amount of damage"
+      ],
+      "code": "# analet: What should be checked before comparing flight conditions?\nprint('DATA QUALITY CHECKS')\nprint(f\"Missing/unparseable speed: {df['Speed IAS in knots'].isna().sum():,}\")\nprint(f\"Unmapped damage labels: {(~known_damage).sum():,}\")\nprint(f\"Blank phase of flight: {df['Phase of flight'].eq('').sum():,}\")\nprint('The sample ends in July 2002; annual totals are not comparable without checking coverage.')\nprint('No flight-count denominator is provided: describe reporting patterns, not risk.')"
+    },
+    {
+      "id": "1019",
+      "title": "How does seasonal strike frequency vary between day and night?",
+      "x": 5.074188959100609,
+      "y": 4.908614517393505,
+      "fields": [
+        "Flight Date",
+        "Time of day"
+      ]
+    },
+    {
+      "id": "1020",
+      "title": "Do large wildlife reports show different seasonal peaks?",
+      "x": 5.26639901345051,
+      "y": 5.555531097094931,
+      "fields": [
+        "Flight Date",
+        "Wildlife Size"
+      ]
+    },
+    {
+      "id": "1021",
+      "title": "Which species are associated with substantial damage reports?",
+      "x": 9.163997532196454,
+      "y": 0.958150132990018,
+      "fields": [
+        "Wildlife Species",
+        "Effect Amount of damage"
+      ]
+    },
+    {
+      "id": "1022",
+      "title": "Do positive recorded repair costs differ by phase of flight?",
+      "x": 10.247601726267387,
+      "y": 2.3890276302716735,
+      "fields": [
+        "Cost Repair",
+        "Phase of flight"
+      ]
+    },
+    {
+      "id": "1023",
+      "title": "Does the relationship between reported speed and damage differ by wildlife size?",
+      "x": 9.370166000818472,
+      "y": 0.5350238762181122,
+      "fields": [
+        "Speed IAS in knots",
+        "Effect Amount of damage",
+        "Wildlife Size"
+      ]
+    },
+    {
+      "id": "1024",
+      "title": "Are day and night reports associated with different damage labels?",
+      "x": 9.521550446429568,
+      "y": 1.4961504329407862,
+      "fields": [
+        "Time of day",
+        "Effect Amount of damage"
+      ]
+    }
+  ],
+  "projection": {
+    "provenance": "Recomputed with the Ptolemy demo projection from saved embeddings; not the original study map.",
+    "method": "Ptolemy semantic-vector and variable-vector mixture, then UMAP",
+    "implementation": "umap-js 1.4.0",
+    "embeddingModel": "text-embedding-3-small",
+    "embeddingDimensions": 1536,
+    "textWeight": 0.5,
+    "variableWeight": 0.5,
+    "nNeighbors": 5,
+    "minDist": 0.005,
+    "spread": 1,
+    "nEpochs": 500,
+    "randomSeed": 42,
+    "randomGenerator": "mulberry32",
+    "metric": "euclidean",
+    "coordinateSpace": "raw fitted coordinates; apply only uniform scale and translation"
+  }
+}
