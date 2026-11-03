@@ -33,12 +33,14 @@
           <h3 id="analysis-title">Hover over a point</h3>
           <p id="analysis-description">Inspect an analysis question and its code. Click a point to keep it selected.</p>
           <p id="analysis-fields"></p>
-          <img id="analysis-plot" alt="" hidden>
+          <a id="analysis-plot-link" target="_blank" rel="noopener noreferrer" title="Open full-size chart" aria-label="Open full-size chart" hidden><img id="analysis-plot" alt="" hidden></a>
+          <h4 id="analysis-output-label" hidden>Output</h4>
+          <pre id="analysis-output" role="region" aria-labelledby="analysis-output-label" tabindex="0" hidden></pre>
           <pre hidden><code id="analysis-code"></code></pre>
           <button id="clear-selection" type="button" hidden>Clear selection</button>
         </div>
       </div>
-      <p class="caption provenance">Positions are recomputed with Ptolemy’s projection code from saved bird-strike analysis embeddings; plots are saved notebook outputs. <a href="https://github.com/vega/vega-datasets/blob/main/data/birdstrikes.csv">Dataset</a>. Python does not run in this page.</p>
+      <p class="caption provenance">Positions are recomputed with Ptolemy’s projection code from saved bird-strike analysis embeddings; plots, text, and tables are saved outputs from executed analyses. <a href="https://github.com/vega/vega-datasets/blob/main/data/birdstrikes.csv">Dataset</a>. Python does not run in this page.</p>
     </section>
   </main>
 </body>

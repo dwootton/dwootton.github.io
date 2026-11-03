@@ -27,10 +27,14 @@ a:focus-visible, button:focus-visible { outline: 2px solid #185b78; outline-offs
 .point-hit { fill: transparent; cursor: pointer; }
 .analysis { min-width: 0; }
 .analysis h3 { font-size: 16px; line-height: 1.4; font-weight: 550; margin: 0 0 10px; }
+.analysis h4 { font-size: 12px; font-weight: 600; margin: 12px 0 0; }
 .analysis p { font-size: 13px; line-height: 1.6; margin-bottom: 12px; }
 #analysis-fields { color: #59645f; overflow-wrap: anywhere; }
+#analysis-plot-link { cursor: zoom-in; }
 #analysis-plot { width: 100%; height: auto; background: #111827; margin: 0 0 8px; }
 pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 11px; line-height: 1.6; background: #f0f2ef; padding: 12px; max-height: 260px; overflow-y: auto; margin: 12px 0; }
+#analysis-output { white-space: pre; overflow-wrap: normal; overflow-x: auto; max-width: 100%; margin-top: 6px; }
+#analysis-output:focus-visible { outline: 2px solid #185b78; outline-offset: 2px; }
 button { font: inherit; font-size: 12px; color: #185b78; padding: 4px 0; background: none; border: 0; text-decoration: underline; cursor: pointer; }
 .provenance { margin-top: 16px; }
 @media (max-width: 600px) {
