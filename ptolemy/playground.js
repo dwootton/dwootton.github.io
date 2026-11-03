@@ -19,6 +19,7 @@
         || !point.title.trim() || !Number.isFinite(point.x)
         || !Number.isFinite(point.y)
         || (point.code !== undefined && typeof point.code !== "string")
+        || (point.outputText !== undefined && typeof point.outputText !== "string")
         || (point.description !== undefined && typeof point.description !== "string")
         || (point.image !== undefined && (typeof point.image !== "string"
           || !/^plots\/[A-Za-z0-9_.-]+\.png$/.test(point.image)))
@@ -65,8 +66,11 @@
   const title = document.getElementById("analysis-title");
   const description = document.getElementById("analysis-description");
   const code = document.getElementById("analysis-code");
+  const output = document.getElementById("analysis-output");
+  const outputLabel = document.getElementById("analysis-output-label");
   const fields = document.getElementById("analysis-fields");
   const plot = document.getElementById("analysis-plot");
+  const plotLink = document.getElementById("analysis-plot-link");
   const clearButton = document.getElementById("clear-selection");
   if ([playground, map, status, title, description, code, fields]
     .some((element) => !element)) return;
@@ -87,11 +91,23 @@
     if (code.parentElement?.tagName === "PRE") {
       code.parentElement.hidden = code.hidden;
     }
+    if (output) {
+      output.textContent = point?.outputText || "";
+      output.scrollLeft = 0;
+      output.scrollTop = 0;
+      output.hidden = !output.textContent.trim();
+    }
+    if (outputLabel) outputLabel.hidden = !output || output.hidden;
 
     const nextImage = point?.image || null;
     if (plot && nextImage !== activeImage) {
       plot.hidden = true;
       plot.removeAttribute("src");
+      if (plotLink) {
+        plotLink.hidden = true;
+        plotLink.removeAttribute("href");
+        if (nextImage) plotLink.setAttribute("href", nextImage);
+      }
       plot.setAttribute("alt", nextImage ? `Saved analysis output: ${point.title}` : "");
       activeImage = nextImage;
       if (nextImage) plot.setAttribute("src", nextImage);
@@ -178,8 +194,12 @@
   if (plot) {
     plot.addEventListener("load", () => {
       plot.hidden = !activeImage || plot.getAttribute("src") !== activeImage;
+      if (plotLink) plotLink.hidden = plot.hidden;
     });
-    plot.addEventListener("error", () => { plot.hidden = true; });
+    plot.addEventListener("error", () => {
+      plot.hidden = true;
+      if (plotLink) plotLink.hidden = true;
+    });
   }
   playground.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
@@ -196,7 +216,7 @@
   async function loadMap() {
     let data;
     try {
-      const response = await fetch("./bird-strikes.json");
+      const response = await fetch("./bird-strikes.json", { cache: "no-cache" });
       if (!response.ok) throw new Error("Map request failed.");
       data = await response.json();
     } catch {
